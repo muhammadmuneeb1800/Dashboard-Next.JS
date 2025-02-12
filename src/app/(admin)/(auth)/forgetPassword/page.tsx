@@ -1,17 +1,21 @@
+"use client"
 import Button from "@/components/button/Button";
 import Input from "@/components/input/Input";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 
 export default function ForgetPassword() {
+  const[email,setEmail]  = useState("")
   return (
     <>
-      <div className="bg-primary flex justify-center items-center w-full h-screen">
-        <div className="bg-white pb-10 px-5 rounded mx-auto w-[30%]">
+      <div className="bg-white flex justify-center items-center w-full h-screen">
+        <div className="bg-white border-primary border-2 shadow-lg pb-10 px-5 rounded-lg mx-auto w-[30%]">
         <Image src="/assets/images/logo.png" alt="Logo Image" width={220} className="mx-auto my-5" height={150}/>
         <p className="text-2xl font-semibold mb-5">Forget Password</p>
           <Input
             type="email"
+            value={email}
+            onChange={(e)=>setEmail(e.target.value)}
             border="border-b-2"
             borderColor="border-gray-400"
             placeholder="enter your email"

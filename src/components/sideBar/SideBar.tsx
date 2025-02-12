@@ -11,7 +11,7 @@ export default function SideBar() {
 
   return (
     <div
-      className={`w-[275px] border-r border-light h-screen p-6 transition-width duration-300 ease-in-out`}
+      className={`w-[275px] border-r border-light h-screen p-6 transition-width duration-300 ease-in-out fixed`}
     >
       <p className="text-info text-xs mt-3">MENU</p>
       {MENU_ITEMS?.map((item) => (

@@ -1,10 +1,16 @@
 import GraphCard from "@/components/graphCard/GrapCard";
 import Task from "@/components/task/Task";
 import { GRAPH_DATA, TASK_DATA } from "@/constant/constant";
+import { auth } from "@/lib/auth";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { FaPlus } from "react-icons/fa";
 
-export default function Dashboard() {
+export default async function Dashboard() {
+  const session = await auth();
+  if (!session) {
+    return redirect("/login");
+  }
   return (
     <>
       <div className="px-5 py-3 w-full bg-success">

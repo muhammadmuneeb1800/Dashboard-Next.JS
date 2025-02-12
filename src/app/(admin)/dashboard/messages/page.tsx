@@ -1,21 +1,22 @@
-"use client";
 import TopBar from "@/components/topBar/TopBar";
-import { FaPlus } from "react-icons/fa";
-import { IoPrintOutline } from "react-icons/io5";
-import { MdOutlineContactSupport } from "react-icons/md";
-import { TbFilter } from "react-icons/tb";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
 
-export default function Messages() {
+export default async function Message() {
+  const session = await auth();
+  if (!session) {
+    redirect("/login");
+  }
   return (
     <>
       <div className="px-5 py-3 w-full bg-success">
-        <h1>Messages</h1>
+        <h1>Message</h1>
         <TopBar
-          title="Message Page"
-          icon1={FaPlus}
-          icon3={TbFilter}
-          icon2={IoPrintOutline}
-          icon4={MdOutlineContactSupport}
+          title="Messages Page"
+          icon1="FaPlus"
+          icon3="TbFilter"
+          icon2="IoPrintOutline"
+          icon4="MdOutlineContactSupport"
         />
       </div>
     </>

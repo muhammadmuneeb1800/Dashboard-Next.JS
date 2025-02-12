@@ -1,14 +1,24 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "@/components/button/Button";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import Link from "next/link";
 import Input from "@/components/input/Input";
 import { MdOutlineCalendarToday } from "react-icons/md";
+import { getSession } from "next-auth/react";
 
 
 export default function AddPatients() {
+    useEffect(()=>{
+        async function Session(){
+          const sessionData = await getSession();
+          if(!sessionData){
+            redirect("/login");
+          }
+        }
+        Session();
+    },[])
   const route = useRouter();
   return (
     <>

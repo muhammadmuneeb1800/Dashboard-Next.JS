@@ -169,7 +169,7 @@ export const GRAPH_DATA = [
     width: 200,
     iconColor: "text-green-700",
     icon: FaArrowAltCircleUp,
-    chart: LineChart1,
+    // chart: LineChart1,
   },
   {
     title: "Online Consultations",
@@ -179,13 +179,13 @@ export const GRAPH_DATA = [
     upAndDown: "-20.9%",
     iconColor: "text-red-700",
     icon: FaArrowAltCircleUp,
-    chart: LineChart2,
+    // chart: LineChart2,
   },
   {
     title: "Total Patients",
     number: 197,
     img: "/assets/images/graphBlue.png",
     width: 200,
-    chart: PieCharts,
+    // chart: PieCharts,
   },
 ];

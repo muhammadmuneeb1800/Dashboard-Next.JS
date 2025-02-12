@@ -1,14 +1,11 @@
 "use client";
-import { FaPlus } from "react-icons/fa6";
-import { FaSearch } from "react-icons/fa";
-import { MdOutlineContactSupport } from "react-icons/md";
-import { TbFilter } from "react-icons/tb";
 import { BsThreeDots } from "react-icons/bs";
 import { PATIENTS } from "@/constant/constant";
 import TopBar from "@/components/topBar/TopBar";
-import { useRouter } from "next/navigation";
 import Button from "@/components/button/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 type StatusType = "Recovered" | "Awaiting surgery" | "On treatment";
 
@@ -19,12 +16,17 @@ const statusStyles: Record<StatusType, string> = {
 };
 
 export default function Patients() {
+  useEffect(()=>{
+      async function Session(){
+        const sessionData = await getSession();
+        if(!sessionData){
+          redirect("/login");
+        }
+      }
+      Session();
+  },[])
   const [active, setActive] = useState<boolean>(false);
   const [activePatient, setActivePatient] = useState<string | null>();
-  const route = useRouter();
-  const handleChange = () => {
-    route.push("/dashboard/patients/addPatients");
-  };
   const handleClick = (id: string) => {
     setActivePatient(activePatient === id ? null : id);
     setActive(!active);
@@ -36,11 +38,11 @@ export default function Patients() {
         <TopBar
           title="Total Patients"
           sabTitle="487"
-          onclick={handleChange}
-          icon1={FaPlus}
-          icon2={FaSearch}
-          icon3={TbFilter}
-          icon4={MdOutlineContactSupport}
+          link={"/dashboard/patients/addPatients"}
+          icon1="FaPlus"
+          icon3="TbFilter"
+          icon2="IoPrintOutline"
+          icon4="MdOutlineContactSupport"
         />
         <div className="bg-white py-3 mt-5 rounded">
           <div className="overflow-x-auto">
@@ -94,7 +96,6 @@ export default function Patients() {
                             color="text-gray-800"
                             hBg="bg-none"
                             hColor="text-black"
-                            onClick={handleChange}
                           />
                           <hr />
                           <Button

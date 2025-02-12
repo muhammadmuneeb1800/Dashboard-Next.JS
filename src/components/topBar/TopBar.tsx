@@ -1,18 +1,37 @@
 "use client";
+import Link from "next/link";
 import React from "react";
-import { IconType } from "react-icons";
+import * as Icons from "react-icons/fa";
+import * as IoIcons from "react-icons/io5";
+import * as MdIcons from "react-icons/md";
+import * as TbIcons from "react-icons/tb";
 
 interface topBarDetails {
   title?: string;
   sabTitle?: string;
-  icon1?: IconType;
-  icon2?: IconType;
-  icon3?: IconType;
-  icon4?: IconType;
+  icon1?: string;
+  icon2?: string;
+  icon3?: string;
+  icon4?: string;
+  link?: string | undefined;
   onclick?: () => void;
 }
 
+const getIcons = (iconName: string) => {
+  return (
+    Icons[iconName as keyof typeof Icons] ||
+    IoIcons[iconName as keyof typeof IoIcons] ||
+    MdIcons[iconName as keyof typeof MdIcons] ||
+    TbIcons[iconName as keyof typeof TbIcons] ||
+    null
+  );
+};
+
 export default function TopBar(props: topBarDetails) {
+  const Icon1 = getIcons(props.icon1 as string);
+  const Icon2 = getIcons(props.icon2 as string);
+  const Icon3 = getIcons(props.icon3 as string);
+  const Icon4 = getIcons(props.icon4 as string);
   return (
     <>
       <div className="flex justify-between items-center px-6 bg-white py-3 mt-5 rounded">
@@ -25,20 +44,21 @@ export default function TopBar(props: topBarDetails) {
           </p>
         </div>
         <div className="flex justify-center gap-5">
-          <div
-            className="border cursor-pointer text-center p-3 rounded-md"
+          <Link
+            href={props?.link || "#"}
             onClick={props.onclick}
+            className="border cursor-pointer text-center p-3 rounded-md"
           >
-            {props.icon1 && <props.icon1 className="text-xl" />}
+            {Icon1 && <Icon1 className="text-xl" />}
+          </Link>
+          <div className="border cursor-pointer text-center p-3 rounded-md">
+            {Icon2 && <Icon2 className="text-xl" />}
           </div>
           <div className="border cursor-pointer text-center p-3 rounded-md">
-            {props.icon2 && <props.icon2 className="text-xl" />}
+            {Icon3 && <Icon3 className="text-2xl" />}
           </div>
           <div className="border cursor-pointer text-center p-3 rounded-md">
-            {props.icon3 && <props.icon3 className="text-2xl" />}
-          </div>
-          <div className="border cursor-pointer text-center p-3 rounded-md">
-            {props.icon4 && <props.icon4 className="text-2xl" />}
+            {Icon4 && <Icon4 className="text-2xl" />}
           </div>
         </div>
       </div>
