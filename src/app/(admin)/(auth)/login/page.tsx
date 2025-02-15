@@ -5,17 +5,22 @@ import Input from "@/components/input/Input";
 import Button from "@/components/button/Button";
 import useLogin from "@/hooks/useLogin/useLogin";
 import Link from "next/link";
+import { getSession } from "next-auth/react";
+import { useLayoutEffect } from "react";
 
 export default function Login() {
-  const {
-    name,
-    setName,
-    email,
-    setEmail,
-    password,
-    setPassword,
-    errors,
-  } = useLogin();
+  const { name, setName, email, setEmail, password, setPassword, error } =
+    useLogin();
+
+  useLayoutEffect(() => {
+    async function sessionData() {
+      const session = await getSession();
+      if (session) {
+        return <Link href="/admin/dashboard">Dashboard</Link>;
+      }
+    }
+    sessionData();
+  });
 
   return (
     <>
@@ -41,7 +46,7 @@ export default function Login() {
                   onChange={(e) => setName(e.target.value)}
                   border="border-b-2"
                 />
-                <p className="text-[13px] text-red-600">{errors}</p>
+                <p className="text-[13px] text-red-600">{error}</p>
               </div>
               <div className="mt-6">
                 <label
@@ -72,7 +77,13 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   border="border-b-2"
                 />
-                <Link href="/forgetPassword/" className="text-secondray block text-right mt-2">Forget Password?</Link>
+                <p className="text-rose-700 mt-1">{error}</p>
+                <Link
+                  href="/forgetPassword/"
+                  className="text-secondray block text-right mt-2"
+                >
+                  Forget Password?
+                </Link>
               </div>
               <div className="mt-10">
                 <Button
@@ -84,7 +95,8 @@ export default function Login() {
                 />
               </div>
             </form>
-            <Link href="/register"
+            <Link
+              href="/register"
               className="mt-2 text-right text-secondray font-medium text-sm block"
             >
               Don&apos;t have an account?{" "}
@@ -106,7 +118,13 @@ export default function Login() {
             Keep track of all patient information in this section.
           </p>
           <div className="text-center w-44 mx-auto mt-4">
-           <Button text="Learn More" bg="bg-white" color="text-primary" hBg="bg-primary" hColor="text-white"/>
+            <Button
+              text="Learn More"
+              bg="bg-white"
+              color="text-primary"
+              hBg="bg-primary"
+              hColor="text-white"
+            />
           </div>
         </div>
       </div>

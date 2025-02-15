@@ -26,8 +26,8 @@ export default function Input(props: inputDetails) {
       >
         <input
           type={props.type}
-          required={true}
           placeholder={props.placeholder}
+          required={true}
           id={props.id}
           value={props.value}
           onChange={props.onChange}
