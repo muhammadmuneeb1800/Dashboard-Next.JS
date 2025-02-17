@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import Authentication from "@/store/slices/authSlice";
+import authentication from "@/store/slices/authSlice";
+import patients from "@/store/slices/patientSlice";
 import { useDispatch, useSelector, useStore } from "react-redux";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      authSlice: Authentication,
+      authSlice: authentication,
+      patientSlice: patients,
     },
   });
 };

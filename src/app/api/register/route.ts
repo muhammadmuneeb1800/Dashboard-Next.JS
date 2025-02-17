@@ -1,5 +1,24 @@
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+
+// export const GET = async () => {
+//   try {
+//     const session = await auth();
+//     if (!session) {
+//       return NextResponse.json({ message: "Unauthenticated" }, { status: 401 });
+//     }
+//     const user = await prisma.user.findUnique({
+//       where: { email: session.user?.email as string },
+//     });
+//     return NextResponse.json({ message: "Hello", user }, { status: 215 });
+//   } catch (error) {
+//     return NextResponse.json(
+//       { message: "Error in GET hello", error: error },
+//       { status: 405 }
+//     );
+//   }
+// };
 
 export const POST = async (req: Request) => {
   try {
@@ -8,10 +27,16 @@ export const POST = async (req: Request) => {
       where: { email: body.email },
     });
     if (existsUser) {
-      return NextResponse.json({ message: "User already exists" });
+      return NextResponse.json(
+        { message: "User already exists" },
+        { status: 401 }
+      );
     }
     const user = await prisma.user.create({ data: body });
-    return NextResponse.json({ message: "User registered successfully", user });
+    return NextResponse.json(
+      { message: "User registered successfully", user },
+      { status: 201 }
+    );
   } catch (error) {
     return NextResponse.json({
       message: "error in POST register user",

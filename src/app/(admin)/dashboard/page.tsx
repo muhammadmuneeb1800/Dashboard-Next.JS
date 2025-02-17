@@ -13,7 +13,7 @@ export default async function Dashboard() {
   }
   return (
     <>
-      <div className="px-5 py-3 w-full bg-success">
+      <div className="px-5 py-3 w-full bg-success h-screen">
         <h1>Dashboard</h1>
         <div className="flex items-center gap-3">
           {GRAPH_DATA.map((card, index) => (

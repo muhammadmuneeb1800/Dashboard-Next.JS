@@ -6,6 +6,7 @@ import Calendar from "@/components/calendor/Calendor";
 import AddSchedule from "@/components/addSchedule/AddSchedule";
 import { getSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+import Modal from "@/components/modal/modal";
 
 export default function Schedule() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,19 +46,7 @@ export default function Schedule() {
         </div>
       </div>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white w-[600px] rounded-lg shadow-lg relative">
-            <button
-              onClick={closeModal}
-              className="absolute top-3 right-3 text-gray-600 hover:text-red-500 text-xl"
-            >
-              ✖
-            </button>
-            <AddSchedule />
-          </div>
-        </div>
-      )}
+      {isModalOpen && <Modal />}
     </>
   );
 }

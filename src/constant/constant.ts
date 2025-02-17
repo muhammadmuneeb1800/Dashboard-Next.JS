@@ -118,32 +118,32 @@ export const MENU_ITEMS = [
   {
     name: "Dashboard",
     icon: MdOutlineSpaceDashboard,
-    path: "/dashboard/",
+    path: "/dashboard",
   },
   {
     name: "Schedule",
     icon: GrSchedules,
-    path: "/dashboard/schedule/",
+    path: "/dashboard/schedule",
   },
   {
     name: "Tasks",
     icon: BiTask,
-    path: "/dashboard/task/",
+    path: "/dashboard/task",
   },
   {
     name: "Patients",
     icon: HiOutlineUsers,
-    path: "/dashboard/patients/",
+    path: "/dashboard/patients",
   },
   {
     name: "Messages",
     icon: MdMailOutline,
-    path: "/dashboard/messages/",
+    path: "/dashboard/messages",
   },
   {
     name: "Analytics",
     icon: SiSimpleanalytics,
-    path: "/dashboard/analytics/",
+    path: "/dashboard/analytics",
   },
 ];
 
@@ -151,12 +151,12 @@ export const GENERAL_ITEMS = [
   {
     name: "Settings",
     icon: IoSettingsOutline,
-    path: "/dashboard/settings/",
+    path: "/dashboard/settings",
   },
   {
     name: "Support",
     icon: MdContactSupport,
-    path: "/dashboard/support/",
+    path: "/dashboard/support",
   },
 ];
 
@@ -188,4 +188,19 @@ export const GRAPH_DATA = [
     width: 200,
     // chart: PieCharts,
   },
+];
+
+export const MONTH_OF_YEAR = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
