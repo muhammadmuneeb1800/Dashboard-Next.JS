@@ -7,6 +7,7 @@ import useLogin from "@/hooks/useLogin/useLogin";
 import Link from "next/link";
 import { getSession } from "next-auth/react";
 import { useLayoutEffect } from "react";
+import { Toast } from "@/components/toast/Toast";
 
 export default function Login() {
   const {
@@ -31,6 +32,7 @@ export default function Login() {
 
   return (
     <>
+    <Toast/>  
       <div className="flex justify-center items-center w-full h-screen">
         <div className="h-screen md:w-[60%] w-full">
           <div className="md:px-5 lg:px-12 px-5 mt-24">
@@ -90,6 +92,7 @@ export default function Login() {
                     color="text-white"
                     hBg="bg-white"
                     hColor="text-primary"
+                    width="w-full"
                   />
                 ) : (
                   <Button
@@ -99,7 +102,8 @@ export default function Login() {
                     color="text-white"
                     hBg="bg-white"
                     hColor="text-primary"
-                  />
+                    width="w-full"
+                    />
                 )}
               </div>
             </form>

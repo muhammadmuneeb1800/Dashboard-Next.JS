@@ -107,6 +107,7 @@ export default function Register() {
                     color="text-white"
                     hBg="bg-white"
                     hColor="text-primary"
+                    width="w-full"
                   />
                 ) : (
                   <Button
@@ -116,6 +117,7 @@ export default function Register() {
                     color="text-white"
                     hBg="bg-white"
                     hColor="text-primary"
+                    width="w-full"
                   />
                 )}
               </div>

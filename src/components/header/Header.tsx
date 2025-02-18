@@ -6,7 +6,6 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
 import { useState } from "react";
 import { MONTH_OF_YEAR } from "@/constant/constant";
-import { signOut } from "@/lib/auth";
 import { useAppSelector } from "@/store/store";
 
 export default function Header() {
@@ -14,7 +13,7 @@ export default function Header() {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [isNotification, setIsNotification] = useState(false);
 
-  const user = useAppSelector((store) => store.authSlice) || {};
+  const user = useAppSelector((store) => store.authSlice) || [];
   console.log("user data fom header", user.user);
 
   const day = new Date().getDate();
@@ -22,8 +21,8 @@ export default function Header() {
   const year = new Date().getFullYear();
 
   return (
-    <div className="w-full flex px-5 py-4 justify-between items-center gap-10 border-light border-b">
-      <div className="w-[50%] flex justify-between items-center border border-light px-5 rounded">
+    <div className="w-full flex px-5 py-[10.8px] justify-between items-center gap-10 border-light border-b">
+      <div className="w-[50%] lg:flex hidden justify-between items-center border border-light px-5 rounded">
         <Input
           placeholder="Search"
           value={search}
@@ -31,22 +30,29 @@ export default function Header() {
         />
         <FaSearch className="text-xl text-info ml-2" />
       </div>
-      <div className="flex justify-center gap-7 items-center">
+      <div className="w-full flex lg:justify-end justify-between md:gap-4 lg:gap-14 items-center">
         <div>
-          <p className="text-xl font-medium">{user?.user.userName}</p>
-          <p className="text-lg font-bold">{user?.user?.companyName}</p>
+          <p className="text-lg md:text-xl font-medium">
+            {user?.user?.userName?.split(" ")[0] ||
+              "Muhammad Muneeb".split(" ")[0]}
+          </p>
+          <p className="text-base md:text-lg font-bold">
+            {user?.user?.companyName || "Techloset"}
+          </p>
         </div>
-        <div className="border p-2 rounded">
+        <div className="hidden md:block border p-2 rounded">
           {day + "," + MONTH_OF_YEAR[month] + " " + year}
         </div>
-        <CiMail className="text-3xl text-info cursor-pointer" />
-        <button
-          className="relative"
-          onClick={() => setNotificationOpen(!notificationOpen)}
-        >
-          <IoMdNotificationsOutline className="text-3xl text-info cursor-pointer" />
+        <div className="flex justify-center items-center gap-5 md:gap-3 lg:gap-6">
+          <CiMail className="text-3xl text-info cursor-pointer" />
+          <button
+            className="relative"
+            onClick={() => setNotificationOpen(!notificationOpen)}
+          >
+            <IoMdNotificationsOutline className="text-3xl text-info cursor-pointer" />
+          </button>
           {notificationOpen && (
-            <div className="z-50 absolute top-10 py-3 overflow-x-hidden right-7 border shadow-md w-80 h-72 rounded bg-white px-5">
+            <div className="z-50 absolute top-16 py-3 overflow-x-hidden right-20 border shadow w-80 h-72 rounded bg-white px-5">
               <p className="text-primary text-start">All Notifications</p>
               <hr className="border border-primary mt-1" />
               {isNotification ? (
@@ -58,10 +64,10 @@ export default function Header() {
               )}
             </div>
           )}
-        </button>
-        <button onClick={() => signOut()}>
-          <FiLogOut className="text-3xl text-info cursor-pointer" />
-        </button>
+          <button>
+            <FiLogOut className="text-3xl text-info cursor-pointer" />
+          </button>
+        </div>
       </div>
     </div>
   );

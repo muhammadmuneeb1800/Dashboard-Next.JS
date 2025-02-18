@@ -9,13 +9,10 @@ export default async function Support() {
   }
   return (
     <>
-      <div className="px-5 py-3 w-full bg-success">
+      <div className="px-5 py-3 w-full bg-success h-screen">
         <h1>Support</h1>
         <TopBar
-          title="Support Page"
-          icon1="FaPlus"
-          icon3="TbFilter"
-          icon2="IoPrintOutline"
+          title="Support"
           icon4="MdOutlineContactSupport"
         />
       </div>

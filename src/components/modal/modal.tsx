@@ -7,38 +7,40 @@ import Input from "../input/Input";
 import { MdOutlineNotifications } from "react-icons/md";
 import Button from "../button/Button";
 
-export default function Modal() {
+export default function Modal({ close }: { close: () => void }) {
   return (
     <>
-      <div className="flex justify-center absolute top-0 left-0 z-50 items-center h-screen w-full bg-gray-500">
-        <div className="bg-white">
+      <div className="fixed justify-center inset-0 z-50 items-center h-screen w-full bg-black backdrop-blur bg-opacity-40">
+        <div className="bg-white w-[60%] mx-auto h-[80%] mt-10 overflow-auto">
           <div className="bg-primary flex justify-between items-center px-4 py-6">
             <p className="text-xl font-bold text-white">New Appointment</p>
-            <ImCross className="text-white" />
+            <button onClick={close}>
+              <ImCross className="text-white" />
+            </button>
           </div>
-          <div className="flex justify-around items-center">
-            <div className="flex flex-col justify-center items-center gap-5">
-              <LuUserRound className="text-primary" />
+          <div className="flex justify-around mt-4">
+            <div className="flex flex-col justify-center items-center gap-3">
+              <LuUserRound className="text-primary text-2xl" />
               <p className="text-primary">PRACTITIONER</p>
               <p>John Doe</p>
               <p className="font-semibold">General Doctor</p>
             </div>
-            <div className="flex flex-col justify-center items-center gap-5">
-              <SlClock className="text-primary" />
+            <div className="flex flex-col justify-center items-center gap-3 mt-2">
+              <SlClock className="text-primary text-xl" />
               <p className="text-primary">DATE AND TIME</p>
               <p>Tue, 26 October</p>
               <p className="font-semibold">9:00</p>
               <p className="text-primary">Change</p>
             </div>
-            <div className="flex flex-col justify-center items-center gap-5">
-              <CiLocationOn className="text-primary" />
+            <div className="flex flex-col justify-center items-center gap-3 mt-2">
+              <CiLocationOn className="text-primary text-2xl" />
               <p className="text-primary">LOCATION</p>
               <p>General clinic</p>
               <p className="font-semibold">Room 1</p>
               <p className="text-primary">Change</p>
             </div>
           </div>
-          <div className="mt-6">
+          <div className="mt-6 px-8 pr-5 md:pr-10 lg:pr-16">
             <div className="flex pt-10 justify-between items-center">
               <label htmlFor="Patient">Patient</label>
               <div className="w-[70%] flex gap-5 justify-between items-center">
@@ -197,16 +199,17 @@ export default function Modal() {
               </div>
             </div>
           </div>
-          <div className="mt-5 flex items-center gap-3">
-            <MdOutlineNotifications className="text-gray-400" />
+          <div className="mt-16 flex items-center gap-3 px-8">
+            <MdOutlineNotifications className="text-gray-400 text-3xl" />
             <p className="font-bold text-lg">Send notifications</p>
           </div>
-          <p>
+          <p className="px-8 mt-2">
             Appointment confirmation and reminder messages will be automatically
             sent to clinic SMS notification settings.
           </p>
-          <div className="mt-10 flex justify-end items-center gap-4">
+          <div className="my-10 flex justify-end items-center gap-4 pr-16">
             <Button
+              onClick={close}
               text="Cancel"
               bg="bg-none"
               color="text-black"
@@ -226,6 +229,9 @@ export default function Modal() {
               color="text-primary"
               hBg="bg-primary"
               hColor="text-white"
+              borderColor="border-primary"
+              borderWidth="border-2"
+              hBorderColor="border-primary"
             />
           </div>
         </div>

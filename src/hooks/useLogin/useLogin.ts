@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { userAuth } from "@/store/slices/authSlice";
 import { useAppDispatch } from "@/store/store";
+import { showToast } from "@/components/toast/Toast";
 
 export default function useLogin() {
   const router = useRouter();
@@ -54,8 +55,11 @@ export default function useLogin() {
         return;
       } else {
         setLoading(false);
-        router.push("/dashboard");
         dispatch(userAuth());
+        router.push("/dashboard");
+        setTimeout(() => {
+          showToast("success", "Login successfully 👍 Now moving to Dashboard");
+        }, 2000);
       }
     } catch (error) {
       setLoading(false);

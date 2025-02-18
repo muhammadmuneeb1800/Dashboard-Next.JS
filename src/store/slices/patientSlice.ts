@@ -3,7 +3,7 @@ import { axiosInstance } from "@/utils/axiosInstance";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  patients: [] as initilaData[],
+  patients: [{}] as initilaData[],
 };
 
 export const fetchPatientsData = createAsyncThunk("fetchPatients", async () => {

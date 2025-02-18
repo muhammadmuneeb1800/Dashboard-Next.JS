@@ -9,10 +9,10 @@ export default async function Analytics() {
   }
   return (
     <>
-      <div className="px-5 py-3 w-full bg-success">
+      <div className="px-5 py-3 w-full bg-success h-screen">
         <h1>Analytics</h1>
         <TopBar
-          title="Analytics Page"
+          title="Analytics"
           icon1="FaPlus"
           icon3="TbFilter"
           icon2="IoPrintOutline"

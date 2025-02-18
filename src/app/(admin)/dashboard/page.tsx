@@ -13,17 +13,17 @@ export default async function Dashboard() {
   }
   return (
     <>
-      <div className="px-5 py-3 w-full bg-success h-screen">
-        <h1>Dashboard</h1>
-        <div className="flex items-center gap-3">
+      <div className="md:px-5 p-3 w-full bg-success">
+        <h1 className="mb-2">Dashboard</h1>
+        <div className="flex flex-col xl:flex-row justify-center items-center gap-3">
           {GRAPH_DATA.map((card, index) => (
             <div key={index} className="w-full">
               <GraphCard {...card} />
             </div>
           ))}
         </div>
-        <div className="flex gap-4">
-          <div className="mt-3 px-5 py-3 bg-white rounded w-[65%]">
+        <div className="flex flex-col xl:flex-row justify-center gap-4">
+          <div className="mt-3 px-3 md:px-5 py-3 bg-white rounded-md shadow w-full xl:w-[65%]">
             <div className="flex justify-between items-center">
               <div>
                 <p className="font-semibold">Tasks</p>
@@ -43,7 +43,7 @@ export default async function Dashboard() {
               ))}
             </div>
           </div>
-          <div className="mt-3 px-5 py-3 bg-white rounded w-[35%]">
+          <div className="mt-3 px-5 py-3 bg-white rounded-md shadow w-full xl:w-[35%]">
             <div className="flex justify-between items-center">
               <p className="font-semibold">Upcomming Schedule</p>
               <Link href={"/dashboard/schedule/"} className="flex justify-center items-center font-medium gap-2 text-primary cursor-pointer">

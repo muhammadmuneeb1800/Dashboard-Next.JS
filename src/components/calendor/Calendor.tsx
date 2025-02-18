@@ -2,7 +2,6 @@
 import FullCalendar from "@fullcalendar/react";
 // import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
 import { useState } from "react";
 
 const Calendar = () => {
@@ -20,7 +19,7 @@ const Calendar = () => {
 
   return (
     <FullCalendar
-      plugins={[timeGridPlugin, interactionPlugin]}
+      plugins={[timeGridPlugin]}
       headerToolbar={false}
       dayHeaderClassNames="h-28"
       dayHeaderFormat={{ day: "2-digit", weekday: "short" }}
@@ -28,8 +27,7 @@ const Calendar = () => {
       selectable={true}
       events={events}
       editable={true}
-      dateClick={handleDateClick}
-      slotLabelFormat={{timeStyle: "short"}}
+      slotLabelFormat={{ timeStyle: "short" }}
       height="auto"
       expandRows={true}
       eventMinHeight={120}

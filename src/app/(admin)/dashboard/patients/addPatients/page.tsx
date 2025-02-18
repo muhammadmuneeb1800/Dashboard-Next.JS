@@ -4,21 +4,20 @@ import React, { useEffect } from "react";
 import Button from "@/components/button/Button";
 import { redirect, useRouter } from "next/navigation";
 import Link from "next/link";
-import Input from "@/components/input/Input";
-import { MdOutlineCalendarToday } from "react-icons/md";
 import { getSession } from "next-auth/react";
-
+import AddPatient from "@/components/addPatient/AddPatients";
 
 export default function AddPatients() {
-    useEffect(()=>{
-        async function Session(){
-          const sessionData = await getSession();
-          if(!sessionData){
-            redirect("/login");
-          }
-        }
-        Session();
-    },[])
+
+  useEffect(() => {
+    async function Session() {
+      const sessionData = await getSession();
+      if (!sessionData) {
+        redirect("/login");
+      }
+    }
+    Session();
+  }, []);
   const route = useRouter();
   return (
     <>
@@ -57,106 +56,7 @@ export default function AddPatients() {
             </div>
           </div>
         </div>
-        <div className="mt-5 bg-white p-8 rounded w-[75%] mx-auto">
-          <div className="flex justify-between items-center">
-            <label htmlFor="Forename">Forename</label>
-            <div className="w-[70%]">
-              <Input
-                type="text"
-                id="Forename"
-                border="border"
-                borderColor="border-gray-400"
-              />
-            </div>
-          </div>
-          <div className="flex pt-10 justify-between items-center">
-            <label htmlFor="Surname">Surname</label>
-            <div className="w-[70%]">
-              <Input
-                type="text"
-                id="Surname"
-                border="border"
-                borderColor="border-gray-400"
-              />
-            </div>
-          </div>
-          <div className="flex pt-10 justify-between items-center">
-            <label htmlFor="Date">Date of birth</label>
-            <div className="w-[70%] flex gap-5 justify-between items-center">
-              <div className="border border-gray-500 p-2 rounded">
-                <MdOutlineCalendarToday id="Date" />
-              </div>
-              <Input
-                type="date"
-                id="Date"
-                border="border"
-                borderColor="border-gray-400"
-              />
-            </div>
-          </div>
-          <div className="flex pt-10 justify-between items-center">
-            <label htmlFor="Sex">Sex</label>
-            <div className="w-[70%] flex items-center gap-5">
-              <label>
-                <input
-                  type="radio"
-                  name="gender"
-                  id="male"
-                  value={"Male"}
-                  className="hidden peer"
-                />
-                <span className="peer-checked:bg-primary peer-checked:text-white bg-gray-300 rounded px-7 py-3">
-                  Male
-                </span>
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="gender"
-                  id="feMale"
-                  value={"Female"}
-                  className="hidden peer"
-                />
-                <span className="peer-checked:bg-primary peer-checked:text-white bg-gray-300 rounded px-7 py-3">
-                  Female
-                </span>
-              </label>
-            </div>
-          </div>
-          <div className="flex pt-10 justify-between items-center">
-            <label htmlFor="Diagnosis">Diagnosis</label>
-            <div className="w-[70%] flex gap-5 justify-between items-center">
-              <Input
-                type="text"
-                id="Diagnosis"
-                border="border"
-                borderColor="border-gray-400"
-              />
-            </div>
-          </div>
-          <div className="flex pt-10 justify-between items-center">
-            <label htmlFor="Notes">Notes</label>
-            <div className="w-[70%] flex gap-5 justify-between items-center">
-              <textarea
-                name="notes"
-                id="notes"
-                rows={4}
-                className="border w-full border-gray-400 rounded outline-none px-3 py-2"
-              ></textarea>
-            </div>
-          </div>
-          <div className="flex pt-10 justify-between items-center">
-            <label htmlFor="Phone Number">Phone Number</label>
-            <div className="w-[70%] flex gap-5 justify-between items-center">
-              <Input
-                type="text"
-                id="Phone Number"
-                border="border"
-                borderColor="border-gray-400"
-              />
-            </div>
-          </div>
-        </div>
+        <AddPatient />
       </div>
     </>
   );

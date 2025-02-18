@@ -5,14 +5,15 @@ export interface initialAuth {
   companyName: string | undefined | null;
 }
 
-export interface initilaData {
-  id: string | null;
-  name: string | null;
-  diagnosis: string | null;
-  status: string | null;
-  dateTime: Date | null;
-  dob: Date | null;
-  sex: string | null;
-  notes: string | null;
-  phoneNumber: string | null;
+export interface InitialData {
+  id?: string | null;
+  name?: string | null;
+  surName?: string | null;
+  diagnosis?: string | null;
+  status?: string | null;
+  dateTime?: string | null;
+  dob?: Date | string | null;
+  sex?: string | null;
+  notes?: string | null;
+  phoneNumber?: string | null;
 }

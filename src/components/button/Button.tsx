@@ -12,6 +12,7 @@ interface button {
   borderColor?: string;
   hBorderColor?: string;
   borderWidth?: string;
+  width?: string;
 }
 
 export default function Button(props: button) {
@@ -20,7 +21,7 @@ export default function Button(props: button) {
       <button
         type={props.type}
         onClick={props.onClick}
-        className={`${props.bg} w-full ${props.color} px-5 py-2 rounded-lg font-medium text-xl md:text-2xl leading-6 ${props.borderColor} ${props.borderWidth} hover:${props.hBg} hover:${props.hColor} hover:${props.borderWidth} hover:${props.hBorderColor} duration-500`}
+        className={`${props.bg} ${props.color} ${props.width} px-5 py-2 rounded-lg font-medium text-lg md:text-xl leading-6 ${props.borderColor} ${props.borderWidth} hover:${props.hBg} hover:${props.hColor} hover:${props.borderWidth} hover:${props.hBorderColor} duration-500`}
       >
         {props.icon ? <props.icon /> : props.text}
       </button>

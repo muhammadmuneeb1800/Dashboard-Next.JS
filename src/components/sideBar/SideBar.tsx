@@ -14,23 +14,24 @@ export default function SideBar() {
   }, [param]);
   return (
     <div
-      className={`w-[260px] bg-white border-light h-screen transition-width duration-300 ease-in-out fixed border-r`}
+      className={`bg-white border-r w-[17%] border-light h-screen transition-width duration-300 ease-in-out fixed`}
     >
-      <div className="flex w-auto justify-center py-2 text-center">
+      <div className="flex items-center gap-2 justify-center py-2 text-center">
         <Image
-          src="/assets/images/logo.png"
+          src="/assets/images/logo-image.png"
           alt="Logo"
-          width={200}
-          height={170}
+          width={50}
+          height={50}
         />
+        <p className="hidden lg:block  text-primary lg:text-2xl mt-1 lg:font-medium">Medicare</p>
       </div>
-      <hr />
-      <p className="text-info text-xs mt-3 px-4">MENU</p>
+      <hr className="mt-[7.5px] md:mt-[11px] lg:mt-[11.5px] w-full" />
+      <p className="text-info md:text-xs text-[10px] mt-3 px-4">MENU</p>
       {MENU_ITEMS?.map((item) => (
         <Link
           key={item?.path}
           href={item?.path}
-          className={`flex items-center gap-1 px-5 text-lg mt-4 hover:text-primary ${
+          className={`flex items-center px-5 text-lg mt-5 hover:text-primary ${
             activePath === item?.path ? "text-primary" : "text-info"
           }`}
           onClick={() => setActivePath(item?.path)}
@@ -41,16 +42,16 @@ export default function SideBar() {
           <div className="text-2xl mr-2">
             <item.icon />
           </div>
-          <p>{item?.name}</p>
+          <p className="hidden md:block text-base lg:text-lg">{item?.name}</p>
         </Link>
       ))}
       <hr className="mx-4 my-5 border-light" />
-      <p className="text-info text-xs mt-3 px-4">GENERAL</p>
+      <p className="text-info md:text-xs text-[10px] mt-3 px-4">GENERAL</p>
       {GENERAL_ITEMS?.map((item) => (
         <Link
           key={item?.path}
           href={item?.path}
-          className={`flex items-center gap-1 px-5 text-lg mt-4 hover:text-primary ${
+          className={`flex items-center gap-1 px-5 text-lg mt-5 hover:text-primary ${
             activePath === item?.path ? "text-primary" : "text-info"
           }`}
           onClick={() => setActivePath(item?.path)}
@@ -61,7 +62,7 @@ export default function SideBar() {
           <div className="text-2xl mr-2">
             <item.icon />
           </div>
-          <p>{item?.name}</p>
+          <p className="hidden md:block text-base lg:text-lg">{item?.name}</p>
         </Link>
       ))}
     </div>

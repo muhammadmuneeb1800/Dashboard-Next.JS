@@ -46,7 +46,7 @@ export default function Patients() {
         />
         <div className="bg-white py-3 mt-5 rounded">
           <div className="overflow-x-auto">
-            <table className="min-w-full bg-white shadow-md rounded-lg">
+            <table className="min-w-full bg-white shadow rounded-lg">
               <thead className="border-b">
                 <tr className="text-info uppercase text-base leading-normal">
                   <th className="py-3 px-6 text-left">Name</th>

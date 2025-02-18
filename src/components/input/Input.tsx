@@ -29,12 +29,12 @@ export default function Input(props: inputDetails) {
           placeholder={props.placeholder}
           required={true}
           id={props.id}
-          value={props.value}
+          value={props?.value}
           onChange={props.onChange}
           className={`w-full outline-none text-xl px-3 py-2`}
         />
         {props.value && (
-          <ImCross className="text-black" onClick={() => handleCross()} />
+          <ImCross className="text-black text-[10px] md:text-[14px]" onClick={() => handleCross()} />
         )}
       </div>
     </>

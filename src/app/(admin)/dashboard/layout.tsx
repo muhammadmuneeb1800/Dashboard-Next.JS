@@ -10,7 +10,7 @@ export default function DashboardLayout({
 
   return (
     <div className="flex items-center w-full">
-      <div className="w-[17%] h-screen fixed top-0 left-0">
+      <div className="w-[17%] h-screen fixed top-0 left-0 border-r z-30">
         <SideBar />
       </div>
       <div className="w-[83%] h-screen absolute right-0 top-0 ">
