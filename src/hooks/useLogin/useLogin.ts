@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
-import { userAuth } from "@/store/slices/authSlice";
+// import { userAuth } from "@/store/slices/authSlice";
 import { useAppDispatch } from "@/store/store";
 import { showToast } from "@/components/toast/Toast";
 
@@ -47,7 +46,6 @@ export default function useLogin() {
         password,
         redirect: false,
       });
-
       if (login?.error) {
         console.log("Login failed", login.error);
         setErrors({ Invalid: "Invalid email or password" });
@@ -55,7 +53,7 @@ export default function useLogin() {
         return;
       } else {
         setLoading(false);
-        dispatch(userAuth());
+        // dispatch(userAuth());
         router.push("/dashboard");
         setTimeout(() => {
           showToast("success", "Login successfully 👍 Now moving to Dashboard");

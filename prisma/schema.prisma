@@ -89,18 +89,20 @@ model Authenticator {
  */
 
 model Patients {
-  doctorId    String    @db.ObjectId
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  recordId    String?   @unique
-  foreName    String
-  surName     String
-  dob         DateTime?
-  sex         String
-  Diagnosis   String
-  Notes       String
-  phoneNumber String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  doctorId        String?   
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  foreName        String
+  surName         String
+  dob             String?
+  sex             String
+  diagnosis       String
+  status          String
+  appointmentDate DateTime?
+  phoneNumber     String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // doctor User @relation(fields: [doctorId], references: [id], onDelete: Cascade)
 }
 
 /**

@@ -5,8 +5,6 @@ import Input from "@/components/input/Input";
 import Button from "@/components/button/Button";
 import useLogin from "@/hooks/useLogin/useLogin";
 import Link from "next/link";
-import { getSession } from "next-auth/react";
-import { useLayoutEffect } from "react";
 import { Toast } from "@/components/toast/Toast";
 
 export default function Login() {
@@ -20,19 +18,9 @@ export default function Login() {
     handleLogin,
   } = useLogin();
 
-  useLayoutEffect(() => {
-    async function sessionData() {
-      const session = await getSession();
-      if (session) {
-        return <Link href="/dashboard">Dashboard</Link>;
-      }
-    }
-    sessionData();
-  });
-
   return (
     <>
-    <Toast/>  
+      <Toast />
       <div className="flex justify-center items-center w-full h-screen">
         <div className="h-screen md:w-[60%] w-full">
           <div className="md:px-5 lg:px-12 px-5 mt-24">
@@ -103,7 +91,7 @@ export default function Login() {
                     hBg="bg-white"
                     hColor="text-primary"
                     width="w-full"
-                    />
+                  />
                 )}
               </div>
             </form>

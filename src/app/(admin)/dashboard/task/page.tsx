@@ -1,12 +1,6 @@
 import TopBar from "@/components/topBar/TopBar";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
 
 export default async function Task() {
-  const session = await auth();
-  if (!session) {
-    return redirect("/login");
-  }
   return (
     <>
       <div className="px-5 py-3 w-full bg-success h-screen">

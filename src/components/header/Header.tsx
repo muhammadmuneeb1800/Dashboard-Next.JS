@@ -14,7 +14,6 @@ export default function Header() {
   const [isNotification, setIsNotification] = useState(false);
 
   const user = useAppSelector((store) => store.authSlice) || [];
-  console.log("user data fom header", user.user);
 
   const day = new Date().getDate();
   const month = new Date().getMonth();

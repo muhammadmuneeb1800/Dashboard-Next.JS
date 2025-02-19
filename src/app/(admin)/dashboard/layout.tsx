@@ -6,8 +6,6 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  console.log("Children in Layout:", children); // Debugging ke liye
-
   return (
     <div className="flex items-center w-full">
       <div className="w-[17%] h-screen fixed top-0 left-0 border-r z-30">

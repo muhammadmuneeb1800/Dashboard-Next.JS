@@ -16,10 +16,12 @@ export default function AddPatient() {
     setGender,
     diagnosis,
     setDiagnosis,
-    notes,
-    setNotes,
+    setStatus,
     phoneNumber,
     setPhoneNumber,
+    appointmentDate,
+    setAppointmentDate,
+    error,
     handleAddPatient,
   } = useAddPatient();
   return (
@@ -39,6 +41,7 @@ export default function AddPatient() {
               border="border"
               borderColor="border-gray-400"
             />
+            <p className="text-red-500 text-sm">{error.foreName}</p>
           </div>
         </div>
         <div className="flex pt-10 justify-between items-center">
@@ -52,17 +55,23 @@ export default function AddPatient() {
               border="border"
               borderColor="border-gray-400"
             />
+            <p className="text-red-500 text-sm">{error.foreName}</p>
           </div>
         </div>
         <div className="flex pt-10 justify-between items-center">
           <label htmlFor="Date">Date of birth</label>
           <div className="w-[70%] flex gap-5 justify-between items-center">
-            <div className="border border-gray-500 p-3 rounded">
+            <label
+              htmlFor="date"
+              className="border border-gray-500 p-3 rounded cursor-pointer"
+            >
               <MdOutlineCalendarToday id="Date" />
-            </div>
+            </label>
             <input
               type="date"
-              value={dob || Date}
+              id="date"
+              name="date"
+              value={dob ? dob : undefined}
               onChange={(e) => setDob(e.target.value)}
               className="rounded-md border border-gray-400 py-2 px-3 w-full"
             />
@@ -113,16 +122,67 @@ export default function AddPatient() {
           </div>
         </div>
         <div className="flex pt-10 justify-between items-center">
-          <label htmlFor="Notes">Notes</label>
-          <div className="w-[70%] flex gap-5 justify-between items-center">
-            <textarea
-              name="notes"
-              id="notes"
-              value={notes || ""}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={4}
-              className="border w-full border-gray-400 rounded outline-none px-3 py-2"
-            ></textarea>
+          <label htmlFor="Sex">Status</label>
+          <div className="w-[70%] flex items-center gap-5">
+            <label>
+              <input
+                type="radio"
+                name="status"
+                id="status"
+                value={"Recovered"}
+                onChange={() => setStatus("Recovered")}
+                className="hidden peer"
+              />
+              <span className="peer-checked:bg-primary peer-checked:text-white bg-gray-300 rounded px-7 py-3">
+                Recovered
+              </span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="status"
+                id="status"
+                value={"AwaitingSurgery"}
+                onChange={() => setStatus("Awaiting Surgery")}
+                className="hidden peer"
+              />
+              <span className="peer-checked:bg-primary peer-checked:text-white bg-gray-300 rounded px-7 py-3">
+                Awaiting Surgery
+              </span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="status"
+                id="status"
+                value={"onTreatment"}
+                onChange={() => setStatus("On Treatment")}
+                className="hidden peer"
+              />
+              <span className="peer-checked:bg-primary peer-checked:text-white bg-gray-300 rounded px-7 py-3">
+                On Treatment
+              </span>
+            </label>
+          </div>
+        </div>
+        <div className="flex pt-10 justify-between items-center">
+          <label htmlFor="appointmentDate">Appointment Date</label>
+          <div className="w-[70%] flex items-center">
+            <input
+              type="datetime-local"
+              value={
+                appointmentDate
+                  ? appointmentDate.toISOString().slice(0, 16)
+                  : ""
+              }
+              onChange={(e) =>
+                setAppointmentDate(
+                  e.target.value ? new Date(e.target.value) : null
+                )
+              }
+              id="appointmentDate"
+              className="rounded-md border border-gray-400 py-2 px-3 w-full"
+            />
           </div>
         </div>
         <div className="flex pt-10 justify-between items-center">
@@ -138,6 +198,7 @@ export default function AddPatient() {
             />
           </div>
         </div>
+        <button type="submit">Submit</button>
       </form>
     </>
   );

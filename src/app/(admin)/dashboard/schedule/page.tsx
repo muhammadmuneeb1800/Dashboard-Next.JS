@@ -1,24 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import TopBar from "@/components/topBar/TopBar";
 import Calendar from "@/components/calendor/Calendor";
-import { getSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import Modal from "@/components/modal/modal";
 
 export default function Schedule() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(() => {
-    async function Session() {
-      const sessionData = await getSession();
-      if (!sessionData) {
-        redirect("/login");
-      }
-    }
-    Session();
-  }, []);
 
   const openModal = () => {
     setIsModalOpen(true);

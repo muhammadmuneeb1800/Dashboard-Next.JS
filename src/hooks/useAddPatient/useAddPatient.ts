@@ -1,40 +1,93 @@
 "use client";
 import { addPatientData } from "@/store/slices/patientSlice";
 import { useAppDispatch } from "@/store/store";
-import { getSession } from "next-auth/react";
 import { useState } from "react";
 
 export default function useAddPatient() {
-  const [foreName, setForeName] = useState<string | null>();
-  const [surName, setSurname] = useState<string | null>();
-  const [dob, setDob] = useState<string | Date | null>();
-  const [gender, setGender] = useState<string | null>();
-  const [diagnosis, setDiagnosis] = useState<string | null>();
-  const [notes, setNotes] = useState<string | null>();
-  const [phoneNumber, setPhoneNumber] = useState<string | null>();
-  const [status, setStatus] = useState<string | null>();
-  const [appointmentDate, setAppointmentDate] = useState<string | null>();
-
+  const [foreName, setForeName] = useState<string>();
+  const [surName, setSurname] = useState<string>();
+  const [dob, setDob] = useState<string>();
+  const [gender, setGender] = useState<string>();
+  const [diagnosis, setDiagnosis] = useState<string>();
+  const [status, setStatus] = useState<string>();
+  const [appointmentDate, setAppointmentDate] = useState<Date | null>(
+    new Date()
+  );
+  const [phoneNumber, setPhoneNumber] = useState<string>();
+  const [error, setError] = useState<Record<string, string>>({});
   const dispatch = useAppDispatch();
-  const handleAddPatient = async (e: React.FormEvent<HTMLFormElement>) => {
+
+  const handleAddPatient = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const userId = await getSession();
+    const newErrors: Record<string, string> = {};
+
+    if (!foreName?.trim()) newErrors.foreName = "Forename is required";
+    if (!surName?.trim()) newErrors.surName = "Surname is required";
+    if (!diagnosis?.trim()) newErrors.diagnosis = "Diagnosis is required";
+    if (!status?.trim()) newErrors.status = "Status is required";
+    if (!status?.trim()) newErrors.Status = "Status are required";
+
+    if (!dob) {
+      newErrors.dob = "Date of birth is required";
+    }
+
+    const validGenders = ["Male", "Female"];
+    if (!validGenders.includes(gender as string)) {
+      newErrors.gender = "Invalid gender (Male, Female)";
+    }
+
+    if (!phoneNumber?.trim()) {
+      newErrors.phoneNumber = "Phone number is required";
+    } else if (!/^\d{10,15}$/.test(phoneNumber)) {
+      newErrors.phoneNumber = "Phone number must be 10-15 digits";
+    }
+
+    if (!appointmentDate) {
+      newErrors.appointmentDate = "Appointment date is required";
+    } else {
+      const appointment = new Date(appointmentDate);
+      if (appointment < new Date()) {
+        newErrors.appointmentDate = "Appointment date must be in the future";
+      }
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setError(newErrors);
+      console.log("Validation failed", newErrors);
+      return;
+    }
+
+    console.log("Validation passed, adding patient...");
 
     const patientData = {
-      id: (userId?.user?.id as string) || null,
-      name: foreName,
+      doctorId: null,
+      foreName: foreName,
       surName: surName,
+      dob: dob,
+      sex: gender,
       diagnosis: diagnosis,
       status: status,
       dateTime: appointmentDate,
-      dob: dob,
-      sex: gender,
-      notes: notes,
       phoneNumber: phoneNumber,
     };
 
+    console.log("user in the hoooks===", patientData);
+
     dispatch(addPatientData(patientData));
+
+    console.log("Patient added successfully");
+
+    setForeName("");
+    setSurname("");
+    setDob("");
+    setGender("");
+    setDiagnosis("");
+    setStatus("");
+    setPhoneNumber("");
+    setStatus("");
+    setAppointmentDate(new Date());
+    setError({});
   };
   return {
     foreName,
@@ -43,18 +96,15 @@ export default function useAddPatient() {
     setSurname,
     dob,
     setDob,
-    gender,
     setGender,
     diagnosis,
     setDiagnosis,
-    notes,
-    setNotes,
+    setStatus,
     phoneNumber,
     setPhoneNumber,
-    status,
-    setStatus,
     appointmentDate,
     setAppointmentDate,
+    error,
     handleAddPatient,
   };
 }

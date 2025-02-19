@@ -1,3 +1,3 @@
-export { auth as middleware } from "@/lib/auth";
+// export { auth as middleware } from "@/";
 
 export const config = { matcher: ["/dashboard/:path*"] };

@@ -1,9 +1,9 @@
-import { initilaData } from "@/types/types";
+import { InitialData } from "@/types/types";
 import { axiosInstance } from "@/utils/axiosInstance";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  patients: [{}] as initilaData[],
+  patients: [{}] as InitialData[],
 };
 
 export const fetchPatientsData = createAsyncThunk("fetchPatients", async () => {
@@ -18,9 +18,22 @@ export const fetchPatientsData = createAsyncThunk("fetchPatients", async () => {
 
 export const addPatientData = createAsyncThunk(
   "addPatients",
-  async (user: initilaData) => {
+  async (user: InitialData) => {
+    console.log("user from slice", user);
     try {
-      const response = await axiosInstance.post("/api/patients", user);
+      const response = await axiosInstance.post("api/patients", user);
+      if (response.status === 401) {
+        alert("Patient already exists.");
+        return;
+      }
+      if (response.status === 201) {
+        alert("Congratulations patient added successfully.");
+        return;
+      }
+      if (response.status === 501) {
+        alert("Server error. Please try again later.");
+        return;
+      }
       const patient = await response?.data();
       return patient;
     } catch (error) {
@@ -31,10 +44,10 @@ export const addPatientData = createAsyncThunk(
 
 export const updatePatientData = createAsyncThunk(
   "updatePatients",
-  async (user: initilaData) => {
+  async (user: InitialData) => {
     try {
       const response = await axiosInstance.put(
-        `/api/patients/${user.id}`,
+        `/api/patients/${user?.id}`,
         user
       );
       const patient = await response?.data();

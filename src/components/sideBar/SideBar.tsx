@@ -10,7 +10,11 @@ export default function SideBar() {
   const param = usePathname();
 
   useEffect(() => {
-    setActivePath(param);
+    if (param === "/dashboard/patients/add-patients") {
+      setActivePath("/dashboard/patients");
+    } else {
+      setActivePath(param);
+    }
   }, [param]);
   return (
     <div
@@ -23,7 +27,9 @@ export default function SideBar() {
           width={50}
           height={50}
         />
-        <p className="hidden lg:block  text-primary lg:text-2xl mt-1 lg:font-medium">Medicare</p>
+        <p className="hidden lg:block  text-primary lg:text-2xl mt-1 lg:font-medium">
+          Medicare
+        </p>
       </div>
       <hr className="mt-[7.5px] md:mt-[11px] lg:mt-[11.5px] w-full" />
       <p className="text-info md:text-xs text-[10px] mt-3 px-4">MENU</p>

@@ -3,9 +3,8 @@ import { BsThreeDots } from "react-icons/bs";
 import { PATIENTS } from "@/constant/constant";
 import TopBar from "@/components/topBar/TopBar";
 import Button from "@/components/button/Button";
-import { useEffect, useState } from "react";
-import { getSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { useState } from "react";
+import { Metadata } from "next";
 
 type StatusType = "Recovered" | "Awaiting surgery" | "On treatment";
 
@@ -15,16 +14,12 @@ const statusStyles: Record<StatusType, string> = {
   "On treatment": "bg-red-200 text-red-800",
 };
 
+export const metaData: Metadata = {
+  title: "Patients",
+  description: "Patients Dashboard",
+};
+
 export default function Patients() {
-  useEffect(()=>{
-      async function Session(){
-        const sessionData = await getSession();
-        if(!sessionData){
-          redirect("/login");
-        }
-      }
-      Session();
-  },[])
   const [active, setActive] = useState<boolean>(false);
   const [activePatient, setActivePatient] = useState<string | null>();
   const handleClick = (id: string) => {
@@ -38,7 +33,7 @@ export default function Patients() {
         <TopBar
           title="Total Patients"
           sabTitle="487"
-          link={"/dashboard/patients/addPatients"}
+          link={"/dashboard/patients/add-patients"}
           icon1="FaPlus"
           icon3="TbFilter"
           icon2="IoPrintOutline"

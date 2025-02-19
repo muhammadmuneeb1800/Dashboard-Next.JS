@@ -9,11 +9,10 @@ export interface InitialData {
   id?: string | null;
   name?: string | null;
   surName?: string | null;
+  dob?: string | null;
+  sex?: string | null;
   diagnosis?: string | null;
   status?: string | null;
-  dateTime?: string | null;
-  dob?: Date | string | null;
-  sex?: string | null;
-  notes?: string | null;
+  appointmentDate?: Date | null;
   phoneNumber?: string | null;
 }

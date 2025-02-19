@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async () => {
   try {
@@ -13,25 +13,39 @@ export const GET = async () => {
   }
 };
 
-export const POST = async (req: Request) => {
+export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();
+    console.log("user form API=========", body);
     const exitPatient = await prisma.patients.findFirst({
       where: { foreName: body.foreName },
     });
+    console.log("into post... ", exitPatient);
     if (exitPatient) {
-      return NextResponse.json({ message: "Patient already exists" });
+      return NextResponse.json(
+        { message: "Patient already exists" },
+        { status: 401 }
+      );
     }
 
     const newPatient = await prisma.patients.create({
       data: body,
     });
-    return NextResponse.json({
-      message: "Succesfully Create Patient",
-      patient: newPatient,
-    });
+
+    console.log("Newly created... ", newPatient);
+    return NextResponse.json(
+      {
+        message: "Succesfully Create Patient",
+        patient: newPatient,
+      },
+      { status: 201 }
+    );
   } catch (error) {
-    return NextResponse.json({ message: "Error to POST", error: error });
+    console.log("erro from api====", error);
+    return NextResponse.json(
+      { message: "Error to POST", error: error },
+      { status: 501 }
+    );
   }
 };
 

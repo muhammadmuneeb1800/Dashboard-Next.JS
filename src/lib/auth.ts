@@ -1,102 +1,58 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import NextAuth from "next-auth";
 import { prisma } from "@/lib/prisma";
-import Credentials from "next-auth/providers/credentials";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import bcrypt from "bcryptjs";
+import NextAuth, { NextAuthOptions } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     Credentials({
+      name: "Credentials",
       credentials: {
         email: {
-          label: "Email",
-          placeholder: "Enter your email",
+          label: "email",
           type: "email",
+          placeholder: "email",
         },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error("Email and password are required");
+        try {
+          const user = await prisma.user.findUnique({
+            where: { email: credentials?.email },
+          });
+          if (user) {
+            const isPasswordValid = await bcrypt.compare(
+              credentials?.password as string,
+              user.password as string
+            );
+            if (isPasswordValid) {
+              return user;
+            } else {
+              return null;
+            }
+          } else {
+            return null;
+          }
+        } catch (error) {
+          throw new Error("Error", error as Error);
         }
-
-        const user = await prisma.user.findFirst({
-          where: { email: credentials.email },
-        });
-
-        if (!user) {
-          throw new Error("User not found");
-        }
-
-        const isPasswordValid = await bcrypt.compare(
-          credentials.password as string,
-          user.password as string
-        );
-
-        if (!isPasswordValid) {
-          throw new Error("Invalid credentials");
-        }
-
-        return { id: user.id, email: user.email };
       },
     }),
   ],
-});
+  pages: {
+    signIn: "/login",
+    newUser: "/register",
+  },
+  callbacks: {
+    async redirect({ baseUrl }) {
+      return baseUrl + "/dashboard";
+    },
+  },
+};
 
-// import { PrismaAdapter } from "@auth/prisma-adapter";
-// import NextAuth from "next-auth";
-// import { prisma } from "@/lib/prisma";
-// import Credentials from "next-auth/providers/credentials";
-// import bcrypt from "bcryptjs";
-
-// export const { handlers, signIn, signOut, auth } = NextAuth({
-//   adapter: PrismaAdapter(prisma),
-//   session: { strategy: "jwt" },
-//   providers: [
-//     Credentials({
-//       credentials: {
-//         email: {
-//           label: "Email",
-//           placeholder: "Enter your email",
-//           type: "email",
-//         },
-//         password: { label: "Password", type: "password" },
-//       },
-//       async authorize(credentials) {
-//         if (!credentials?.email || !credentials?.password) {
-//           throw new Error("Email and password are required");
-//         }
-
-//         const user = await prisma.user.findFirst({
-//           where: { email: credentials.email },
-//         });
-
-//         if (!user) {
-//           throw new Error("User not found");
-//         }
-
-//         const isPasswordValid = await bcrypt.compare(
-//           credentials.password as string,
-//           user.password as string
-//         );
-
-//         if (!isPasswordValid) {
-//           throw new Error("password is not valid");
-//         }
-
-//         return { id: user.id, email: user.email };
-//       },
-//     }),
-//   ],
-//   pages: {
-//     signIn: "/login",
-//   },
-//   callbacks: {
-//     async signIn({ user }) {
-//       if (!user) return "/login?error=Invalid credentials";
-//       return true;
-//     },
-//   },
-// });
+export default NextAuth(authOptions);
