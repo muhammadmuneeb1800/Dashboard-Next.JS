@@ -44,10 +44,10 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  pages: {
-    signIn: "/login",
-    newUser: "/register",
-  },
+  // pages: {
+  //   signIn: "/login",
+  //   newUser: "/register",
+  // },
   callbacks: {
     async redirect({ baseUrl }) {
       return baseUrl + "/dashboard";

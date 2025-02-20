@@ -1,11 +1,12 @@
 "use client";
-
-import React from "react";
-import Input from "../input/Input";
+import React from 'react'
+import Button from '@/components/button/Button';
+import Input from "@/components/input/Input";
 import { MdOutlineCalendarToday } from "react-icons/md";
 import useAddPatient from "@/hooks/useAddPatient/useAddPatient";
+import { useRouter } from 'next/navigation';
 
-export default function AddPatient() {
+export default function AddPatientsForm() {
   const {
     foreName,
     setForeName,
@@ -24,8 +25,41 @@ export default function AddPatient() {
     error,
     handleAddPatient,
   } = useAddPatient();
+  const route = useRouter();
   return (
     <>
+      <div className="shadow">
+        <div className="flex justify-between items-center px-6 bg-white py-3 mt-5 rounded">
+          <div>
+            <p className="text-xl font-medium">Add New Patient</p>
+          </div>
+          <div className="flex justify-center gap-5">
+            <div
+              className="text-center"
+              onClick={() => route.push("/dashboard/patients/addPatients/")}
+            >
+              <Button
+                onClick={() => route.back()}
+                text="Cencel"
+                bg="bg-white"
+                hBg="bg-primary"
+                color="text-primary"
+                hColor="text-white"
+              />
+            </div>
+            <div className="text-center">
+              <Button
+                type="submit"
+                text="Save"
+                bg="bg-primary"
+                hBg="bg-white"
+                color="text-white"
+                hColor="text-primary"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
       <form
         onSubmit={handleAddPatient}
         className="mt-5 bg-white p-8 rounded w-[75%] mx-auto"
@@ -198,7 +232,6 @@ export default function AddPatient() {
             />
           </div>
         </div>
-        <button type="submit">Submit</button>
       </form>
     </>
   );

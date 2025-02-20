@@ -1,4 +1,10 @@
 import TopBar from "@/components/topBar/TopBar";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard / Messages",
+  description: "Your Personal Doctor Dashboard.",
+};
 
 export default async function Message() {
   return (

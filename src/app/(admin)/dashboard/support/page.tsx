@@ -1,4 +1,10 @@
 import TopBar from "@/components/topBar/TopBar";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard / support",
+  description: "Your Dashboard Support",
+};
 
 export default async function Support() {
   return (

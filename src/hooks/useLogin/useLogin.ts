@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-// import { userAuth } from "@/store/slices/authSlice";
-import { useAppDispatch } from "@/store/store";
 import { showToast } from "@/components/toast/Toast";
+import { signIn, useSession } from "next-auth/react";
 
 export default function useLogin() {
   const router = useRouter();
@@ -12,7 +11,7 @@ export default function useLogin() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const dispatch = useAppDispatch();
+  const session = useSession();
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -53,7 +52,6 @@ export default function useLogin() {
         return;
       } else {
         setLoading(false);
-        // dispatch(userAuth());
         router.push("/dashboard");
         setTimeout(() => {
           showToast("success", "Login successfully 👍 Now moving to Dashboard");
@@ -73,6 +71,8 @@ export default function useLogin() {
     errors,
     setErrors,
     loading,
+    session,
+    router,
     handleLogin,
   };
 }

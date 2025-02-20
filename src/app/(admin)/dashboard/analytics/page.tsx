@@ -1,4 +1,10 @@
 import TopBar from "@/components/topBar/TopBar";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard / Analytics",
+  description: "Your Analytics of your personal Dashboard.",
+};
 
 export default async function Analytics() {
   return (

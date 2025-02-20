@@ -3,6 +3,9 @@ export interface initialAuth {
   userName: string | undefined | null;
   email: string | undefined;
   companyName: string | undefined | null;
+  resetToken?: string | null;
+  resetTokenExpiry?: Date | null;
+  emailVerified?: Date | null;
 }
 
 export interface InitialData {

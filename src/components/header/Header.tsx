@@ -6,14 +6,14 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
 import { useState } from "react";
 import { MONTH_OF_YEAR } from "@/constant/constant";
-import { useAppSelector } from "@/store/store";
+import { signOut, useSession } from "next-auth/react";
 
 export default function Header() {
   const [search, setSearch] = useState<string>("");
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [isNotification, setIsNotification] = useState(false);
 
-  const user = useAppSelector((store) => store.authSlice) || [];
+  const user = useSession();
 
   const day = new Date().getDate();
   const month = new Date().getMonth();
@@ -32,11 +32,10 @@ export default function Header() {
       <div className="w-full flex lg:justify-end justify-between md:gap-4 lg:gap-14 items-center">
         <div>
           <p className="text-lg md:text-xl font-medium">
-            {user?.user?.userName?.split(" ")[0] ||
-              "Muhammad Muneeb".split(" ")[0]}
+            {user?.data?.user?.name}
           </p>
           <p className="text-base md:text-lg font-bold">
-            {user?.user?.companyName || "Techloset"}
+            {user.data?.user?.email}
           </p>
         </div>
         <div className="hidden md:block border p-2 rounded">
@@ -63,7 +62,7 @@ export default function Header() {
               )}
             </div>
           )}
-          <button>
+          <button onClick={() => signOut({ callbackUrl: "/ligin" })}>
             <FiLogOut className="text-3xl text-info cursor-pointer" />
           </button>
         </div>
