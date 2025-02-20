@@ -7,7 +7,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model User {
+model Doctor {
   id            String          @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
   email         String          @unique
@@ -19,8 +19,10 @@ model User {
   employees     String?
   accounts      Account[]
   sessions      Session[]
-  // Optional for WebAuthn support
   Authenticator Authenticator[]
+  patients      Patients[]
+  appointments  Appointments[]
+  tasks         Tasks[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -43,7 +45,7 @@ model Account {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user Doctor @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -53,7 +55,7 @@ model Session {
   sessionToken String   @unique
   userId       String   @db.ObjectId
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         Doctor   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -68,7 +70,6 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @id @map("_id")
   userId               String  @db.ObjectId
@@ -79,7 +80,7 @@ model Authenticator {
   credentialBackedUp   Boolean
   transports           String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user Doctor @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, credentialID])
 }
@@ -89,38 +90,81 @@ model Authenticator {
  */
 
 model Patients {
-  doctorId        String?   
-  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  doctorId        String        @db.ObjectId
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
   foreName        String
   surName         String
-  dob             String?
-  sex             String
+  dob             String
+  sex             Sex
   diagnosis       String
-  status          String
+  status          PatientStatus
   appointmentDate DateTime?
   phoneNumber     String
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 
-  // doctor User @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  doctor Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+}
+
+enum Sex {
+  Male
+  Female
+}
+
+enum PatientStatus {
+  Recovered
+  Awaiting_Surgery
+  On_Treatment
 }
 
 /**
  * ******************************************* Appointments Schema **************************************************************************
  */
-
 model Appointments {
-  id                 String    @id @default(auto()) @map("_id") @db.ObjectId
-  doctorId           String    @db.ObjectId
-  doctorName         String
-  appointmentDate    DateTime?
-  location           String
-  patientName        String
-  purposeOfVisit     String
-  appointmentStatus  String
-  duration           String
-  appointmentType    String
-  OnlineConsultation String
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
+  id                String            @id @default(auto()) @map("_id") @db.ObjectId
+  doctorId          String            @db.ObjectId
+  doctorName        String
+  appointmentDate   DateTime?
+  location          String
+  patientName       String
+  purposeOfVisit    String
+  appointmentStatus AppointmentStatus
+  duration          String
+  appointmentType   AppointmentType
+  isOnline          Boolean
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  doctor Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+}
+
+enum AppointmentStatus {
+  CONFIRMED_REQUIRED
+  CONFIRMED
+}
+
+enum AppointmentType {
+  FIRST_TIME
+  FOLLOW_UP_VISIT
+}
+
+/**
+ * ******************************************* Tasks Schema **************************************************************************
+ */
+
+model Tasks {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  doctorId    String     @db.ObjectId
+  title       String
+  description String
+  status      TaskStatus
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  doctor Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+}
+
+enum TaskStatus {
+  NOT_COMPLETED
+  COMPLETED
 }

@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // export const GET = async () => {
 //   try {
@@ -19,10 +19,10 @@ import { NextResponse } from "next/server";
 //   }
 // };
 
-export const POST = async (req: Request) => {
+export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();
-    const existsUser = await prisma.user.findFirst({
+    const existsUser = await prisma.doctor.findFirst({
       where: { email: body.email },
     });
     if (existsUser) {
@@ -31,7 +31,7 @@ export const POST = async (req: Request) => {
         { status: 401 }
       );
     }
-    const user = await prisma.user.create({ data: body });
+    const user = await prisma.doctor.create({ data: body });
     return NextResponse.json(
       { message: "User registered successfully", user },
       { status: 201 }
@@ -44,11 +44,11 @@ export const POST = async (req: Request) => {
   }
 };
 
-export const PUT = async (req: Request) => {
+export const PUT = async (req: NextRequest) => {
   try {
     const body = await req.json();
     const { id } = body;
-    const updatedUser = await prisma.user.update({
+    const updatedUser = await prisma.doctor.update({
       where: { id: id as string },
       data: body,
     });
@@ -64,11 +64,11 @@ export const PUT = async (req: Request) => {
   }
 };
 
-export const DELETE = async (req: Request) => {
+export const DELETE = async (req: NextRequest) => {
   try {
     const body = await req.json();
     const { id } = body;
-    await prisma.user.delete({ where: { id: id as string } });
+    await prisma.doctor.delete({ where: { id: id as string } });
     return NextResponse.json({ message: "User deleted successfully" });
   } catch (error) {
     return NextResponse.json({

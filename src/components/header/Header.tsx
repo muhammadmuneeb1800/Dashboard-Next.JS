@@ -62,7 +62,7 @@ export default function Header() {
               )}
             </div>
           )}
-          <button onClick={() => signOut({ callbackUrl: "/ligin" })}>
+          <button onClick={() => signOut()}>
             <FiLogOut className="text-3xl text-info cursor-pointer" />
           </button>
         </div>

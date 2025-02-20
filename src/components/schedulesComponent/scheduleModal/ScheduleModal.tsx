@@ -3,14 +3,14 @@ import { CiLocationOn } from "react-icons/ci";
 import { ImCross } from "react-icons/im";
 import { LuUserRound } from "react-icons/lu";
 import { SlClock } from "react-icons/sl";
-import Input from "../input/Input";
+import Input from "../../input/Input";
 import { MdOutlineNotifications } from "react-icons/md";
-import Button from "../button/Button";
+import Button from "../../button/Button";
 
-export default function Modal({ close }: { close: () => void }) {
+export default function ScheduleModal({ close }: { close: () => void }) {
   return (
     <>
-      <div className="fixed justify-center inset-0 z-50 items-center h-screen w-full bg-black backdrop-blur bg-opacity-40">
+      <div onClick={close} className="fixed flex justify-center inset-0 z-50 items-center h-screen w-full bg-black backdrop-blur bg-opacity-40">
         <div className="bg-white w-[60%] mx-auto h-[80%] mt-10 overflow-auto">
           <div className="bg-primary flex justify-between items-center px-4 py-6">
             <p className="text-xl font-bold text-white">New Appointment</p>

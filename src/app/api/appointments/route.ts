@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async () => {
   try {
@@ -13,7 +13,7 @@ export const GET = async () => {
   }
 };
 
-export const POST = async (req: Request) => {
+export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();
     const exitsAppointments = await prisma.appointments.findFirst({
@@ -37,7 +37,7 @@ export const POST = async (req: Request) => {
   }
 };
 
-export const PUT = async (req: Request) => {
+export const PUT = async (req: NextRequest) => {
   try {
     const url = new URL(req.url);
     const id = url.searchParams.get("id");
@@ -55,7 +55,7 @@ export const PUT = async (req: Request) => {
   }
 };
 
-export const DELETE = async (req: Request) => {
+export const DELETE = async (req: NextRequest) => {
   try {
     const body = await req.json();
     const { id } = body;

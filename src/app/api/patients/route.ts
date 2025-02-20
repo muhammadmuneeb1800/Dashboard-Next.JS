@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { NextRequest, NextResponse } from "next/server";
+import { NextNextRequest, NextResponse } from "next/server";
 
 export const GET = async () => {
   try {
@@ -13,23 +13,22 @@ export const GET = async () => {
   }
 };
 
-export const POST = async (req: NextRequest) => {
+export const POST = async (req: NextNextRequest) => {
   try {
     const body = await req.json();
     console.log("user form API=========", body);
-    const exitPatient = await prisma.patients.findFirst({
-      where: { foreName: body.foreName },
-    });
-    console.log("into post... ", exitPatient);
-    if (exitPatient) {
-      return NextResponse.json(
-        { message: "Patient already exists" },
-        { status: 401 }
-      );
-    }
-
     const newPatient = await prisma.patients.create({
-      data: body,
+      data: {
+        doctorId: body.doctorId,
+        foreName: body.foreName,
+        surName: body.surName,
+        dob: body.dob,
+        sex: body.sex,
+        diagnosis: body.diagnosis,
+        status: body.status,
+        appointmentDate: body.appointmentDate,
+        phoneNumber: body.phoneNumber,
+      },
     });
 
     console.log("Newly created... ", newPatient);
@@ -49,7 +48,7 @@ export const POST = async (req: NextRequest) => {
   }
 };
 
-export const PUT = async (req: Request) => {
+export const PUT = async (req: NextRequest) => {
   try {
     const url = new URL(req.url);
     const id = url.searchParams.get("id");
@@ -67,7 +66,7 @@ export const PUT = async (req: Request) => {
   }
 };
 
-export const DELETE = async (req: Request) => {
+export const DELETE = async (req: NextRequest) => {
   try {
     const body = await req.json();
     const { id } = body;

@@ -1,11 +1,7 @@
+import { taskData } from "@/types/types";
 import { BsThreeDots } from "react-icons/bs";
 
-interface taskDetails {
-  title: string;
-  dis: string;
-}
-
-export default function Task(props: taskDetails) {
+export default function TaskCard(props: taskData) {
   return (
     <>
       <div className="bg-success rounded px-3 py-5 md:p-5 flex justify-between shadow-sm items-center">
@@ -19,11 +15,16 @@ export default function Task(props: taskDetails) {
               name="checkbox"
               id="checkbox"
             />
-            <label htmlFor="checkbox" className="text-[15px] md:text-lg font-medium">
-              {props.title}
+            <label
+              htmlFor="checkbox"
+              className="text-[15px] md:text-lg font-medium"
+            >
+              {props?.title}
             </label>
           </div>
-          <p className="md:pl-12 pl-9 text-[11px] md:text-[14px]">{props.dis}</p>
+          <p className="md:pl-12 pl-9 text-[11px] md:text-[14px]">
+            {props?.description}
+          </p>
         </div>
         <div className="flex justify-center items-center gap-2 md:gap-10">
           <p className="text-[11px] md:text-[15px]">24 Oct 2022</p>

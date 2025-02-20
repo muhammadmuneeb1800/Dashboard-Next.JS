@@ -10,7 +10,8 @@ export interface initialAuth {
 
 export interface InitialData {
   id?: string | null;
-  name?: string | null;
+  doctorId?: string | null;
+  foreName?: string | null;
   surName?: string | null;
   dob?: string | null;
   sex?: string | null;
@@ -18,4 +19,12 @@ export interface InitialData {
   status?: string | null;
   appointmentDate?: Date | null;
   phoneNumber?: string | null;
+}
+
+export interface taskData {
+  id?: string | null;
+  doctorId?: string | null;
+  title: string | null;
+  description: string | null;
+  status: string | null;
 }

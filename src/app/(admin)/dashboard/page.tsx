@@ -1,6 +1,6 @@
 import MainCards from "@/components/cards/mainCards/MainCards";
 import SchedulesComponent from "@/components/schedulesComponent/mainSchedules/MainSchedules";
-import Tasks from "@/components/tasks/Tasks";
+import DashboardTask from "@/components/tasks/dashboardTask/DashboardTask";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -15,7 +15,7 @@ export default async function Dashboard() {
         <h1 className="mb-2">Dashboard</h1>
         <MainCards />
         <div className="flex flex-col xl:flex-row justify-center gap-4">
-          <Tasks />
+          <DashboardTask />
           <SchedulesComponent />
         </div>
       </div>

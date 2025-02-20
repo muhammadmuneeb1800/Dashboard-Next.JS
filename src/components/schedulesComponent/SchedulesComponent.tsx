@@ -1,7 +1,7 @@
 "use client";
 
 import Calendar from "@/components/calendor/Calendor";
-import Modal from "@/components/modal/modal";
+import ScheduleModal from "@/components/schedulesComponent/scheduleModal/ScheduleModal";
 import TopBar from "@/components/topBar/TopBar";
 import React, { useState } from "react";
 
@@ -29,7 +29,7 @@ export default function MainSchedules() {
         <Calendar />
       </div>
 
-      {isModalOpen && <Modal close={closeModal} />}
+      {isModalOpen && <ScheduleModal close={closeModal} />}
     </div>
   );
 }

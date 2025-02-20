@@ -1,6 +1,9 @@
 "use client";
+import { showToast } from "@/components/toast/Toast";
 import { addPatientData } from "@/store/slices/patientSlice";
 import { useAppDispatch } from "@/store/store";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function useAddPatient() {
@@ -10,12 +13,12 @@ export default function useAddPatient() {
   const [gender, setGender] = useState<string>();
   const [diagnosis, setDiagnosis] = useState<string>();
   const [status, setStatus] = useState<string>();
-  const [appointmentDate, setAppointmentDate] = useState<Date | null>(
-    new Date()
-  );
+  const [appointmentDate, setAppointmentDate] = useState<Date | null>();
   const [phoneNumber, setPhoneNumber] = useState<string>();
   const [error, setError] = useState<Record<string, string>>({});
   const dispatch = useAppDispatch();
+  const currentuser = useSession();
+  const router = useRouter();
 
   const handleAddPatient = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,26 +60,27 @@ export default function useAddPatient() {
       console.log("Validation failed", newErrors);
       return;
     }
-
-    console.log("Validation passed, adding patient...");
+    const doctorId = currentuser.data?.user?.id;
 
     const patientData = {
-      doctorId: null,
+      doctorId: doctorId,
       foreName: foreName,
       surName: surName,
       dob: dob,
       sex: gender,
       diagnosis: diagnosis,
-      status: status,
-      dateTime: appointmentDate,
+      status: status?.replace(" ", "_"),
+      appointmentDate: appointmentDate,
       phoneNumber: phoneNumber,
     };
 
-    console.log("user in the hoooks===", patientData);
-
-    dispatch(addPatientData(patientData));
-
-    console.log("Patient added successfully");
+    try {
+      await dispatch(addPatientData(patientData));
+      showToast("success", "Patient added successfully");
+      router.push("/dashboard/patients");
+    } catch (error) {
+      console.log("Error from the useAdd Patients", error);
+    }
 
     setForeName("");
     setSurname("");
@@ -86,7 +90,7 @@ export default function useAddPatient() {
     setStatus("");
     setPhoneNumber("");
     setStatus("");
-    setAppointmentDate(new Date());
+    setAppointmentDate(null);
     setError({});
   };
   return {

@@ -3,16 +3,15 @@ import { axiosInstance } from "@/utils/axiosInstance";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  patients: [{}] as InitialData[],
+  patients: [] as InitialData[],
 };
 
 export const fetchPatientsData = createAsyncThunk("fetchPatients", async () => {
   try {
     const response = await axiosInstance.get("/api/patients");
-    const patients = await response?.data();
-    return patients;
+    return response?.data || [];
   } catch (error) {
-    console.log(error);
+    console.error("Error fetching patients:", error);
   }
 });
 
@@ -26,18 +25,14 @@ export const addPatientData = createAsyncThunk(
         alert("Patient already exists.");
         return;
       }
-      if (response.status === 201) {
-        alert("Congratulations patient added successfully.");
-        return;
-      }
       if (response.status === 501) {
         alert("Server error. Please try again later.");
         return;
       }
-      const patient = await response?.data();
+      const patient = (await response?.data) || {};
       return patient;
     } catch (error) {
-      console.log(error);
+      throw new Error("Error creating patient", error as Error);
     }
   }
 );
@@ -76,10 +71,10 @@ const Patients = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchPatientsData.fulfilled, (state, action) => {
-      state.patients = action.payload;
+      state.patients = action.payload || [];
     });
     builder.addCase(addPatientData.fulfilled, (state, action) => {
-      state.patients.push(action.payload);
+      state.patients = [action.payload, ...state.patients];
     });
     builder.addCase(updatePatientData.fulfilled, (state, action) => {
       state.patients = state.patients.map((patient) =>

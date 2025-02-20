@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authentication from "@/store/slices/authSlice";
 import patients from "@/store/slices/patientSlice";
+import tasks from "@/store/slices/taskSlice";
 import { useDispatch, useSelector, useStore } from "react-redux";
 
 export const makeStore = () => {
@@ -8,6 +9,7 @@ export const makeStore = () => {
     reducer: {
       authSlice: authentication,
       patientSlice: patients,
+      tasksSlice: tasks,
     },
   });
 };

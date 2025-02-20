@@ -2,7 +2,7 @@ import TopBar from "@/components/topBar/TopBar";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Dashboard / Tasks",
+  title: "Dashboard - Tasks",
   description: "Your Dashboard Tasks here",
 };
 

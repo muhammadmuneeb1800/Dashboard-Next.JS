@@ -4,7 +4,7 @@ import Link from "next/link";
 import AddPatientsForm from "@/components/PatientsComponent/addPatientForm/AddPatientsForm";
 
 export const metadata: Metadata = {
-  title: "Dashboard / Add Patient",
+  title: "Dashboard Patients - Add Patient",
   description: "Add Patients in your Dashboard",
 };
 
