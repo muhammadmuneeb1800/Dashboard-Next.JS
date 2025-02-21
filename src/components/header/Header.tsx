@@ -7,20 +7,21 @@ import { FiLogOut } from "react-icons/fi";
 import { useState } from "react";
 import { MONTH_OF_YEAR } from "@/constant/constant";
 import { signOut, useSession } from "next-auth/react";
+import { showToast } from "../toast/Toast";
 
 export default function Header() {
   const [search, setSearch] = useState<string>("");
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [isNotification, setIsNotification] = useState(false);
 
-  const user = useSession();
+  const { data: session } = useSession();
 
   const day = new Date().getDate();
   const month = new Date().getMonth();
   const year = new Date().getFullYear();
 
   return (
-    <div className="w-full flex px-5 py-[10.8px] justify-between items-center gap-10 border-light border-b">
+    <div className="w-full flex px-3 md:px-5 py-[10.8px] justify-between items-center gap-10 border-light border-b">
       <div className="w-[50%] lg:flex hidden justify-between items-center border border-light px-5 rounded">
         <Input
           placeholder="Search"
@@ -32,22 +33,24 @@ export default function Header() {
       <div className="w-full flex lg:justify-end justify-between md:gap-4 lg:gap-14 items-center">
         <div>
           <p className="text-lg md:text-xl font-medium">
-            {user?.data?.user?.name}
+            {session?.user?.name?.slice(0, 10).concat("...")}
           </p>
           <p className="text-base md:text-lg font-bold">
-            {user.data?.user?.email}
+            {session?.user?.email
+              ?.slice(0, 8)
+              .concat("...com")}
           </p>
         </div>
         <div className="hidden md:block border p-2 rounded">
           {day + "," + MONTH_OF_YEAR[month] + " " + year}
         </div>
         <div className="flex justify-center items-center gap-5 md:gap-3 lg:gap-6">
-          <CiMail className="text-3xl text-info cursor-pointer" />
+          <CiMail className="text-2xl lg:text-3xl text-info cursor-pointer" />
           <button
             className="relative"
             onClick={() => setNotificationOpen(!notificationOpen)}
           >
-            <IoMdNotificationsOutline className="text-3xl text-info cursor-pointer" />
+            <IoMdNotificationsOutline className="text-2xl lg:text-3xl text-info cursor-pointer" />
           </button>
           {notificationOpen && (
             <div className="z-50 absolute top-16 py-3 overflow-x-hidden right-20 border shadow w-80 h-72 rounded bg-white px-5">
@@ -62,8 +65,13 @@ export default function Header() {
               )}
             </div>
           )}
-          <button onClick={() => signOut()}>
-            <FiLogOut className="text-3xl text-info cursor-pointer" />
+          <button
+            onClick={async () => {
+              await signOut();
+              showToast("success", "Logout successful");
+            }}
+          >
+            <FiLogOut className="text-2xl lg:text-3xl text-info cursor-pointer" />
           </button>
         </div>
       </div>

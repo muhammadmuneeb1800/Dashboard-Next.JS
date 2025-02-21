@@ -1,6 +1,6 @@
 export interface initialAuth {
-  id: string | undefined;
-  userName: string | undefined | null;
+  id?: string | undefined;
+  name: string | undefined | null;
   email: string | undefined;
   companyName: string | undefined | null;
   resetToken?: string | null;

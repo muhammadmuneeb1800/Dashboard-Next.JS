@@ -16,6 +16,19 @@ export const userAuth = createAsyncThunk("userAuth", async () => {
   }
 });
 
+export const userEdit = createAsyncThunk(
+  "userEditProfile",
+  async (data: initialAuth) => {
+    try {
+      const response = await axiosInstance.put(`/api/login-user`, data);
+      console.log("response from userEditProfile", response);
+      return response?.data || [];
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 const Authentication = createSlice({
   name: "Authentication",
   initialState,

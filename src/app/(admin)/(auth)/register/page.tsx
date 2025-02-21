@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 export default function Register() {
   return (
     <>
-      <div className="flex">
-        <div className="h-screen w-[60%]">
+      <div className="flex justify-center items-center w-full h-screen">
+        <div className="h-screen md:w-[60%] w-full">
           <RegisterForm />
         </div>
         <div className="w-[100%] md:pt-16 lg:pt-0 h-screen justify-center items-center hidden md:block bg-primary text-center col-span-2">

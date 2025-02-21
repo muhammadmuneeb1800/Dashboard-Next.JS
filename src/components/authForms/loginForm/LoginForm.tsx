@@ -76,12 +76,13 @@ export default function LoginForm() {
           <div className="mt-20">
             {loading ? (
               <Button
-                text="Loading..."
-                type="submit"
-                bg="bg-primary"
+                text="Login..."
+                bg="bg-gray-400"
                 color="text-white"
-                hBg="bg-white"
-                hColor="text-primary"
+                hBg="bg-gray-400"
+                hColor="text-white"
+                borderWidth="border-2"
+                borderColor="border-gray-400"
                 width="w-full"
               />
             ) : (
@@ -92,6 +93,8 @@ export default function LoginForm() {
                 color="text-white"
                 hBg="bg-white"
                 hColor="text-primary"
+                borderColor="border-primary"
+                borderWidth="border-2"
                 width="w-full"
               />
             )}

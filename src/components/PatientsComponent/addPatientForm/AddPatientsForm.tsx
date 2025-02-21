@@ -29,42 +29,46 @@ export default function AddPatientsForm() {
   return (
     <>
       <form onSubmit={handleAddPatient}>
-        <div className="shadow">
-          <div className="flex justify-between items-center px-6 bg-white py-3 mt-5 rounded">
-            <div>
-              <p className="text-xl font-medium">Add New Patient</p>
+        <div className="flex shadow justify-between items-center px-3 md:px-6 bg-white py-3 mt-5 rounded">
+            <p className="text-lg md:text-xl block md:hidden font-medium">Add Patient</p>
+            <p className="text-lg md:text-xl hidden md:block font-medium">Add New Patient</p>
+          <div className="flex justify-center items-center gap-2 md:gap-5">
+            <div className="text-center" onClick={() => route.back()}>
+              <Button
+                text="Cencel"
+                bg="bg-white"
+                hBg="bg-primary"
+                color="text-primary"
+                borderWidth="border-2"
+                borderColor="border-primary"
+                hColor="text-white"
+              />
             </div>
-            <div className="flex justify-center gap-5">
-              <div className="text-center" onClick={() => route.back()}>
-                <Button
-                  text="Cencel"
-                  bg="bg-white"
-                  hBg="bg-primary"
-                  color="text-primary"
-                  hColor="text-white"
-                />
-              </div>
-              <div className="text-center">
-                <Button
-                  type="submit"
-                  text="Save"
-                  bg="bg-primary"
-                  hBg="bg-white"
-                  color="text-white"
-                  hColor="text-primary"
-                />
-              </div>
+            <div className="text-center">
+              <Button
+                type="submit"
+                text="Save"
+                bg="bg-primary"
+                hBg="bg-white"
+                color="text-white"
+                borderWidth="border-2"
+                borderColor="border-primary"
+                hColor="text-primary"
+              />
             </div>
           </div>
         </div>
         {/* Start form from here */}
-        <div className="mt-5 bg-white p-8 rounded w-[75%] mx-auto">
-          <div className="flex justify-between items-center">
-            <label htmlFor="Forename">Forename</label>
+        <div className="mt-5 bg-white p-4 md:p-8 rounded w-[100%] md:w-[85%] shadow lg:w-[75%] mx-auto">
+          <div className="flex justify-between items-center gap-2">
+            <label htmlFor="Forename" className="text-sm md:text-base">
+              Forename
+            </label>
             <div className="w-[70%]">
               <Input
                 type="text"
                 id="Forename"
+                placeholder="Jhone"
                 value={foreName || ""}
                 onChange={(e) => setForeName(e.target.value)}
                 border="border"
@@ -73,8 +77,10 @@ export default function AddPatientsForm() {
               <p className="text-red-500 text-sm">{error.foreName}</p>
             </div>
           </div>
-          <div className="flex pt-10 justify-between items-center">
-            <label htmlFor="Surname">Surname</label>
+          <div className="flex pt-10 justify-between items-center gap-2">
+            <label htmlFor="Surname" className="text-sm md:text-base">
+              Surname
+            </label>
             <div className="w-[70%]">
               <Input
                 type="text"
@@ -87,12 +93,14 @@ export default function AddPatientsForm() {
               <p className="text-red-500 text-sm">{error.foreName}</p>
             </div>
           </div>
-          <div className="flex pt-10 justify-between items-center">
-            <label htmlFor="Date">Date of birth</label>
+          <div className="flex pt-10 justify-between gap-2 items-center">
+            <label htmlFor="Date" className="text-sm md:text-base">
+              Date of birth
+            </label>
             <div className="w-[70%] flex gap-5 justify-between items-center">
               <label
                 htmlFor="date"
-                className="border border-gray-500 p-3 rounded cursor-pointer"
+                className="border hidden md:block border-gray-500 p-3 rounded cursor-pointer"
               >
                 <MdOutlineCalendarToday id="Date" />
               </label>
@@ -100,15 +108,17 @@ export default function AddPatientsForm() {
                 type="date"
                 id="date"
                 name="date"
-                value={dob ? dob : undefined}
+                value={dob ?? ""}
                 onChange={(e) => setDob(e.target.value)}
-                className="rounded-md border border-gray-400 py-2 px-3 w-full"
+                className="rounded-md border border-gray-400 py-2 outline-none px-3 w-full"
               />
             </div>
           </div>
-          <div className="flex pt-10 justify-between items-center">
-            <label htmlFor="Sex">Sex</label>
-            <div className="w-[70%] flex items-center gap-5">
+          <div className="flex pt-10 justify-between items-center gap-2">
+            <label htmlFor="Sex" className="text-sm md:text-base">
+              Sex
+            </label>
+            <div className="w-[70%] flex flex-col md:flex-row md:items-center items-start gap-6 md:gap-5">
               <label>
                 <input
                   type="radio"
@@ -137,8 +147,10 @@ export default function AddPatientsForm() {
               </label>
             </div>
           </div>
-          <div className="flex pt-10 justify-between items-center">
-            <label htmlFor="Diagnosis">Diagnosis</label>
+          <div className="flex pt-10 justify-between items-center gap-2">
+            <label htmlFor="Diagnosis" className="text-sm md:text-base">
+              Diagnosis
+            </label>
             <div className="w-[70%] flex gap-5 justify-between items-center">
               <Input
                 type="text"
@@ -150,9 +162,11 @@ export default function AddPatientsForm() {
               />
             </div>
           </div>
-          <div className="flex pt-10 justify-between items-center">
-            <label htmlFor="Sex">Status</label>
-            <div className="w-[70%] flex items-center gap-5">
+          <div className="flex pt-10 justify-between items-center gap-2">
+            <label htmlFor="status" className="text-sm md:text-base">
+              Status
+            </label>
+            <div className="w-[70%] flex flex-col items-start lg:flex-row lg:items-center gap-6 md:gap-5">
               <label>
                 <input
                   type="radio"
@@ -194,8 +208,10 @@ export default function AddPatientsForm() {
               </label>
             </div>
           </div>
-          <div className="flex pt-10 justify-between items-center">
-            <label htmlFor="appointmentDate">Appointment Date</label>
+          <div className="flex pt-10 justify-between items-center gap-2">
+            <label htmlFor="appointmentDate" className="text-sm md:text-base">
+              Appointment Date
+            </label>
             <div className="w-[70%] flex items-center">
               <input
                 type="datetime-local"
@@ -215,7 +231,9 @@ export default function AddPatientsForm() {
             </div>
           </div>
           <div className="flex pt-10 justify-between items-center">
-            <label htmlFor="Phone Number">Phone Number</label>
+            <label htmlFor="Phone Number" className="text-sm md:text-base">
+              Phone Number
+            </label>
             <div className="w-[70%] flex gap-5 justify-between items-center">
               <Input
                 type="text"

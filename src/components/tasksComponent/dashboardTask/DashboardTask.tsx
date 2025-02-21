@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
-import TaskCard from "../taskCard/TaskCard";
 import TaskModal from "../taskModal/TaskModal";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { fetchTasksData } from "@/store/slices/taskSlice";
@@ -36,11 +35,15 @@ export default function DashboardTask() {
           </button>
         </div>
         <div className="mt-5">
-          {/* {allTasks?.map((tasks, index) => (
-            <div key={index} className="mt-3">
-              <TaskCard {...tasks} />
-            </div>
-          ))} */}
+          {/* {allTasks.length > 0 ? (
+            <p className="text-center text-sm">No tasks found</p>
+          ) : (
+            allTasks?.map((tasks, index) => (
+              <div key={index} className="mt-3">
+                <TaskCard {...tasks} />
+              </div>
+            ))
+          )} */}
         </div>
       </div>
 

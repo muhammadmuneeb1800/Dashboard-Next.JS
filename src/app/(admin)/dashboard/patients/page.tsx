@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function Patients() {
   return (
     <>
-      <div className="px-5 py-3 w-full bg-success">
+      <div className="px-3 md:px-5 py-3 w-full bg-success h-screen">
         <h1>Patient registrer</h1>
         <TopBar
           title="Total Patients"

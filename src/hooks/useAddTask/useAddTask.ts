@@ -8,7 +8,7 @@ export default function useAddTask(close: () => void) {
   const [title, setTitle] = useState<string>("");
   const [des, setDes] = useState<string>("");
   const [status, setStatus] = useState<string>("NOT_COMPLETED");
-  const doctorId = useSession();
+  const { data: session } = useSession();
   const dispatch = useAppDispatch();
 
   const handleSave = async (e: React.FormEvent) => {
@@ -28,7 +28,7 @@ export default function useAddTask(close: () => void) {
     }
 
     const data = {
-      doctorId: doctorId.data?.user.id,
+      doctorId: session?.user.id,
       title: title,
       description: des,
       status: status,

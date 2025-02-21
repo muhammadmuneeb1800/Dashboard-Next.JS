@@ -3,6 +3,8 @@ import { useState } from "react";
 import bcrypt from "bcryptjs";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { axiosInstance } from "@/utils/axiosInstance";
+import { showToast } from "@/components/toast/Toast";
 
 export default function useRegister() {
   const [loading, setLoading] = useState(false);
@@ -13,7 +15,6 @@ export default function useRegister() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const router = useRouter();
   const session = useSession();
-  
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -56,40 +57,24 @@ export default function useRegister() {
 
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
-
-      const myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-
-      const raw = JSON.stringify({
+      const userData = {
         name: name,
         email: email,
         password: hashedPassword,
         companyName: companyName,
-      });
-
-      const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow" as RequestRedirect,
       };
 
-      const response = await fetch(
-        "http://localhost:3000/api/register",
-        requestOptions
-      );
-      const fetchData = await response.json();
-
-      console.log("data from fetch fetchData", fetchData);
+      const response = await axiosInstance.post("/api/register", userData);
+      console.log("data from fetch fetchData", response);
 
       if (response.status === 401) {
-        alert("Email already exists");
+        showToast("error", "Email already exists");
         setLoading(false);
         return;
       }
 
       if (response.status === 201) {
-        alert("Successfully registered");
+        showToast("success", "Successfully registered");
         setLoading(false);
         router.push("/login");
       }
@@ -98,6 +83,12 @@ export default function useRegister() {
       setErrors({ general: "Something went wrong. Please try again later!" });
       setLoading(false);
     }
+
+    setName("");
+    setEmail("");
+    setCompanyName("");
+    setPassword("");
+    setErrors({});
   };
 
   return {

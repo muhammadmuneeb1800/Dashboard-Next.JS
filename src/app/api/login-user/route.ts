@@ -1,7 +1,7 @@
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async () => {
   const session = await getServerSession(authOptions);
@@ -24,6 +24,31 @@ export const GET = async () => {
     return NextResponse.json({
       message: "Error While Geting Session Data",
       error: error,
+    });
+  }
+};
+
+export const PUT = async (req: NextRequest) => {
+  try {
+    const body = await req.json();
+    console.log("user data from api edit user =========", body);
+    const updatedDoctor = await prisma.doctor.update({
+      where: { id: body.id },
+      data: {
+        name: body.name,
+        email: body.email,
+        companyName: body.companyName,
+      },
+    });
+
+    return NextResponse.json({
+      message: "succesfully updated user info",
+      user: updatedDoctor,
+    });
+  } catch (error) {
+    return NextResponse.json({
+      message: "Error while PUTing Session user Data",
+      error,
     });
   }
 };

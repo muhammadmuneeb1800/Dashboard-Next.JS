@@ -1,3 +1,4 @@
+import { showToast } from "@/components/toast/Toast";
 import { InitialData } from "@/types/types";
 import { axiosInstance } from "@/utils/axiosInstance";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
@@ -21,12 +22,9 @@ export const addPatientData = createAsyncThunk(
     console.log("user from slice", user);
     try {
       const response = await axiosInstance.post("api/patients", user);
-      if (response.status === 401) {
-        alert("Patient already exists.");
-        return;
-      }
+
       if (response.status === 501) {
-        alert("Server error. Please try again later.");
+        showToast("error","Server error. Please try again later.");
         return;
       }
       const patient = (await response?.data) || {};

@@ -1,6 +1,6 @@
 import MainCards from "@/components/cards/mainCards/MainCards";
 import SchedulesComponent from "@/components/schedulesComponent/mainSchedules/MainSchedules";
-import DashboardTask from "@/components/tasks/dashboardTask/DashboardTask";
+import DashboardTask from "@/components/tasksComponent/dashboardTask/DashboardTask";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

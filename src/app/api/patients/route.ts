@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { NextNextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async () => {
   try {
@@ -13,7 +13,7 @@ export const GET = async () => {
   }
 };
 
-export const POST = async (req: NextNextRequest) => {
+export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();
     console.log("user form API=========", body);

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default async function Message() {
   return (
     <>
-      <div className="px-5 py-3 w-full bg-success h-screen">
+      <div className="px-3 md:px-5 py-3 w-full bg-success h-screen">
         <h1>Message</h1>
         <TopBar
           title="Messages"

@@ -17,7 +17,7 @@ export default function useAddPatient() {
   const [phoneNumber, setPhoneNumber] = useState<string>();
   const [error, setError] = useState<Record<string, string>>({});
   const dispatch = useAppDispatch();
-  const currentuser = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
 
   const handleAddPatient = async (e: React.FormEvent) => {
@@ -60,7 +60,7 @@ export default function useAddPatient() {
       console.log("Validation failed", newErrors);
       return;
     }
-    const doctorId = currentuser.data?.user?.id;
+    const doctorId = session?.user?.id;
 
     const patientData = {
       doctorId: doctorId,

@@ -34,7 +34,7 @@ export default function TopBar(props: topBarDetails) {
   const Icon4 = getIcons(props.icon4 as string);
   return (
     <>
-      <div className="flex justify-between shadow items-center px-5 md:px-7 bg-white py-3 mt-5 rounded">
+      <div className="flex justify-between shadow items-center px-3 md:px-7 bg-white py-3 mt-5 rounded">
         <div>
           <p className="text-xl font-medium">
             {props.title}{" "}

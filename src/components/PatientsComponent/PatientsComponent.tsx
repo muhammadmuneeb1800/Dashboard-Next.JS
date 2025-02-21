@@ -38,7 +38,7 @@ export default function PatientsComponent() {
     <>
       <div className="bg-white py-3 mt-5 rounded shadow-md">
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white shadow rounded-lg">
+          <table className="min-w-full bg-white shadow">
             <thead className="border-b">
               <tr className="text-info text-base leading-normal">
                 <th className="py-3 px-6 text-left">Name</th>
@@ -107,8 +107,8 @@ export default function PatientsComponent() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="text-center py-4">
-                    No patients available
+                  <td colSpan={6} className="text-center text-info py-4">
+                    No patients available.
                   </td>
                 </tr>
               )}

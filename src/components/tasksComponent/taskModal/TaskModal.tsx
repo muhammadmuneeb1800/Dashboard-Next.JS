@@ -11,7 +11,7 @@ export default function TaskModal({ close }: { close: () => void }) {
       <div className="fixed flex justify-center inset-0 z-50 items-center h-screen w-full bg-black backdrop-blur bg-opacity-40">
         <form
           onSubmit={handleSave}
-          className="mx-auto w-[50%] p-7 bg-white rounded-md shadow-md"
+          className="mx-auto w-[85%] md:w-[65%] lg:w-[50%] p-7 bg-white rounded-md shadow-md"
         >
           <h2 className="text-center text-xl font-semibold">Add Task</h2>
           <div className="mt-5">
@@ -44,7 +44,7 @@ export default function TaskModal({ close }: { close: () => void }) {
               id="status"
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="w-full border-b py-2 focus:border-b border-black mt-1 focus:outline-none"
+              className="w-full border-b bg-white py-2 focus:border-b border-black mt-1 focus:outline-none"
             >
               <option value="NOT_COMPLETED">NOT_COMPLETED</option>
               <option value="COMPLETED">COMPLETED</option>

@@ -29,7 +29,7 @@ export default function RegisterForm() {
   }, [session, router]);
   return (
     <>
-      <div className="px-12 mt-10">
+      <div className="md:px-5 lg:px-12 px-5 mt-20">
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium">
           Welcome to Medicare
         </h1>
@@ -104,12 +104,13 @@ export default function RegisterForm() {
           <div className="mt-5">
             {loading ? (
               <Button
-                type="submit"
-                text="Loading..."
-                bg="bg-primary"
+                text="Finish..."
+                bg="bg-gray-400"
                 color="text-white"
-                hBg="bg-white"
-                hColor="text-primary"
+                hBg="bg-gray-400"
+                hColor="text-white"
+                borderWidth="border-2"
+                borderColor="border-gray-400"
                 width="w-full"
               />
             ) : (
@@ -119,6 +120,8 @@ export default function RegisterForm() {
                 bg="bg-primary"
                 color="text-white"
                 hBg="bg-white"
+                borderColor="border-primary"
+                borderWidth="border-2"
                 hColor="text-primary"
                 width="w-full"
               />
