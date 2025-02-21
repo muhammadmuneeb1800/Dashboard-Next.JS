@@ -124,12 +124,11 @@ model Appointments {
   id                String            @id @default(auto()) @map("_id") @db.ObjectId
   doctorId          String            @db.ObjectId
   doctorName        String
-  appointmentDate   DateTime?
-  location          String
   patientName       String
   purposeOfVisit    String
   appointmentStatus AppointmentStatus
-  duration          String
+  startDate         DateTime?
+  endDate           DateTime?
   appointmentType   AppointmentType
   isOnline          Boolean
   createdAt         DateTime          @default(now())
@@ -139,13 +138,13 @@ model Appointments {
 }
 
 enum AppointmentStatus {
-  CONFIRMED_REQUIRED
-  CONFIRMED
+  Confirmation_Required
+  Confirmed
 }
 
 enum AppointmentType {
-  FIRST_TIME
-  FOLLOW_UP_VISIT
+  First_Time
+  Follow_Up_Visit
 }
 
 /**

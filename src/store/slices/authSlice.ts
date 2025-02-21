@@ -9,12 +9,14 @@ const initialState = {
 export const userAuth = createAsyncThunk("userAuth", async () => {
   try {
     const user = await axiosInstance.get("/api/login-user");
-    const Data = user.data();
+    const Data = user.data || {};
     return Data;
   } catch (error) {
-    console.log(error);
+    console.log("errro to fetch login user",error);
   }
 });
+
+
 
 export const userEdit = createAsyncThunk(
   "userEditProfile",

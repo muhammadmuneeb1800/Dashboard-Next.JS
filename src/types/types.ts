@@ -28,3 +28,18 @@ export interface taskData {
   description: string | null;
   status: string | null;
 }
+
+export interface initialAppointment {
+  id?: string | null;
+  doctorId: string | null;
+  doctorName: string | null;
+  patientName: string | null;
+  purposeOfVisit: string | null;
+  appointmentStatus: string | null;
+  startDate: Date | null;
+  endDate: Date | null;
+  appointmentType: string | null;
+  isOnline: boolean;
+  createdAt?: Date | null;
+  updatedAt?: Date | null;
+}

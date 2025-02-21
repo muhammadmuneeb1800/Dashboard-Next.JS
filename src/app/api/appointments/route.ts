@@ -16,6 +16,7 @@ export const GET = async () => {
 export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();
+    console.log("appointment from api aapi ====", body);
     const exitsAppointments = await prisma.appointments.findFirst({
       where: { patientName: body.patientName },
     });
@@ -24,9 +25,19 @@ export const POST = async (req: NextRequest) => {
         message: "Patient already has an appointment",
       });
     }
-    
+
     const newAppointment = await prisma.appointments.create({
-      data: body,
+      data: {
+        doctorId: body.doctorId,
+        doctorName: body.doctorName,
+        patientName: body.patientName,
+        purposeOfVisit: body.purposeOfVisit,
+        appointmentStatus: body.appointmentStatus,
+        startDate: body.startDate,
+        endDate: body.endDate,
+        appointmentType: body.appointmentType,
+        isOnline: body.isOnline,
+      },
     });
     return NextResponse.json({
       message: "Succesfully Create Appointment",
