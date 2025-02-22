@@ -1,15 +1,27 @@
 import { showToast } from "@/components/toast/Toast";
-import { addTasks } from "@/store/slices/taskSlice";
+import {
+  addTasks,
+  deleteTasks,
+  updateTaskId,
+  updateTasks,
+} from "@/store/slices/taskSlice";
 import { useAppDispatch } from "@/store/store";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
-export default function useAddTask(close: () => void) {
+export default function useAddTask(close?: () => void) {
   const [title, setTitle] = useState<string>("");
   const [des, setDes] = useState<string>("");
   const [status, setStatus] = useState<string>("NOT_COMPLETED");
   const { data: session } = useSession();
   const dispatch = useAppDispatch();
+
+  const data = {
+    doctorId: session?.user.id as string,
+    title: title,
+    description: des,
+    status: status,
+  };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,25 +34,57 @@ export default function useAddTask(close: () => void) {
       alert("Description is required");
       return;
     }
-    if (!status) {
-      alert("Status is required");
-      return;
-    }
 
+    try {
+      await dispatch(addTasks(data));
+      showToast("success", "Task added successfully");
+      if (close) {
+        close();
+      }
+    } catch (error) {
+      showToast("error", error as string);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await dispatch(deleteTasks(id));
+      showToast("success", "Task deleted successfully");
+    } catch (error) {
+      showToast("error", error as string);
+    }
+  };
+
+  const handleUpdate = async (id: string) => {
+    try {
+      await dispatch(updateTaskId(id));
+    } catch (error) {
+      showToast("error", error as string);
+    }
+  };
+
+  const handleUpdateTask = async (e: React.FormEvent) => {
+    e.preventDefault();
     const data = {
-      doctorId: session?.user.id,
+      id: session?.user.id as string,
+      doctorId: session?.user.id as string,
       title: title,
       description: des,
       status: status,
     };
-
     try {
-      await dispatch(addTasks(data));
-      close();
-      showToast("success", "Task added successfully");
+      await dispatch(updateTasks(data));
+      showToast("success", "Task updated successfully");
+      if (close) close();
     } catch (error) {
       showToast("error", error as string);
     }
+  };
+
+  const clearTask = () => {
+    setTitle("");
+    setDes("");
+    setStatus("NOT_COMPLETED");
   };
 
   return {
@@ -51,5 +95,10 @@ export default function useAddTask(close: () => void) {
     status,
     setStatus,
     handleSave,
+    handleDelete,
+    clearTask,
+    dispatch,
+    handleUpdateTask,
+    handleUpdate,
   };
 }

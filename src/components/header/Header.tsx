@@ -4,18 +4,24 @@ import { FaSearch } from "react-icons/fa";
 import { CiMail } from "react-icons/ci";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MONTH_OF_YEAR } from "@/constant/constant";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { showToast } from "../toast/Toast";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { userAuth } from "@/store/slices/authSlice";
 
 export default function Header() {
   const [search, setSearch] = useState<string>("");
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [isNotification, setIsNotification] = useState(false);
+  const dispatch = useAppDispatch();
 
-  const { data: session } = useSession();
+  useEffect(() => {
+    dispatch(userAuth());
+  }, [dispatch]);
 
+  const session = useAppSelector((store) => store.authSlice.user) || {};
   const day = new Date().getDate();
   const month = new Date().getMonth();
   const year = new Date().getFullYear();
@@ -32,13 +38,9 @@ export default function Header() {
       </div>
       <div className="w-full flex lg:justify-end justify-between md:gap-4 lg:gap-14 items-center">
         <div>
-          <p className="text-lg md:text-xl font-medium">
-            {session?.user?.name?.slice(0, 10).concat("...")}
-          </p>
+          <p className="text-lg md:text-xl font-medium">{session?.name}</p>
           <p className="text-base md:text-lg font-bold">
-            {session?.user?.email
-              ?.slice(0, 8)
-              .concat("...com")}
+            {session?.companyName}
           </p>
         </div>
         <div className="hidden md:block border p-2 rounded">

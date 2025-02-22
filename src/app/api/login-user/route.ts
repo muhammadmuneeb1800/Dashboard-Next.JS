@@ -6,9 +6,9 @@ import { NextRequest, NextResponse } from "next/server";
 export const GET = async () => {
   const session = await getServerSession(authOptions);
   try {
-    // if (!session || !session.user || !session.user.email) {
-    //   return new NextResponse("Unauthorized");
-    // }
+    if (!session || !session.user || !session.user.email) {
+      return new NextResponse("Unauthorized");
+    }
     const user = await prisma.doctor.findUnique({
       where: { email: session?.user?.email as string },
     });

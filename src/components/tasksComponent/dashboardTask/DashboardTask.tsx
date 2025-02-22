@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import TaskModal from "../taskModal/TaskModal";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import { fetchTasksData } from "@/store/slices/taskSlice";
+import { fetchTasksData, resetUpdateTaskId } from "@/store/slices/taskSlice";
+import TaskCard from "../taskCard/TaskCard";
 
 export default function DashboardTask() {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,7 +26,10 @@ export default function DashboardTask() {
             <p className="font-semibold">Tasks</p>
           </div>
           <button
-            onClick={close}
+            onClick={()=>{
+              close()
+              dispatch(resetUpdateTaskId());
+            }}
             className="flex justify-center items-center font-medium gap-2 text-primary cursor-pointer"
           >
             <p className="text-sm font-semibold">New Tasks</p>
@@ -35,15 +39,15 @@ export default function DashboardTask() {
           </button>
         </div>
         <div className="mt-5">
-          {/* {allTasks.length > 0 ? (
-            <p className="text-center text-sm">No tasks found</p>
-          ) : (
+          {allTasks.length > 0 ? (
             allTasks?.map((tasks, index) => (
               <div key={index} className="mt-3">
-                <TaskCard {...tasks} />
+                <TaskCard {...tasks} close={close} />
               </div>
             ))
-          )} */}
+          ) : (
+            <p className="text-center text-sm">No tasks found</p>
+          )}
         </div>
       </div>
 

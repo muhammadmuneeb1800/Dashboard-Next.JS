@@ -10,7 +10,7 @@ const initialState = {
 export const fetchPatientsData = createAsyncThunk("fetchPatients", async () => {
   try {
     const response = await axiosInstance.get("/api/patients");
-    return response?.data || {};
+    return response?.data?.patients || [];
   } catch (error) {
     console.error("Error fetching patients:", error);
   }

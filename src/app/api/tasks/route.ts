@@ -1,9 +1,17 @@
+import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async () => {
   try {
-    const response = await prisma.tasks.findMany();
+    const id = await getServerSession(authOptions);
+    console.log('Id => ', id)
+    const response = await prisma.tasks.findMany({
+      where: {
+        doctorId: id?.user.id as string,
+      },
+    });
     return NextResponse.json({
       message: "Successfully fetched tasks",
       tasks: response,
@@ -37,7 +45,8 @@ export const POST = async (req: NextRequest) => {
 export const PUT = async (req: NextRequest) => {
   try {
     const body = await req.json();
-    const updatedTask = await prisma.tasks.update({
+    console.log("Task form API=========", body);
+    const updatedTask = await prisma.tasks.updateMany({
       where: { id: body.id },
       data: {
         title: body.title,

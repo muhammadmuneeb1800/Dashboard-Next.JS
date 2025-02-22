@@ -1,4 +1,5 @@
-import { initialAuth } from "@/types/types";
+import { showToast } from "@/components/toast/Toast";
+import { initialAuth, updatePasswordData } from "@/types/types";
 import { axiosInstance } from "@/utils/axiosInstance";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
@@ -9,14 +10,12 @@ const initialState = {
 export const userAuth = createAsyncThunk("userAuth", async () => {
   try {
     const user = await axiosInstance.get("/api/login-user");
-    const Data = user.data || {};
+    const Data = user?.data?.user || {};
     return Data;
   } catch (error) {
-    console.log("errro to fetch login user",error);
+    console.log("errro to fetch login user", error);
   }
 });
-
-
 
 export const userEdit = createAsyncThunk(
   "userEditProfile",
@@ -24,7 +23,29 @@ export const userEdit = createAsyncThunk(
     try {
       const response = await axiosInstance.put(`/api/login-user`, data);
       console.log("response from userEditProfile", response);
-      return response?.data || [];
+      return response?.data?.user || {};
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const updateUserPassword = createAsyncThunk(
+  "updatePassword",
+  async (data: updatePasswordData) => {
+    try {
+      console.log("updating user password", data);
+      const response = await axiosInstance.put("/api/update-password", data);
+      console.log("response from updatePassword", response);
+      if (response.status === 401) {
+        showToast("error", "Old password is required");
+        return;
+      }
+      if (response.status === 402) {
+        showToast("error", "Incorrect password provided");
+        return;
+      }
+      return response?.data || {};
     } catch (error) {
       console.log(error);
     }
@@ -37,6 +58,9 @@ const Authentication = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(userAuth.fulfilled, (state, action) => {
+      state.user = action.payload;
+    });
+    builder.addCase(userEdit.fulfilled, (state, action) => {
       state.user = action.payload;
     });
   },

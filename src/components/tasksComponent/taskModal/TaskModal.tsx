@@ -1,19 +1,47 @@
 import Button from "@/components/button/Button";
 import Input from "@/components/input/Input";
 import useAddTask from "@/hooks/useAddTask/useAddTask";
-import React from "react";
+import { resetUpdateTaskId } from "@/store/slices/taskSlice";
+import { useAppSelector } from "@/store/store";
+import React, { useEffect } from "react";
 
 export default function TaskModal({ close }: { close: () => void }) {
-  const { title, setTitle, des, setDes, status, setStatus, handleSave } =
-    useAddTask(close);
+  const {
+    title,
+    setTitle,
+    des,
+    setDes,
+    status,
+    setStatus,
+    handleSave,
+    handleUpdateTask,
+    dispatch,
+    clearTask,
+  } = useAddTask(close);
+  const update = useAppSelector((store) => store.tasksSlice.updateTask) || null;
+  useEffect(() => {
+    if (update) {
+      setTitle(update.title as string);
+      setDes(update.description as string);
+      setStatus(update.status as string);
+    } else {
+      setTitle("");
+      setDes("");
+      setStatus("");
+    }
+
+    console.log("To update fomr asls======", update);
+  }, [update]);
   return (
     <>
       <div className="fixed flex justify-center inset-0 z-50 items-center h-screen w-full bg-black backdrop-blur bg-opacity-40">
         <form
-          onSubmit={handleSave}
-          className="mx-auto w-[85%] md:w-[65%] lg:w-[50%] p-7 bg-white rounded-md shadow-md"
+          onSubmit={update === null ? handleSave : handleUpdateTask}
+          className="mx-auto w-[85%] md:w-[65%] lg:w-[50%] p-7 bg-white z-50 rounded-md shadow-md"
         >
-          <h2 className="text-center text-xl font-semibold">Add Task</h2>
+          <h2 className="text-center text-xl font-semibold">
+            {update === null ? "Add Task" : "Update Task"}
+          </h2>
           <div className="mt-5">
             <label htmlFor="title">Title</label>
             <Input
@@ -58,12 +86,17 @@ export default function TaskModal({ close }: { close: () => void }) {
                 color="text-white"
                 hBg="bg-white"
                 hColor="text-red"
-                onClick={close}
+                type="button"
+                onClick={() => {
+                  close();
+                  clearTask();
+                  dispatch(resetUpdateTaskId());
+                }}
               />
             </div>
             <div>
               <Button
-                text="Add"
+                text={update !== null ? "Update" : "Add"}
                 type="submit"
                 bg="bg-primary"
                 color="text-white"

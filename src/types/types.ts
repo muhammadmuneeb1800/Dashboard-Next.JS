@@ -26,7 +26,8 @@ export interface taskData {
   doctorId?: string | null;
   title: string | null;
   description: string | null;
-  status: string | null;
+  createdAt?: Date | null;
+  status: string | undefined;
 }
 
 export interface initialAppointment {
@@ -42,4 +43,11 @@ export interface initialAppointment {
   isOnline: boolean;
   createdAt?: Date | null;
   updatedAt?: Date | null;
+}
+
+
+export interface updatePasswordData {
+  id: string;
+  oldPassword: string;
+  newPassword: string;
 }
