@@ -9,9 +9,10 @@ import Button from "../../button/Button";
 import moment from "moment";
 import useAddAppointment from "@/hooks/useAddAppointment/useAddAppointment";
 import { FaCheck } from "react-icons/fa";
+import { useAppSelector } from "@/store/store";
 
 export default function ScheduleModal({ close }: { close: () => void }) {
-  const date = moment(new Date()).format("ddd, d MMMM");
+  const date = moment(new Date()).format("ddd, MM MMMM");
   const time = moment(new Date()).format("h:mm");
   const {
     patientName,
@@ -25,9 +26,11 @@ export default function ScheduleModal({ close }: { close: () => void }) {
     setEndDate,
     setType,
     isOnline,
+    isLoading,
     setIsOnline,
     handleAddAppointment,
   } = useAddAppointment(close);
+  const session = useAppSelector((store) => store.authSlice.user) || [];
   return (
     <>
       <div className="fixed flex justify-center inset-0 z-50 items-center h-screen w-full bg-black backdrop-blur bg-opacity-40">
@@ -45,7 +48,7 @@ export default function ScheduleModal({ close }: { close: () => void }) {
             <div className="flex flex-col justify-center items-center gap-2 md:gap-3">
               <LuUserRound className="text-primary text-xl md:text-2xl" />
               <p className="text-primary text-sm md:text-base">PRACTITIONER</p>
-              <p className="text-sm md:text-base">John Doe</p>
+              <p className="text-sm md:text-base">{session?.name}</p>
               <p className="font-semibold text-sm md:text-base">
                 General Doctor
               </p>
@@ -73,6 +76,7 @@ export default function ScheduleModal({ close }: { close: () => void }) {
                   id="Patient"
                   type="text"
                   border="border"
+                  placeholder="Patient"
                   value={patientName}
                   onChange={(e) => setPatientName(e.target.value)}
                   borderColor="border-gray-400"
@@ -85,6 +89,7 @@ export default function ScheduleModal({ close }: { close: () => void }) {
                 <textarea
                   name="visit"
                   id="visit"
+                  placeholder="Purpose of visit"
                   value={purpose}
                   onChange={(e) => setPurpose(e.target.value)}
                   rows={4}
@@ -230,17 +235,30 @@ export default function ScheduleModal({ close }: { close: () => void }) {
               borderWidth="border-2"
               hColor="text-black"
             />
-            <Button
-              type="submit"
-              text="Save"
-              bg="bg-primary"
-              color="text-white"
-              hBg="bg-white"
-              hColor="text-primary"
-              borderColor="border-primary"
-              borderWidth="border-2"
-              hBorderColor="border-primary"
-            />
+            {isLoading ? (
+              <Button
+                type="button"
+                text="Save..."
+                bg="bg-gray-400"
+                color="text-white"
+                hBg="bg-gray-400"
+                hColor="text-white"
+                borderWidth="border-2"
+                borderColor="border-gray-400"
+              />
+            ) : (
+              <Button
+                type="submit"
+                text="Save"
+                bg="bg-primary"
+                color="text-white"
+                hBg="bg-white"
+                hColor="text-primary"
+                borderColor="border-primary"
+                borderWidth="border-2"
+                hBorderColor="border-primary"
+              />
+            )}
           </div>
         </form>
       </div>

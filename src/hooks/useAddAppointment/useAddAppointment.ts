@@ -13,52 +13,62 @@ export default function useAddAppointment(close: () => void) {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [type, setType] = useState<string>("");
   const [isOnline, setIsOnline] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
 
   const handleAddAppointment = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     const newErrors: Record<string, string> = {};
     if (!patientName) {
       newErrors.patient = "Patient is required";
       showToast("error", "Patient is required");
+      setIsLoading(false);
       return;
     }
     if (!purpose) {
       newErrors.purpose = "Purpose is required";
       showToast("error", "Purpose is required");
+      setIsLoading(false);
       return;
     }
     if (!status) {
       newErrors.status = "Status is required";
       showToast("error", "Status is required");
+      setIsLoading(false);
       return;
     }
     if (!startDate) {
       newErrors.startDate = "Start date is required";
       showToast("error", "Start date is required");
+      setIsLoading(false);
       return;
     }
     if (!endDate) {
       newErrors.endDate = "End date is required";
       showToast("error", "End date is required");
+      setIsLoading(false);
       return;
     }
     if (!type) {
       newErrors.type = "Type is required";
       showToast("error", "Type is required");
+      setIsLoading(false);
       return;
     }
     if (startDate && endDate && startDate > endDate) {
       newErrors.startDate = "Start date cannot be after end date";
       showToast("error", "Start date cannot be after end date");
+      setIsLoading(false);
       return;
     }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       console.log("Validation failed", newErrors);
+      setIsLoading(false);
       return;
     }
 
@@ -76,7 +86,7 @@ export default function useAddAppointment(close: () => void) {
 
     try {
       await dispatch(createAppointments(appointmentData));
-      console.log("appointment from hook ====", appointmentData);
+      setIsLoading(false);
       close();
       showToast("success", "Appointment created successfully");
     } catch (error) {
@@ -106,6 +116,7 @@ export default function useAddAppointment(close: () => void) {
     type,
     setType,
     isOnline,
+    isLoading,
     setIsOnline,
     errors,
     handleAddAppointment,

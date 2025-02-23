@@ -102,8 +102,8 @@ export default function PatientsComponent() {
                       {activePatient === patient?.id && active && (
                         <div className="absolute top-10 border shadow-md right-16 bg-white rounded-md w-28 px-2 py-3 z-40 flex flex-col justify-center items-center gap-3">
                           <button
-                            onClick={()=>{
-                              dispatch(updatePatient(patient.id));
+                            onClick={async()=>{
+                              await dispatch(updatePatient(patient.id));
                               router.push("/dashboard/patients/add-patients")
                             }}
                           className="text-base text-primary hover:bg-primary duration-500 hover:text-white font-bold px-3 py-2 rounded-md">

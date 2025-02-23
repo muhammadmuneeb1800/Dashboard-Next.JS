@@ -70,7 +70,15 @@ const Patients = createSlice({
   initialState,
   reducers: {
     updatePatient: (state, action) => {
-      state.updatePatientData = action.payload;
+      const patientToUpdate = state.patients.find(
+        (patient) => patient.id === action.payload
+      );
+      if (patientToUpdate) {
+        state.updatePatientData = patientToUpdate;
+      } else {
+        console.log("patient not found in state");
+        state.updatePatientData = null;
+      }
     },
     resetUpdatePatientData: (state) => {
       state.updatePatientData = null;

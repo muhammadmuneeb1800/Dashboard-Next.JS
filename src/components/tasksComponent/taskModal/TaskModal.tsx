@@ -16,6 +16,7 @@ export default function TaskModal({ close }: { close: () => void }) {
     handleSave,
     handleUpdateTask,
     dispatch,
+    isLoading,
     clearTask,
   } = useAddTask(close);
   const update = useAppSelector((store) => store.tasksSlice.updateTask) || null;
@@ -95,15 +96,27 @@ export default function TaskModal({ close }: { close: () => void }) {
               />
             </div>
             <div>
-              <Button
-                text={update !== null ? "Update" : "Add"}
-                type="submit"
-                bg="bg-primary"
-                color="text-white"
-                hBg="bg-white"
-                hColor="text-red"
-                width="w-28"
-              />
+              {isLoading ? (
+                <Button
+                  text={update !== null ? "Update..." : "Add..."}
+                  type="button"
+                  bg="bg-gray-400"
+                  color="text-white"
+                  hBg="bg-gray-400"
+                  hColor="text-white"
+                  width="w-28"
+                />
+              ) : (
+                <Button
+                  text={update !== null ? "Update" : "Add"}
+                  type="submit"
+                  bg="bg-primary"
+                  color="text-white"
+                  hBg="bg-white"
+                  hColor="text-red"
+                  width="w-28"
+                />
+              )}
             </div>
           </div>
         </form>

@@ -1,4 +1,6 @@
 import useAddTask from "@/hooks/useAddTask/useAddTask";
+import { updateTaskCheckBox } from "@/store/slices/taskSlice";
+import { useAppDispatch } from "@/store/store";
 import { taskData } from "@/types/types";
 import moment from "moment";
 import { useState } from "react";
@@ -10,7 +12,8 @@ export default function TaskCard({
 }: taskData & { close: () => void }) {
   const date = moment(props.createdAt).format("DD MMM YYYY ");
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { handleDelete, handleUpdate } = useAddTask(close);
+  const { handleDelete, handleUpdate, setStatus } = useAddTask(close);
+  const dispatch = useAppDispatch();
   return (
     <>
       <div className="bg-success rounded px-3 py-5 md:p-5 flex justify-between shadow-sm items-center">
@@ -23,6 +26,17 @@ export default function TaskCard({
                checked:after:justify-center checked:after:w-full checked:after:h-full`}
               name="checkbox"
               checked={props.status === "COMPLETED"}
+              onChange={async () => {
+                const updatedStatus =
+                  props.status === "COMPLETED" ? "NOT_COMPLETED" : "COMPLETED";
+                await dispatch(
+                  updateTaskCheckBox({
+                    id: props.id as string,
+                    status: updatedStatus,
+                  })
+                );
+                setStatus(updatedStatus);
+              }}
               id="checkbox"
             />
             <label

@@ -13,6 +13,7 @@ export default function useAddTask(close?: () => void) {
   const [title, setTitle] = useState<string>("");
   const [des, setDes] = useState<string>("");
   const [status, setStatus] = useState<string>("NOT_COMPLETED");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { data: session } = useSession();
   const dispatch = useAppDispatch();
 
@@ -25,18 +26,21 @@ export default function useAddTask(close?: () => void) {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setIsLoading(true);
     if (!title) {
-      alert("Title is required");
+      showToast("error", "Title is required");
+      setIsLoading(false);
       return;
     }
     if (!des) {
-      alert("Description is required");
+      showToast("error", "Description is required");
+      setIsLoading(false);
       return;
     }
 
     try {
       await dispatch(addTasks(data));
+      setIsLoading(false);
       showToast("success", "Task added successfully");
       if (close) {
         close();
@@ -65,6 +69,7 @@ export default function useAddTask(close?: () => void) {
 
   const handleUpdateTask = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     const data = {
       id: session?.user.id as string,
       doctorId: session?.user.id as string,
@@ -74,6 +79,7 @@ export default function useAddTask(close?: () => void) {
     };
     try {
       await dispatch(updateTasks(data));
+      setIsLoading(false);
       showToast("success", "Task updated successfully");
       if (close) close();
     } catch (error) {
@@ -98,6 +104,7 @@ export default function useAddTask(close?: () => void) {
     handleDelete,
     clearTask,
     dispatch,
+    isLoading,
     handleUpdateTask,
     handleUpdate,
   };

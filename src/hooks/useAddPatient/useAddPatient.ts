@@ -15,53 +15,72 @@ export default function useAddPatient() {
   const [status, setStatus] = useState<string>();
   const [appointmentDate, setAppointmentDate] = useState<Date | null>();
   const [phoneNumber, setPhoneNumber] = useState<string>();
-  const [error, setError] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
   const router = useRouter();
 
   const handleAddPatient = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
-    const newErrors: Record<string, string> = {};
-
-    if (!foreName?.trim()) newErrors.foreName = "Forename is required";
-    if (!surName?.trim()) newErrors.surName = "Surname is required";
-    if (!diagnosis?.trim()) newErrors.diagnosis = "Diagnosis is required";
-    if (!status?.trim()) newErrors.status = "Status is required";
-    if (!status?.trim()) newErrors.Status = "Status are required";
-
+    if (!foreName?.trim()) {
+      showToast("error", "Forename is required");
+      setIsLoading(false);
+      return;
+    }
+    if (!surName?.trim()) {
+      showToast("error", "Surname is required");
+      setIsLoading(false);
+      return;
+    }
+    if (!diagnosis?.trim()) {
+      showToast("error", "Diagnosis is required");
+      setIsLoading(false);
+      return;
+    }
+    if (!status?.trim()) {
+      showToast("error", "Status is required");
+      setIsLoading(false);
+      return;
+    }
     if (!dob) {
-      newErrors.dob = "Date of birth is required";
+      showToast("error", "Date of birth is required");
+      setIsLoading(false);
+      return;
     }
 
     const validGenders = ["Male", "Female"];
     if (!validGenders.includes(gender as string)) {
-      newErrors.gender = "Invalid gender (Male, Female)";
+      showToast("error", "Sex is Require (Male) & (Female)");
+      setIsLoading(false);
+      return;
     }
 
     if (!phoneNumber?.trim()) {
-      newErrors.phoneNumber = "Phone number is required";
+      showToast("error", "Phone number is required");
+      setIsLoading(false);
+      return;
     } else if (!/^\d{10,15}$/.test(phoneNumber)) {
-      newErrors.phoneNumber = "Phone number must be 10-15 digits";
+      showToast("error", "Phone number must be 10-15 digits");
+      setIsLoading(false);
+      return;
     }
 
     if (!appointmentDate) {
-      newErrors.appointmentDate = "Appointment date is required";
+      showToast("error", "Appointment date is required");
+      setIsLoading(false);
+      return;
     } else {
       const appointment = new Date(appointmentDate);
       if (appointment < new Date()) {
-        newErrors.appointmentDate = "Appointment date must be in the future";
+        showToast("error", "Appointment date must be in the future");
+        setIsLoading(false);
+        return;
       }
     }
 
-    if (Object.keys(newErrors).length > 0) {
-      setError(newErrors);
-      console.log("Validation failed", newErrors);
-      return;
-    }
     const doctorId = session?.user?.id;
-
     const patientData = {
       doctorId: doctorId,
       foreName: foreName,
@@ -91,7 +110,6 @@ export default function useAddPatient() {
     setPhoneNumber("");
     setStatus("");
     setAppointmentDate(null);
-    setError({});
   };
   return {
     foreName,
@@ -101,14 +119,17 @@ export default function useAddPatient() {
     dob,
     setDob,
     setGender,
+    gender,
     diagnosis,
     setDiagnosis,
     setStatus,
     phoneNumber,
     setPhoneNumber,
     appointmentDate,
+    isLoading,
+    dispatch,
+    router,
     setAppointmentDate,
-    error,
     handleAddPatient,
   };
 }

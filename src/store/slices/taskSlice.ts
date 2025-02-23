@@ -11,7 +11,6 @@ const initialState = {
 export const fetchTasksData = createAsyncThunk("fetchTasks", async () => {
   try {
     const response = await axiosInstance.get("/api/tasks");
-    console.log("data from the redux fdffoid", response.data.tasks[0]);
     return response?.data?.tasks || [];
   } catch (error) {
     console.error("Error fetching tasks:", error);
@@ -57,6 +56,21 @@ export const deleteTasks = createAsyncThunk(
   }
 );
 
+export const updateTaskCheckBox = createAsyncThunk(
+  "updateTaskCheckBox",
+  async ({ id, status }: { id: string; status: string }) => {
+    try {
+      console.log("Checking", status, id);
+      const response = await axiosInstance.put(`/api/task-checkbox`, {
+        data: { id, status },
+      });
+      return response?.data?.task || [];
+    } catch (error) {
+      console.error("Error updating task status:", error);
+    }
+  }
+);
+
 const Task = createSlice({
   name: "task",
   initialState,
@@ -67,6 +81,9 @@ const Task = createSlice({
       );
       if (taskToUpdate) {
         state.updateTask = taskToUpdate;
+      } else {
+        console.log("task not found in state");
+        state.updateTask = null;
       }
     },
     resetUpdateTaskId: (state) => {
