@@ -5,11 +5,12 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   patients: [] as InitialData[],
+  updatePatientData: {} as InitialData | null,
 };
 
 export const fetchPatientsData = createAsyncThunk("fetchPatients", async () => {
   try {
-    const response = await axiosInstance.get("/api/patients");
+    const response = await axiosInstance.get("api/patients");
     return response?.data?.patients || [];
   } catch (error) {
     console.error("Error fetching patients:", error);
@@ -24,7 +25,7 @@ export const addPatientData = createAsyncThunk(
       const response = await axiosInstance.post("api/patients", user);
 
       if (response.status === 501) {
-        showToast("error","Server error. Please try again later.");
+        showToast("error", "Server error. Please try again later.");
         return;
       }
       const patient = (await response?.data) || {};
@@ -40,7 +41,7 @@ export const updatePatientData = createAsyncThunk(
   async (user: InitialData) => {
     try {
       const response = await axiosInstance.put(
-        `/api/patients/${user?.id}`,
+        `api/patients/${user?.id}`,
         user
       );
       const patient = await response?.data();
@@ -55,7 +56,8 @@ export const deletePatientData = createAsyncThunk(
   "deletePatients",
   async (id: string) => {
     try {
-      await axiosInstance.delete(`/api/patients/${id}`);
+      console.log("id frpm slice ====", id);
+      await axiosInstance.delete(`api/patients`, { data: { id } });
       return id;
     } catch (error) {
       console.log(error);
@@ -66,7 +68,14 @@ export const deletePatientData = createAsyncThunk(
 const Patients = createSlice({
   name: "Patients",
   initialState,
-  reducers: {},
+  reducers: {
+    updatePatient: (state, action) => {
+      state.updatePatientData = action.payload;
+    },
+    resetUpdatePatientData: (state) => {
+      state.updatePatientData = null;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchPatientsData.fulfilled, (state, action) => {
       state.patients = action.payload || [];
@@ -87,4 +96,5 @@ const Patients = createSlice({
   },
 });
 
+export const { updatePatient, resetUpdatePatientData } = Patients.actions;
 export default Patients.reducer;

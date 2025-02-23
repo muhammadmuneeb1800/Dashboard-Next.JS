@@ -1,13 +1,16 @@
 import { LineChart1, LineChart2, PieCharts } from "@/components/charts/Charts";
 import { FaArrowAltCircleUp } from "react-icons/fa";
-import { MdOutlineSpaceDashboard } from "react-icons/md";
+import {
+  MdOutlineNotifications,
+  MdOutlineSpaceDashboard,
+} from "react-icons/md";
 import { GrSchedules } from "react-icons/gr";
 import { BiTask } from "react-icons/bi";
 import { HiOutlineUsers } from "react-icons/hi";
-import { MdMailOutline } from "react-icons/md";
 import { SiSimpleanalytics } from "react-icons/si";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdContactSupport } from "react-icons/md";
+import { useAppSelector } from "@/store/store";
 
 export const LINE_CHART_DATA = [
   { name: "Page A", uv: 4000, pv: 5400, amt: 2400 },
@@ -136,9 +139,9 @@ export const MENU_ITEMS = [
     path: "/dashboard/patients",
   },
   {
-    name: "Messages",
-    icon: MdMailOutline,
-    path: "/dashboard/messages",
+    name: "Notifications",
+    icon: MdOutlineNotifications,
+    path: "/dashboard/notifications",
   },
   {
     name: "Analytics",
@@ -163,11 +166,9 @@ export const GENERAL_ITEMS = [
 export const GRAPH_DATA = [
   {
     title: "Offline Consultations",
-    number: 101,
-    img: "/assets/images/graphBlue.png",
+    number: 10,
     upAndDown: "+3.11%",
     width: 200,
-    iconColor: "text-green-700",
     icon: FaArrowAltCircleUp,
     // chart: LineChart1,
   },
@@ -177,14 +178,12 @@ export const GRAPH_DATA = [
     img: "/assets/images/graphRed.png",
     width: 240,
     upAndDown: "-20.9%",
-    iconColor: "text-red-700",
     icon: FaArrowAltCircleUp,
     // chart: LineChart2,
   },
   {
     title: "Total Patients",
     number: 197,
-    img: "/assets/images/graphBlue.png",
     width: 200,
     // chart: PieCharts,
   },

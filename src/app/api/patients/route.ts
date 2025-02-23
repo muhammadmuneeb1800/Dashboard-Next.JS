@@ -1,9 +1,16 @@
+import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async () => {
   try {
-    const patients = await prisma.patients.findMany();
+    const id = await getServerSession(authOptions);
+    const patients = await prisma.patients.findMany({
+      where: {
+        doctorId: id?.user.id as string,
+      },
+    });
     return NextResponse.json({
       message: "Succesfully Fetch Patients",
       patients: patients,
@@ -69,6 +76,7 @@ export const PUT = async (req: NextRequest) => {
 export const DELETE = async (req: NextRequest) => {
   try {
     const body = await req.json();
+    console.log("id from deleet patients shdsjjk =====", body.id)
     const { id } = body;
     await prisma.patients.delete({ where: { id: id } });
     return NextResponse.json({ message: "Succesfully Delete Patient" });

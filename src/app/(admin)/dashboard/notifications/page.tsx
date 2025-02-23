@@ -9,10 +9,10 @@ export const metadata: Metadata = {
 export default async function Message() {
   return (
     <>
-      <div className="px-3 md:px-5 py-3 w-full bg-success h-screen">
-        <h1>Message</h1>
+      <div className="px-3 md:px-5 py-3 w-full bg-success min-h-screen">
+        <h1>Notifications</h1>
         <TopBar
-          title="Messages"
+          title="Notifications"
           icon1="FaPlus"
           icon3="TbFilter"
           icon2="IoPrintOutline"

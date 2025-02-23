@@ -4,15 +4,14 @@ import Button from "../button/Button";
 import { BsThreeDots } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import moment from "moment";
-import { fetchPatientsData } from "@/store/slices/patientSlice";
-
-type StatusType = "Recovered" | "Awaiting surgery" | "On treatment";
-
-const statusStyles: Record<StatusType, string> = {
-  Recovered: "bg-green-200 text-green-800",
-  "Awaiting surgery": "bg-blue-200 text-blue-800",
-  "On treatment": "bg-red-200 text-red-800",
-};
+import {
+  deletePatientData,
+  fetchPatientsData,
+  updatePatient,
+} from "@/store/slices/patientSlice";
+import TopBar from "../topBar/TopBar";
+import { showToast } from "../toast/Toast";
+import { useRouter } from "next/navigation";
 
 export default function PatientsComponent() {
   const [active, setActive] = useState<boolean>(false);
@@ -23,12 +22,10 @@ export default function PatientsComponent() {
   };
 
   const dispatch = useAppDispatch();
+  const router = useRouter()
 
   useEffect(() => {
-    async function call() {
-      await dispatch(fetchPatientsData());
-    }
-    call();
+    dispatch(fetchPatientsData());
   }, [dispatch]);
 
   const allPatients =
@@ -36,7 +33,16 @@ export default function PatientsComponent() {
   console.log("all patients", allPatients);
   return (
     <>
-      <div className="bg-white py-3 mt-5 rounded shadow-md">
+      <TopBar
+        title="Total Patients"
+        sabTitle={allPatients.length.toLocaleString()}
+        link={"/dashboard/patients/add-patients"}
+        icon1="FaPlus"
+        icon3="TbFilter"
+        icon2="IoPrintOutline"
+        icon4="MdOutlineContactSupport"
+      />
+      <div className="bg-white py-3 mt-5 w-full h-auto rounded shadow-md">
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white shadow">
             <thead className="border-b">
@@ -50,8 +56,8 @@ export default function PatientsComponent() {
               </tr>
             </thead>
             <tbody className="text-black text-base font-light">
-              {allPatients.length > 0 ? (
-                allPatients.map((patient, index) => (
+              {allPatients?.length > 0 ? (
+                allPatients?.map((patient, index) => (
                   <tr key={index} className="hover:bg-gray-50">
                     <td className="py-3 px-6 text-left whitespace-nowrap">
                       {patient?.foreName}
@@ -61,9 +67,19 @@ export default function PatientsComponent() {
                     </td>
                     <td className="py-3 px-6 text-center">
                       <span
-                        className={`py-1 px-3 rounded-full text-xs ${statusStyles}`}
+                        className={`py-[5px] px-[15px] rounded-full w-full text-xs ${
+                          patient?.status === "Recovered"
+                            ? "bg-green-300 bg-opacity-65 text-green-700"
+                            : patient?.status === "Awaiting_Surgery"
+                            ? "bg-blue-300 bg-opacity-65 text-blue-700"
+                            : "bg-red-300 bg-opacity-65 text-red-700"
+                        }`}
                       >
-                        {patient?.status}
+                        {patient?.status === "On_Treatment"
+                          ? "On Treatment"
+                          : patient?.status === "Awaiting_Surgery"
+                          ? "Awaiting Surgery"
+                          : "Recovered"}
                       </span>
                     </td>
                     <td className="py-3 px-6 text-center">
@@ -84,22 +100,29 @@ export default function PatientsComponent() {
                         onClick={() => handleClick(patient?.id || "")}
                       />
                       {activePatient === patient?.id && active && (
-                        <div className="bg-gray-400 p-2 rounded absolute top-10 right-28 w-full">
-                          <Button
-                            text="Edit"
-                            bg="bg-none"
-                            color="text-gray-800"
-                            hBg="bg-none"
-                            hColor="text-black"
-                          />
-                          <hr />
-                          <Button
-                            text="Delete"
-                            bg="bg-none"
-                            color="text-red-500"
-                            hBg="bg-none"
-                            hColor="text-red-800"
-                          />
+                        <div className="absolute top-10 border shadow-md right-16 bg-white rounded-md w-28 px-2 py-3 z-40 flex flex-col justify-center items-center gap-3">
+                          <button
+                            onClick={()=>{
+                              dispatch(updatePatient(patient.id));
+                              router.push("/dashboard/patients/add-patients")
+                            }}
+                          className="text-base text-primary hover:bg-primary duration-500 hover:text-white font-bold px-3 py-2 rounded-md">
+                            Update
+                          </button>
+                          <button
+                            onClick={async () => {
+                              await dispatch(
+                                deletePatientData(patient.id as string)
+                              );
+                              showToast(
+                                "success",
+                                "Patient deleted successfully"
+                              );
+                            }}
+                            className="text-base text-red-500 hover:bg-red-500 duration-500 hover:text-white font-bold px-3 py-2 rounded-md"
+                          >
+                            Delete
+                          </button>
                         </div>
                       )}
                     </td>

@@ -129,7 +129,7 @@ export default function RegisterForm() {
           </div>
         </form>
         <Link
-          href="/login"
+          href="/"
           className="mt-3 text-right text-secondray font-medium text-sm block"
         >
           Already have an account?{" "}

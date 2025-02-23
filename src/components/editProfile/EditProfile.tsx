@@ -28,10 +28,13 @@ export default function EditProfile() {
 
   return (
     <>
-      <div className="w-[70%] mx-auto bg-white p-6 rounded-md shadow-md mt-5">
+      <div className="md:w-[70%] mx-auto bg-white p-6 rounded-md shadow-md mt-5">
         {isPassword ? (
           <form onSubmit={handleSaveChanges}>
-            <div className="mt-10">
+            <h1 className="text-center font-bold text-lg md:text-xl text-primary">
+              Update Profile
+            </h1>
+            <div className="mt-8">
               <label htmlFor="name">Name</label>
               <div className="my-2 md:my-4 shadow-sm">
                 <Input
@@ -108,6 +111,9 @@ export default function EditProfile() {
           </form>
         ) : (
           <form onSubmit={handleChangePassword}>
+            <h1 className="text-center font-bold text-lg md:text-xl text-primary">
+              Change Password
+            </h1>
             <div className="mt-10">
               <label htmlFor="password">Old Password</label>
               <div className="my-2 md:my-4 shadow-sm">

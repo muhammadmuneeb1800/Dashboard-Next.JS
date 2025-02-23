@@ -85,6 +85,7 @@ export default function AddPatientsForm() {
               <Input
                 type="text"
                 value={surName || ""}
+                placeholder="Jhone Surname"
                 onChange={(e) => setSurname(e.target.value)}
                 id="Surname"
                 border="border"
@@ -155,6 +156,7 @@ export default function AddPatientsForm() {
               <Input
                 type="text"
                 id="Diagnosis"
+                placeholder="Diagnosis"
                 value={diagnosis || ""}
                 onChange={(e) => setDiagnosis(e.target.value)}
                 border="border"
@@ -166,7 +168,7 @@ export default function AddPatientsForm() {
             <label htmlFor="status" className="text-sm md:text-base">
               Status
             </label>
-            <div className="w-[70%] flex flex-col items-start lg:flex-row lg:items-center gap-6 md:gap-5">
+            <div className="w-[70%] flex flex-col items-start lg:flex-row lg:flex-wrap lg:gap-8 lg:items-center gap-6 md:gap-5">
               <label>
                 <input
                   type="radio"
@@ -237,6 +239,7 @@ export default function AddPatientsForm() {
             <div className="w-[70%] flex gap-5 justify-between items-center">
               <Input
                 type="text"
+                placeholder="Phone Number"
                 value={phoneNumber || ""}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 id="Phone Number"

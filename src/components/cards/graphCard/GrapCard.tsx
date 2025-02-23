@@ -4,7 +4,6 @@ import { BsThreeDots } from "react-icons/bs";
 interface cardDetails {
   title?: string;
   number?: number;
-  iconColor?: string;
   upAndDown?: string;
   img?: string | undefined; 
   width?: number;
@@ -24,11 +23,13 @@ export default function GraphCard(props: cardDetails) {
           <div>
             <p className="text-3xl font-bold mt-3 mb-5">{props.number}</p>
             <div
-              className={`flex text-xl gap-2 font-medium ${props.iconColor}`}
+              className={`flex text-xl gap-2 ${
+                props.upAndDown === "+3.11%" ? "text-green-600" : "text-red-600"
+              } font-medium`}
             >
-              {props.icon && <props.icon className={`${props.iconColor}`} />}
+              {props.icon && <props.icon />}
 
-              <p className={`text-sm ${props.iconColor}`}>{props.upAndDown}</p>
+              <p className={`text-sm`}>{props.upAndDown}</p>
             </div>
           </div>
           <div className="">{props.chart && <props.chart />}</div>
