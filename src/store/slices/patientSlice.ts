@@ -8,64 +8,83 @@ const initialState = {
   updatePatientData: {} as InitialData | null,
 };
 
-export const fetchPatientsData = createAsyncThunk("fetchPatients", async () => {
-  try {
-    const response = await axiosInstance.get("api/patients");
-    return response?.data?.patients || [];
-  } catch (error) {
-    console.error("Error fetching patients:", error);
+// Fetch patients data
+export const fetchPatientsData = createAsyncThunk(
+  "patients/fetchPatients",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get("api/patients");
+      return response?.data?.patients || [];
+    } catch (error) {
+      console.error("Error fetching patients:", error);
+      return rejectWithValue("Failed to fetch patients");
+    }
   }
-});
+);
 
+// Add patient data
 export const addPatientData = createAsyncThunk(
-  "addPatients",
-  async (user: InitialData) => {
-    console.log("user from slice", user);
+  "patients/addPatients",
+  async (user: InitialData, { rejectWithValue, dispatch }) => {
     try {
       const response = await axiosInstance.post("api/patients", user);
 
       if (response.status === 501) {
         showToast("error", "Server error. Please try again later.");
-        return;
+        return rejectWithValue("Server error");
       }
-      const patient = (await response?.data) || {};
+
+      const patient = response?.data || {};
+      dispatch(fetchPatientsData()); // Refresh list
       return patient;
     } catch (error) {
-      throw new Error("Error creating patient", error as Error);
+      console.error("Error creating patient:", error);
+      return rejectWithValue("Failed to create patient");
     }
   }
 );
 
-export const updatePatientData = createAsyncThunk(
-  "updatePatients",
-  async (user: InitialData) => {
+// Update patient data
+export const updatePatientDataThunk = createAsyncThunk(
+  "patients/updatePatients",
+  async (user: InitialData, { rejectWithValue, dispatch }) => {
     try {
-      const response = await axiosInstance.put(
-        `api/patients/${user?.id}`,
-        user
-      );
-      const patient = await response?.data();
-      return patient;
+      console.log("Updating patient:", user);
+      const response = await axiosInstance.put("api/patients", user);
+
+      if (response.status !== 200) {
+        showToast("error", "Failed to update patient.");
+        return rejectWithValue("Update failed");
+      }
+
+      const updatedPatient = response?.data;
+      dispatch(fetchPatientsData()); // Refresh list
+      return updatedPatient;
     } catch (error) {
-      console.log(error);
+      console.error("Error updating patient:", error);
+      return rejectWithValue("Failed to update patient");
     }
   }
 );
 
+// Delete patient data
 export const deletePatientData = createAsyncThunk(
-  "deletePatients",
-  async (id: string) => {
+  "patients/deletePatients",
+  async (id: string, { rejectWithValue, dispatch }) => {
     try {
-      console.log("id frpm slice ====", id);
-      await axiosInstance.delete(`api/patients`, { data: { id } });
+      console.log("Deleting patient with ID:", id);
+      await axiosInstance.delete("api/patients", { data: { id } });
+
+      dispatch(fetchPatientsData()); // Refresh list
       return id;
     } catch (error) {
-      console.log(error);
+      console.error("Error deleting patient:", error);
+      return rejectWithValue("Failed to delete patient");
     }
   }
 );
 
-const Patients = createSlice({
+const PatientsSlice = createSlice({
   name: "Patients",
   initialState,
   reducers: {
@@ -73,36 +92,32 @@ const Patients = createSlice({
       const patientToUpdate = state.patients.find(
         (patient) => patient.id === action.payload
       );
-      if (patientToUpdate) {
-        state.updatePatientData = patientToUpdate;
-      } else {
-        console.log("patient not found in state");
-        state.updatePatientData = null;
-      }
+      state.updatePatientData = patientToUpdate || null;
     },
     resetUpdatePatientData: (state) => {
       state.updatePatientData = null;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchPatientsData.fulfilled, (state, action) => {
-      state.patients = action.payload || [];
-    });
-    builder.addCase(addPatientData.fulfilled, (state, action) => {
-      state.patients = [action.payload, ...state.patients];
-    });
-    builder.addCase(updatePatientData.fulfilled, (state, action) => {
-      state.patients = state.patients.map((patient) =>
-        patient.id === action.payload.id ? action.payload : patient
-      );
-    });
-    builder.addCase(deletePatientData.fulfilled, (state, action) => {
-      state.patients = state.patients.filter(
-        (patient) => patient.id !== action.payload
-      );
-    });
+    builder
+      .addCase(fetchPatientsData.fulfilled, (state, action) => {
+        state.patients = action.payload || [];
+      })
+      .addCase(addPatientData.fulfilled, (state, action) => {
+        state.patients = [action.payload, ...state.patients];
+      })
+      .addCase(updatePatientDataThunk.fulfilled, (state, action) => {
+        state.patients = state.patients.map((patient) =>
+          patient.id === action.payload.id ? action.payload : patient
+        );
+      })
+      .addCase(deletePatientData.fulfilled, (state, action) => {
+        state.patients = state.patients.filter(
+          (patient) => patient.id !== action.payload
+        );
+      });
   },
 });
 
-export const { updatePatient, resetUpdatePatientData } = Patients.actions;
-export default Patients.reducer;
+export const { updatePatient, resetUpdatePatientData } = PatientsSlice.actions;
+export default PatientsSlice.reducer;

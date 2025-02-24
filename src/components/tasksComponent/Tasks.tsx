@@ -18,7 +18,6 @@ export default function Tasks() {
   }, [dispatch]);
 
   const AllTasks = useAppSelector((store) => store.tasksSlice.task) || [];
-  console.log("use from task ksidfjsffj asdfl", AllTasks);
 
   return (
     <>

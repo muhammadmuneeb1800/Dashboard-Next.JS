@@ -1,6 +1,10 @@
 "use client";
 import { showToast } from "@/components/toast/Toast";
-import { addPatientData } from "@/store/slices/patientSlice";
+import {
+  addPatientData,
+  fetchPatientsData,
+  updatePatientDataThunk,
+} from "@/store/slices/patientSlice";
 import { useAppDispatch } from "@/store/store";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -20,10 +24,7 @@ export default function useAddPatient() {
   const { data: session } = useSession();
   const router = useRouter();
 
-  const handleAddPatient = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
+  const formValidation = () => {
     if (!foreName?.trim()) {
       showToast("error", "Forename is required");
       setIsLoading(false);
@@ -80,6 +81,16 @@ export default function useAddPatient() {
       }
     }
 
+    return true;
+  };
+  const handleAddPatient = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    if (!formValidation()) {
+      setIsLoading(false);
+      return;
+    }
+
     const doctorId = session?.user?.id;
     const patientData = {
       doctorId: doctorId,
@@ -111,6 +122,58 @@ export default function useAddPatient() {
     setStatus("");
     setAppointmentDate(null);
   };
+
+  const handleUpdate = async (
+    e: React.FormEvent,
+    id: string,
+    close: () => void
+  ) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    if (!formValidation()) {
+      setIsLoading(false);
+      return;
+    }
+
+    const doctorId = session?.user?.id;
+    const patientData = {
+      id,
+      doctorId,
+      foreName,
+      surName,
+      dob,
+      sex: gender,
+      diagnosis,
+      status: status?.replace(" ", "_"),
+      appointmentDate,
+      phoneNumber,
+    };
+
+    try {
+      const res = await dispatch(updatePatientDataThunk(patientData));
+
+      if (res?.payload?.success) {
+        showToast("success", "Patient Updated successfully");
+        await dispatch(fetchPatientsData());
+      }
+    } catch (error) {
+      console.log("Error updating patient:", error);
+    } finally {
+      close();
+      setIsLoading(false);
+    }
+
+    setForeName("");
+    setSurname("");
+    setDob("");
+    setGender("");
+    setDiagnosis("");
+    setStatus("");
+    setPhoneNumber("");
+    setAppointmentDate(null);
+  };
+
   return {
     foreName,
     setForeName,
@@ -123,6 +186,7 @@ export default function useAddPatient() {
     diagnosis,
     setDiagnosis,
     setStatus,
+    status,
     phoneNumber,
     setPhoneNumber,
     appointmentDate,
@@ -131,5 +195,6 @@ export default function useAddPatient() {
     router,
     setAppointmentDate,
     handleAddPatient,
+    handleUpdate,
   };
 }

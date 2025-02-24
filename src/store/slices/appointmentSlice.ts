@@ -12,7 +12,7 @@ export const fetchAppointments = createAsyncThunk(
     try {
       const response = await axiosInstance.get("api/appointments");
       const data = await response.data;
-      return data;
+      return data.Appointments;
     } catch (error) {
       console.error("Error fetching appointments:", error);
     }

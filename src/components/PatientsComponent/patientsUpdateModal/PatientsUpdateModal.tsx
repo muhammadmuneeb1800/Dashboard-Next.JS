@@ -1,11 +1,11 @@
-"use client";
-import React from "react";
 import Button from "@/components/button/Button";
 import Input from "@/components/input/Input";
-import { MdOutlineCalendarToday } from "react-icons/md";
 import useAddPatient from "@/hooks/useAddPatient/useAddPatient";
+import { useAppSelector } from "@/store/store";
+import React, { useEffect } from "react";
+import { MdOutlineCalendarToday } from "react-icons/md";
 
-export default function AddPatientsForm() {
+export default function PatientsUpdateModal({ close }: { close: () => void }) {
   const {
     foreName,
     setForeName,
@@ -20,50 +20,66 @@ export default function AddPatientsForm() {
     phoneNumber,
     setPhoneNumber,
     gender,
+    status,
     isLoading,
-    router,
+    handleUpdate,
     appointmentDate,
     setAppointmentDate,
-    handleAddPatient,
   } = useAddPatient();
+  const updatePatient =
+    useAppSelector((store) => store.patientSlice.updatePatientData) || {};
+  useEffect(() => {
+    if (updatePatient) {
+      setForeName(updatePatient.foreName as string);
+      setSurname(updatePatient.surName as string);
+      setDob(updatePatient.dob as string);
+      setGender(updatePatient.sex as string);
+      setDiagnosis(updatePatient.diagnosis as string);
+      setStatus(updatePatient.status as string);
+      setPhoneNumber(updatePatient.phoneNumber as string);
+      setAppointmentDate(
+        updatePatient.appointmentDate
+          ? new Date(updatePatient.appointmentDate)
+          : null
+      );
+    }
+  }, [updatePatient]);
   return (
-    <>
-      <form onSubmit={handleAddPatient}>
-        <div className="flex shadow justify-between items-center px-3 md:px-6 bg-white py-3 mt-5 rounded">
-          <p className="text-lg md:text-xl block md:hidden font-medium">
-            Add Patient
-          </p>
-          <p className="text-lg md:text-xl hidden md:block font-medium">
-            Add New Patient
-          </p>
-          <div className="flex justify-center items-center gap-2 md:gap-5">
-            <div className="text-center" onClick={() => router.back()}>
+    <div className="flex justify-center items-center fixed z-50 inset-0 w-full bg-black bg-opacity-40 backdrop-blur">
+      <form
+        onSubmit={(e: React.FormEvent) =>
+          handleUpdate(e, updatePatient.id as string, close)
+        }
+        className="bg-white rounded w-[100%] md:w-[85%] overflow-y-auto h-[90%] overflow-x-hidden shadow lg:w-[65%] mx-auto"
+      >
+        <div className="bg-primary sticky top-0 flex justify-between items-center px-2 md:px-4 py-6">
+          <p className="text-xl font-bold text-white">Update Patient</p>
+          <div className="flex items-center gap-2 md:gap-5">
+            <div className="text-center" onClick={close}>
               <Button
                 text="Cencel"
-                bg="bg-white"
-                hBg="bg-primary"
-                color="text-primary"
+                color="text-white"
+                bg="bg-primary"
+                hBg="bg-white"
+                hColor="text-white"
                 borderWidth="border-2"
                 borderColor="border-primary"
-                hColor="text-white"
               />
             </div>
             <div className="text-center">
               {isLoading ? (
                 <Button
                   type="button"
-                  text="Save..."
-                  bg="bg-gray-400"
+                  text="Updating..."
+                  bg="bg-primary"
+                  hBg="bg-white"
                   color="text-white"
-                  hBg="bg-gray-400"
-                  hColor="text-white"
-                  borderWidth="border-2"
-                  borderColor="border-gray-400"
+                  hColor="text-primary"
                 />
               ) : (
                 <Button
                   type="submit"
-                  text="Save"
+                  text="Update"
                   bg="bg-primary"
                   hBg="bg-white"
                   color="text-white"
@@ -75,8 +91,7 @@ export default function AddPatientsForm() {
             </div>
           </div>
         </div>
-        {/* Start form from here */}
-        <div className="mt-5 bg-white p-4 md:p-8 rounded w-[100%] md:w-[85%] shadow lg:w-[75%] mx-auto">
+        <div className="p-4 md:p-8">
           <div className="flex justify-between items-center gap-2">
             <label htmlFor="Forename" className="text-sm md:text-base">
               Forename
@@ -192,6 +207,7 @@ export default function AddPatientsForm() {
                   name="status"
                   id="status"
                   value={"Recovered"}
+                  checked={status === "Recovered"}
                   onChange={() => setStatus("Recovered")}
                   className="hidden peer"
                 />
@@ -204,8 +220,9 @@ export default function AddPatientsForm() {
                   type="radio"
                   name="status"
                   id="status"
+                  checked={status === "Awaiting_Surgery"}
                   value={"AwaitingSurgery"}
-                  onChange={() => setStatus("Awaiting Surgery")}
+                  onChange={() => setStatus("Awaiting_Surgery")}
                   className="hidden peer"
                 />
                 <span className="peer-checked:bg-primary peer-checked:text-white bg-gray-300 rounded px-7 py-3">
@@ -218,7 +235,8 @@ export default function AddPatientsForm() {
                   name="status"
                   id="status"
                   value={"onTreatment"}
-                  onChange={() => setStatus("On Treatment")}
+                  checked={status === "On_Treatment"}
+                  onChange={() => setStatus("On_Treatment")}
                   className="hidden peer"
                 />
                 <span className="peer-checked:bg-primary peer-checked:text-white bg-gray-300 rounded px-7 py-3">
@@ -235,7 +253,8 @@ export default function AddPatientsForm() {
               <input
                 type="datetime-local"
                 value={
-                  appointmentDate
+                  appointmentDate instanceof Date &&
+                  !isNaN(appointmentDate.getTime())
                     ? appointmentDate.toISOString().slice(0, 16)
                     : ""
                 }
@@ -267,6 +286,6 @@ export default function AddPatientsForm() {
           </div>
         </div>
       </form>
-    </>
+    </div>
   );
 }

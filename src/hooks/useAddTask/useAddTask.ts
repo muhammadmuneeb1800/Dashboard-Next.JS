@@ -11,6 +11,7 @@ import { useState } from "react";
 
 export default function useAddTask(close?: () => void) {
   const [title, setTitle] = useState<string>("");
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [des, setDes] = useState<string>("");
   const [status, setStatus] = useState<string>("NOT_COMPLETED");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -105,6 +106,8 @@ export default function useAddTask(close?: () => void) {
     clearTask,
     dispatch,
     isLoading,
+    isOpen,
+    setIsOpen,
     handleUpdateTask,
     handleUpdate,
   };

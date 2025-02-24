@@ -5,7 +5,7 @@ interface cardDetails {
   title?: string;
   number?: number;
   upAndDown?: string;
-  img?: string | undefined; 
+  img?: string | undefined;
   width?: number;
   icon?: IconType;
   chart?: React.FC | React.ComponentType;

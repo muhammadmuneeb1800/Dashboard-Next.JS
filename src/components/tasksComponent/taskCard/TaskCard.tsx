@@ -1,19 +1,21 @@
 import useAddTask from "@/hooks/useAddTask/useAddTask";
 import { updateTaskCheckBox } from "@/store/slices/taskSlice";
-import { useAppDispatch } from "@/store/store";
 import { taskData } from "@/types/types";
 import moment from "moment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 
 export default function TaskCard({
   close,
   ...props
 }: taskData & { close: () => void }) {
+  const [checked, setChecked] = useState(props.status === "COMPLETED");
   const date = moment(props.createdAt).format("DD MMM YYYY ");
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { handleDelete, handleUpdate, setStatus } = useAddTask(close);
-  const dispatch = useAppDispatch();
+  const { handleDelete, handleUpdate, dispatch, isOpen, setIsOpen } =
+    useAddTask(close);
+  useEffect(() => {
+    setChecked(props.status === "COMPLETED");
+  }, [props.status]);
   return (
     <>
       <div className="bg-success rounded px-3 py-5 md:p-5 flex justify-between shadow-sm items-center">
@@ -25,7 +27,7 @@ export default function TaskCard({
               checked:after:content-['✔'] checked:after:text-white checked:after:text-lg checked:after:flex checked:after:items-center
                checked:after:justify-center checked:after:w-full checked:after:h-full`}
               name="checkbox"
-              checked={props.status === "COMPLETED"}
+              checked={checked}
               onChange={async () => {
                 const updatedStatus =
                   props.status === "COMPLETED" ? "NOT_COMPLETED" : "COMPLETED";
@@ -35,7 +37,7 @@ export default function TaskCard({
                     status: updatedStatus,
                   })
                 );
-                setStatus(updatedStatus);
+                setChecked(!checked);
               }}
               id="checkbox"
             />

@@ -11,26 +11,28 @@ import {
 } from "@/store/slices/patientSlice";
 import TopBar from "../topBar/TopBar";
 import { showToast } from "../toast/Toast";
-import { useRouter } from "next/navigation";
+import PatientsUpdateModal from "./patientsUpdateModal/PatientsUpdateModal";
 
 export default function PatientsComponent() {
   const [active, setActive] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [activePatient, setActivePatient] = useState<string | null>();
   const handleClick = (id: string) => {
     setActivePatient(activePatient === id ? null : id);
     setActive(!active);
   };
 
-  const dispatch = useAppDispatch();
-  const router = useRouter()
+  const close = () => {
+    setIsOpen(!isOpen);
+  };
 
+  const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchPatientsData());
   }, [dispatch]);
 
   const allPatients =
     useAppSelector((store) => store.patientSlice.patients) || [];
-  console.log("all patients", allPatients);
   return (
     <>
       <TopBar
@@ -86,9 +88,8 @@ export default function PatientsComponent() {
                       {patient?.phoneNumber}
                     </td>
                     <td className="py-3 px-6 text-center">
-                      {patient?.appointmentDate
-                        ? moment(patient?.appointmentDate).format("MM-DD-YYYY")
-                        : ""}
+                      {patient?.appointmentDate &&
+                        moment(patient?.appointmentDate).format("MM-DD-YYYY")}
                     </td>
                     <td className="py-3 px-6 text-lg text-center relative">
                       <Button
@@ -102,11 +103,13 @@ export default function PatientsComponent() {
                       {activePatient === patient?.id && active && (
                         <div className="absolute top-10 border shadow-md right-16 bg-white rounded-md w-28 px-2 py-3 z-40 flex flex-col justify-center items-center gap-3">
                           <button
-                            onClick={async()=>{
+                            onClick={async () => {
                               await dispatch(updatePatient(patient.id));
-                              router.push("/dashboard/patients/add-patients")
+                              setActive(!active)
+                              close();
                             }}
-                          className="text-base text-primary hover:bg-primary duration-500 hover:text-white font-bold px-3 py-2 rounded-md">
+                            className="text-base text-primary hover:bg-primary duration-500 hover:text-white font-bold px-3 py-2 rounded-md"
+                          >
                             Update
                           </button>
                           <button
@@ -139,76 +142,8 @@ export default function PatientsComponent() {
           </table>
         </div>
       </div>
+
+      {isOpen && <PatientsUpdateModal close={close} />}
     </>
   );
-}
-
-{
-  /* <tbody className="text-black text-base font-light">
-              {
-                allPatients.length > 0 ?
-              (allPatients?.map((patient, index) => (
-                <tr key={index} className="hover:bg-gray-50">
-                  <td className="py-3 px-6 text-left whitespace-nowrap">
-                    {patient?.foreName}
-                  </td>
-                  <td className="py-3 px-6 text-left">{patient?.diagnosis}</td>
-                  <td className="py-3 px-6 text-center">
-                    <span
-                      className={`py-1 px-3 rounded-full text-xs ${
-                        statusStyles[patient?.status as StatusType]
-                      }`}
-                    >
-                      {patient?.status}
-                    </span>
-                  </td>
-                  <td className="py-3 px-6 text-center">
-                    {patient?.phoneNumber}
-                  </td>
-                  <td className="py-3 px-6 text-center">
-                    {patient?.appointmentDate
-                      ? moment(patient?.appointmentDate).format("MM-DD-YYYY")
-                      : ""}
-                  </td>
-                  <td className="py-3 px-6 text-lg text-center relative">
-                    <Button
-                      icon={BsThreeDots}
-                      bg="bg-none"
-                      color="text-gray-400"
-                      hBg="bg-none"
-                      hColor="text-black"
-                      onClick={() =>
-                        handleClick(patient?.id ? patient?.id : "")
-                      }
-                    />
-                    {activePatient == patient?.id && active ? (
-                      <div className="bg-gray-400 p-2 rounded absolute top-10 right-28 w-full">
-                        <Button
-                          text="Edit"
-                          bg="bg-none"
-                          color="text-gray-800"
-                          hBg="bg-none"
-                          hColor="text-black"
-                        />
-                        <hr />
-                        <Button
-                          text="Delete"
-                          bg="bg-none"
-                          color="text-red-500"
-                          hBg="bg-none"
-                          hColor="text-red-800"
-                        />
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                    </td>
-                    </tr>)
-                    :
-                    (
-                      <div><p>Not data</p></div>
-                    )
-                  }
-                  ))}
-            </tbody> */
 }

@@ -7,6 +7,7 @@ import {
 } from "@/constant/constant";
 type ViewBoxType = { cx: number; cy: number };
 export const LineChart1 = () => {
+  
   return (
     <LineChart data={LINE_CHART_DATA} width={200} height={100}>
       <Line

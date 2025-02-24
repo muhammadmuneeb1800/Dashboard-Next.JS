@@ -57,17 +57,30 @@ export const POST = async (req: NextRequest) => {
 
 export const PUT = async (req: NextRequest) => {
   try {
-    const url = new URL(req.url);
-    const id = url.searchParams.get("id");
     const body = await req.json();
+    console.log("body from PUT API====", body);
     const updatedPatient = await prisma.patients.update({
-      where: { id: id as string },
-      data: body,
+      where: { id: body.id as string },
+      data: {
+        foreName: body.foreName,
+        surName: body.surName,
+        dob: body.dob,
+        sex: body.sex,
+        diagnosis: body.diagnosis,
+        status: body.status,
+        appointmentDate: body.appointmentDate,
+        phoneNumber: body.phoneNumber,
+        doctorId: body.doctorId,
+        updatedAt: new Date(),
+      },
     });
-    return NextResponse.json({
-      message: "Succesfully Update Patient",
-      patient: updatedPatient,
-    });
+    return NextResponse.json(
+      {
+        message: "Succesfully Update Patient",
+        patient: updatedPatient,
+      },
+      { status: 205 }
+    );
   } catch (error) {
     return NextResponse.json({ message: "Error to PUT", error: error });
   }
@@ -76,7 +89,7 @@ export const PUT = async (req: NextRequest) => {
 export const DELETE = async (req: NextRequest) => {
   try {
     const body = await req.json();
-    console.log("id from deleet patients shdsjjk =====", body.id)
+    console.log("id from deleet patients shdsjjk =====", body.id);
     const { id } = body;
     await prisma.patients.delete({ where: { id: id } });
     return NextResponse.json({ message: "Succesfully Delete Patient" });
