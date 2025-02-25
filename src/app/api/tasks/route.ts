@@ -6,7 +6,6 @@ import { NextRequest, NextResponse } from "next/server";
 export const GET = async () => {
   try {
     const id = await getServerSession(authOptions);
-    console.log('Id => ', id)
     const response = await prisma.tasks.findMany({
       where: {
         doctorId: id?.user.id as string,
@@ -24,7 +23,6 @@ export const GET = async () => {
 export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();
-    console.log("Task form API=========", body);
     const newTask = await prisma.tasks.create({
       data: {
         doctorId: body.doctorId,
@@ -45,7 +43,6 @@ export const POST = async (req: NextRequest) => {
 export const PUT = async (req: NextRequest) => {
   try {
     const body = await req.json();
-    console.log("Task form API=========Task Task Task", body);
     const updatedTask = await prisma.tasks.update({
       where: { id: body.id },
       data: {

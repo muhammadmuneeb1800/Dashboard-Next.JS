@@ -1,6 +1,5 @@
+import { ToastType } from "@/types/types";
 import { Toaster, toast, ToastOptions } from "react-hot-toast";
-
-type ToastType = "success" | "error" | "loading" | "default";
 
 const showToast = (
   type: ToastType,

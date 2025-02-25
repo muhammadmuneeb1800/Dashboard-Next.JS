@@ -47,20 +47,15 @@ export default function useEditProfile() {
       setLoading(false);
       return;
     }
-
     const newData = {
       id: session?.user?.id,
       name: name,
       email: email,
       companyName: company,
     };
-
-    console.log("data from user edit prifile and sdiufisdfsdfh", newData);
-
     try {
       await dispatch(userEdit(newData));
       showToast("success", "Profile updated successfully");
-
       await update({
         user: {
           ...session?.user,
@@ -70,7 +65,6 @@ export default function useEditProfile() {
         },
       });
       await getSession();
-
       setLoading(false);
       router.push("/dashboard");
     } catch (error) {
@@ -97,9 +91,6 @@ export default function useEditProfile() {
       oldPassword: oldPassword,
       newPassword: newPassword,
     };
-
-    console.log("data from password change", updatedData);
-
     try {
       await dispatch(updateUserPassword(updatedData));
       showToast("success", "Password updated successfully");
@@ -107,7 +98,6 @@ export default function useEditProfile() {
       showToast("error", error as string);
       setLoading(false);
     }
-
     setOldPassword("");
     setNewPassword("");
     setConfirmPassword("");

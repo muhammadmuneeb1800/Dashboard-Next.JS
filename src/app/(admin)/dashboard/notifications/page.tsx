@@ -2,11 +2,11 @@ import TopBar from "@/components/topBar/TopBar";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Dashboard - Messages",
+  title: "Dashboard - Notifications",
   description: "Your Personal Doctor Dashboard.",
 };
 
-export default async function Message() {
+export default async function Notifications() {
   return (
     <>
       <div className="px-3 md:px-5 py-3 w-full bg-success min-h-screen">

@@ -20,7 +20,6 @@ export const fetchTasksData = createAsyncThunk("fetchTasks", async () => {
 export const addTasks = createAsyncThunk("addTasks", async (task: taskData) => {
   try {
     const response = await axiosInstance.post("/api/tasks", task);
-    console.log("fomsdkfllflsdfldfsdhkhsdkkhsd", response);
     return response?.data?.task || [];
   } catch (error) {
     console.error("Error adding task:", error);
@@ -31,7 +30,6 @@ export const updateTasks = createAsyncThunk(
   "updateTasks",
   async (task: taskData) => {
     try {
-      console.log("form dtaa slice skk", task);
       const response = await axiosInstance.put(`/api/tasks`, task);
       if (response.status === 401) {
         showToast("error", "Error updating tasks");
@@ -60,7 +58,6 @@ export const updateTaskCheckBox = createAsyncThunk(
   "updateTaskCheckBox",
   async ({ id, status }: { id: string; status: string }) => {
     try {
-      console.log("Checking", status, id);
       const response = await axiosInstance.put(`/api/task-checkbox`, {
         data: { id, status },
       });

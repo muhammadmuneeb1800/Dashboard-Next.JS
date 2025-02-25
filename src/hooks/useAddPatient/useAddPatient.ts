@@ -22,6 +22,7 @@ export default function useAddPatient() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
+  const doctorId = session?.user?.id;
   const router = useRouter();
 
   const formValidation = () => {
@@ -50,14 +51,12 @@ export default function useAddPatient() {
       setIsLoading(false);
       return;
     }
-
     const validGenders = ["Male", "Female"];
     if (!validGenders.includes(gender as string)) {
       showToast("error", "Sex is Require (Male) & (Female)");
       setIsLoading(false);
       return;
     }
-
     if (!phoneNumber?.trim()) {
       showToast("error", "Phone number is required");
       setIsLoading(false);
@@ -67,7 +66,6 @@ export default function useAddPatient() {
       setIsLoading(false);
       return;
     }
-
     if (!appointmentDate) {
       showToast("error", "Appointment date is required");
       setIsLoading(false);
@@ -80,9 +78,9 @@ export default function useAddPatient() {
         return;
       }
     }
-
     return true;
   };
+
   const handleAddPatient = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -90,8 +88,6 @@ export default function useAddPatient() {
       setIsLoading(false);
       return;
     }
-
-    const doctorId = session?.user?.id;
     const patientData = {
       doctorId: doctorId,
       foreName: foreName,
@@ -103,7 +99,6 @@ export default function useAddPatient() {
       appointmentDate: appointmentDate,
       phoneNumber: phoneNumber,
     };
-
     try {
       await dispatch(addPatientData(patientData));
       showToast("success", "Patient added successfully");
@@ -111,7 +106,6 @@ export default function useAddPatient() {
     } catch (error) {
       console.log("Error from the useAdd Patients", error);
     }
-
     setForeName("");
     setSurname("");
     setDob("");
@@ -130,13 +124,10 @@ export default function useAddPatient() {
   ) => {
     e.preventDefault();
     setIsLoading(true);
-
     if (!formValidation()) {
       setIsLoading(false);
       return;
     }
-
-    const doctorId = session?.user?.id;
     const patientData = {
       id,
       doctorId,
@@ -149,10 +140,8 @@ export default function useAddPatient() {
       appointmentDate,
       phoneNumber,
     };
-
     try {
       const res = await dispatch(updatePatientDataThunk(patientData));
-
       if (res?.payload?.success) {
         showToast("success", "Patient Updated successfully");
         await dispatch(fetchPatientsData());
@@ -163,7 +152,6 @@ export default function useAddPatient() {
       close();
       setIsLoading(false);
     }
-
     setForeName("");
     setSurname("");
     setDob("");

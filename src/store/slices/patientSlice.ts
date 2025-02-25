@@ -28,14 +28,12 @@ export const addPatientData = createAsyncThunk(
   async (user: InitialData, { rejectWithValue, dispatch }) => {
     try {
       const response = await axiosInstance.post("api/patients", user);
-
       if (response.status === 501) {
         showToast("error", "Server error. Please try again later.");
         return rejectWithValue("Server error");
       }
-
       const patient = response?.data || {};
-      dispatch(fetchPatientsData()); // Refresh list
+      dispatch(fetchPatientsData());
       return patient;
     } catch (error) {
       console.error("Error creating patient:", error);
@@ -49,16 +47,13 @@ export const updatePatientDataThunk = createAsyncThunk(
   "patients/updatePatients",
   async (user: InitialData, { rejectWithValue, dispatch }) => {
     try {
-      console.log("Updating patient:", user);
       const response = await axiosInstance.put("api/patients", user);
-
       if (response.status !== 200) {
         showToast("error", "Failed to update patient.");
         return rejectWithValue("Update failed");
       }
-
       const updatedPatient = response?.data;
-      dispatch(fetchPatientsData()); // Refresh list
+      dispatch(fetchPatientsData());
       return updatedPatient;
     } catch (error) {
       console.error("Error updating patient:", error);
@@ -72,10 +67,8 @@ export const deletePatientData = createAsyncThunk(
   "patients/deletePatients",
   async (id: string, { rejectWithValue, dispatch }) => {
     try {
-      console.log("Deleting patient with ID:", id);
       await axiosInstance.delete("api/patients", { data: { id } });
-
-      dispatch(fetchPatientsData()); // Refresh list
+      dispatch(fetchPatientsData());
       return id;
     } catch (error) {
       console.error("Error deleting patient:", error);
@@ -107,14 +100,15 @@ const PatientsSlice = createSlice({
         state.patients = [action.payload, ...state.patients];
       })
       .addCase(updatePatientDataThunk.fulfilled, (state, action) => {
-        state.patients = state.patients.map((patient) =>
-          patient.id === action.payload.id ? action.payload : patient
-        );
+        state.patients =
+          state.patients.map((patient) =>
+            patient.id === action.payload.id ? action.payload : patient
+          ) || [];
       })
       .addCase(deletePatientData.fulfilled, (state, action) => {
-        state.patients = state.patients.filter(
-          (patient) => patient.id !== action.payload
-        );
+        state.patients =
+          state.patients.filter((patient) => patient.id !== action.payload) ||
+          [];
       });
   },
 });

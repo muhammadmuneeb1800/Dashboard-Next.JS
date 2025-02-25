@@ -9,8 +9,8 @@ export default function TaskCard({
   close,
   ...props
 }: taskData & { close: () => void }) {
-  const [checked, setChecked] = useState(props.status === "COMPLETED");
   const date = moment(props.createdAt).format("DD MMM YYYY ");
+  const [checked, setChecked] = useState(props.status === "COMPLETED");
   const { handleDelete, handleUpdate, dispatch, isOpen, setIsOpen } =
     useAddTask(close);
   useEffect(() => {

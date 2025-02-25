@@ -5,7 +5,6 @@ import { NextRequest, NextResponse } from "next/server";
 export const PUT = async (req: NextRequest) => {
   try {
     const body = await req.json();
-    console.log("api-======asdfushihsdhashah", body);
     const password = await prisma.doctor.findUnique({
       where: { id: body.id },
     });

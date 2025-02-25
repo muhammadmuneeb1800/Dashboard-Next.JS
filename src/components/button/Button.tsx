@@ -1,19 +1,4 @@
-import { IconType } from "react-icons";
-
-interface button {
-  text?: string;
-  type?: "submit" | "reset" | "button";
-  onClick?: () => void;
-  bg: string;
-  color: string;
-  hBg: string;
-  hColor: string;
-  icon?: IconType;
-  borderColor?: string;
-  hBorderColor?: string;
-  borderWidth?: string;
-  width?: string;
-}
+import { button } from "@/types/types";
 
 export default function Button(props: button) {
   return (

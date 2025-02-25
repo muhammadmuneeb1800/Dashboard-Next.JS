@@ -73,17 +73,15 @@ const Appointment = createSlice({
       state.appointments = [action.payload, ...state.appointments];
     });
     builder.addCase(updateAppointments.fulfilled, (state, action) => {
-      const index = state.appointments.findIndex(
-        (ap) => ap.id === action.payload.id
-      );
-      if (index > -1) {
-        state.appointments[index] = action.payload;
-      }
+      state.appointments =
+        state.appointments.map((app) =>
+          app.id === action.payload.id ? action.payload : app
+        ) || [];
     });
     builder.addCase(deleteAppointments.fulfilled, (state, action) => {
       state.appointments = state.appointments.filter(
         (ap) => ap.id !== action.payload
-      );
+      ) || [];
     });
   },
 });

@@ -8,7 +8,6 @@ import { usePathname } from "next/navigation";
 export default function SideBar() {
   const [activePath, setActivePath] = useState("");
   const param = usePathname();
-
   useEffect(() => {
     if (param === "/dashboard/patients/add-patients") {
       setActivePath("/dashboard/patients");

@@ -1,9 +1,16 @@
+import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async () => {
   try {
-    const appointments = await prisma.appointments.findMany();
+    const session = await getServerSession(authOptions);
+    const appointments = await prisma.appointments.findMany({
+      where: {
+        doctorId: session?.user.id as string,
+      },
+    });
     return NextResponse.json({
       message: "Succesfully Fetch Appointments",
       Appointments: appointments,
@@ -16,7 +23,6 @@ export const GET = async () => {
 export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();
-    console.log("appointment from api aapi ====", body);
     const exitsAppointments = await prisma.appointments.findFirst({
       where: { patientName: body.patientName },
     });
@@ -25,7 +31,6 @@ export const POST = async (req: NextRequest) => {
         message: "Patient already has an appointment",
       });
     }
-
     const newAppointment = await prisma.appointments.create({
       data: {
         doctorId: body.doctorId,

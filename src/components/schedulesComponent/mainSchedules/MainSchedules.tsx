@@ -1,5 +1,4 @@
 "use client"
-
 import React, { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import UpCommingSchedule from "../upCommingSchedule/UpCommingSchedule";
@@ -12,7 +11,7 @@ export default function SchedulesComponent() {
   };
   return (
     <>
-      <div className="mt-3 px-3 md:px-5 py-3 bg-white rounded-md shadow w-full xl:w-[35%]">
+      <div className="mt-3 px-3 md:px-5 py-3 bg-white rounded-md shadow w-full xl:w-[35%] h-auto">
         <div className="flex justify-between items-center">
           <p className="font-semibold">Upcomming Schedule</p>
           <button

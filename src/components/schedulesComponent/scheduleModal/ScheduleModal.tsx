@@ -6,14 +6,11 @@ import { SlClock } from "react-icons/sl";
 import Input from "../../input/Input";
 import { MdOutlineNotifications } from "react-icons/md";
 import Button from "../../button/Button";
-import moment from "moment";
 import useAddAppointment from "@/hooks/useAddAppointment/useAddAppointment";
 import { FaCheck } from "react-icons/fa";
 import { useAppSelector } from "@/store/store";
 
 export default function ScheduleModal({ close }: { close: () => void }) {
-  const date = moment(new Date()).format("ddd, DD MMMM");
-  const time = moment(new Date()).format("h:mm");
   const {
     patientName,
     setPatientName,
@@ -27,6 +24,8 @@ export default function ScheduleModal({ close }: { close: () => void }) {
     setType,
     isOnline,
     isLoading,
+    date,
+    time,
     setIsOnline,
     handleAddAppointment,
   } = useAddAppointment(close);
@@ -263,81 +262,3 @@ export default function ScheduleModal({ close }: { close: () => void }) {
     </>
   );
 }
-
-// <div className="flex pt-10 justify-between items-center">
-//   <label htmlFor="Duration">Duration</label>
-//   <div className="w-[70%] flex flex-wrap md:items-center gap-7 md:gap-6">
-//     <label>
-//       <input
-//         type="radio"
-//         name="Duration"
-//         id="10"
-//         value={"10"}
-//         className="hidden peer"
-//       />
-//       <span className="peer-checked:bg-primary peer-checked:text-white bg-gray-300 rounded px-7 py-3">
-//         10&lsquo;
-//       </span>
-//     </label>
-//     <label>
-//       <input
-//         type="radio"
-//         name="Duration"
-//         id="30"
-//         value={"30"}
-//         className="hidden peer"
-//       />
-//       <span className="peer-checked:bg-primary peer-checked:text-white bg-gray-300 rounded px-7 py-3">
-//         30&lsquo;
-//       </span>
-//     </label>
-//     <label>
-//       <input
-//         type="radio"
-//         name="Duration"
-//         id="45"
-//         value={"45"}
-//         className="hidden peer"
-//       />
-//       <span className="peer-checked:bg-primary peer-checked:text-white bg-gray-300 rounded px-7 py-3">
-//         45&lsquo;
-//       </span>
-//     </label>
-//     <label>
-//       <input
-//         type="radio"
-//         name="Duration"
-//         id="60"
-//         value={"60"}
-//         className="hidden peer"
-//       />
-//       <span className="peer-checked:bg-primary peer-checked:text-white bg-gray-300 rounded px-7 py-3">
-//         60&lsquo;
-//       </span>
-//     </label>
-//     <label>
-//       <input
-//         type="radio"
-//         name="Duration"
-//         id="90"
-//         value={"90"}
-//         className="hidden peer"
-//       />
-//       <span className="peer-checked:bg-primary peer-checked:text-white bg-gray-300 rounded px-7 py-3">
-//         90&lsquo;
-//       </span>
-//     </label>
-//     <label>
-//       <input
-//         type="radio"
-//         name="Duration"
-//         id="120"
-//         value={"120"}
-//         className="hidden peer"
-//       />
-//       <span className="peer-checked:bg-primary peer-checked:text-white bg-gray-300 rounded px-7 py-3">
-//         120&lsquo;
-//       </span>
-//     </label>
-//   </div>
-// </div>

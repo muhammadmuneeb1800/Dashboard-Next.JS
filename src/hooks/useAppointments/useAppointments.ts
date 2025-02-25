@@ -8,18 +8,14 @@ import { FaArrowAltCircleUp } from "react-icons/fa";
 
 export const useGraphData = () => {
   const dispatch = useAppDispatch();
-
   useEffect(() => {
     dispatch(fetchAppointments());
     dispatch(fetchPatientsData());
   }, [dispatch]);
-
   const allAppointments =
     useAppSelector((store) => store.appointmentSlice.appointments) || [];
-
   const allPatients =
     useAppSelector((store) => store.patientSlice.patients) || [];
-
   const onlineAppointments = allAppointments.filter((a) => a.isOnline);
   const offlineAppointments = allAppointments.filter((a) => !a.isOnline);
 

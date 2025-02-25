@@ -1,3 +1,5 @@
+import { IconType } from "react-icons";
+
 export interface initialAuth {
   id?: string | undefined;
   name: string | undefined | null;
@@ -45,9 +47,56 @@ export interface initialAppointment {
   updatedAt?: Date | null;
 }
 
-
 export interface updatePasswordData {
   id: string;
   oldPassword: string;
   newPassword: string;
+}
+
+export interface topBarDetails {
+  title?: string;
+  sabTitle?: string;
+  icon1?: string;
+  icon2?: string;
+  icon3?: string;
+  icon4?: string;
+  link?: string | undefined;
+  onclick?: () => void;
+}
+
+export type ToastType = "success" | "error" | "loading" | "default";
+
+export interface inputDetails {
+  value?: string | number;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  border?: string;
+  borderColor?: string;
+  id?: string;
+  type?: string;
+  placeholder?: string;
+}
+
+export interface cardDetails {
+  title?: string;
+  number?: number;
+  upAndDown?: string;
+  img?: string | undefined;
+  width?: number;
+  icon?: IconType;
+  chart?: React.FC | React.ComponentType;
+}
+
+export interface button {
+  text?: string;
+  type?: "submit" | "reset" | "button";
+  onClick?: () => void;
+  bg: string;
+  color: string;
+  hBg: string;
+  hColor: string;
+  icon?: IconType;
+  borderColor?: string;
+  hBorderColor?: string;
+  borderWidth?: string;
+  width?: string;
 }

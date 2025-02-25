@@ -2,6 +2,7 @@
 import { showToast } from "@/components/toast/Toast";
 import { createAppointments } from "@/store/slices/appointmentSlice";
 import { useAppDispatch } from "@/store/store";
+import moment from "moment";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
@@ -15,8 +16,10 @@ export default function useAddAppointment(close: () => void) {
   const [isOnline, setIsOnline] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const dispatch = useAppDispatch();
+  const date = moment(new Date()).format("ddd, DD MMMM");
+  const time = moment(new Date()).format("h:mm");
   const { data: session } = useSession();
+  const dispatch = useAppDispatch();
 
   const handleAddAppointment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,7 +74,6 @@ export default function useAddAppointment(close: () => void) {
       setIsLoading(false);
       return;
     }
-
     const appointmentData = {
       doctorId: session?.user.id as string,
       doctorName: session?.user.name as string,
@@ -83,7 +85,6 @@ export default function useAddAppointment(close: () => void) {
       appointmentType: type.replaceAll(" ", "_"),
       isOnline: isOnline,
     };
-
     try {
       await dispatch(createAppointments(appointmentData));
       setIsLoading(false);
@@ -93,7 +94,6 @@ export default function useAddAppointment(close: () => void) {
       console.log("Error adding appointment", error);
       showToast("error", "Error adding appointment");
     }
-
     setPatientName("");
     setPurpose("");
     setStatus("");
@@ -119,6 +119,8 @@ export default function useAddAppointment(close: () => void) {
     isLoading,
     setIsOnline,
     errors,
+    date,
+    time,
     handleAddAppointment,
   };
 }

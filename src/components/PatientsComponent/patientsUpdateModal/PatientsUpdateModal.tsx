@@ -1,8 +1,9 @@
+"use client"
+import React, { useEffect } from "react";
 import Button from "@/components/button/Button";
 import Input from "@/components/input/Input";
 import useAddPatient from "@/hooks/useAddPatient/useAddPatient";
 import { useAppSelector } from "@/store/store";
-import React, { useEffect } from "react";
 import { MdOutlineCalendarToday } from "react-icons/md";
 
 export default function PatientsUpdateModal({ close }: { close: () => void }) {

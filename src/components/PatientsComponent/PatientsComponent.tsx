@@ -17,16 +17,14 @@ export default function PatientsComponent() {
   const [active, setActive] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [activePatient, setActivePatient] = useState<string | null>();
+  const dispatch = useAppDispatch();
   const handleClick = (id: string) => {
     setActivePatient(activePatient === id ? null : id);
     setActive(!active);
   };
-
   const close = () => {
     setIsOpen(!isOpen);
   };
-
-  const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchPatientsData());
   }, [dispatch]);
@@ -105,7 +103,7 @@ export default function PatientsComponent() {
                           <button
                             onClick={async () => {
                               await dispatch(updatePatient(patient.id));
-                              setActive(!active)
+                              setActive(!active);
                               close();
                             }}
                             className="text-base text-primary hover:bg-primary duration-500 hover:text-white font-bold px-3 py-2 rounded-md"
@@ -142,7 +140,6 @@ export default function PatientsComponent() {
           </table>
         </div>
       </div>
-
       {isOpen && <PatientsUpdateModal close={close} />}
     </>
   );

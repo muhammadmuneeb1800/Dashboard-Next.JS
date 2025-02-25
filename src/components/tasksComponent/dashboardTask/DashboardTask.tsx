@@ -7,27 +7,25 @@ import { fetchTasksData, resetUpdateTaskId } from "@/store/slices/taskSlice";
 import TaskCard from "../taskCard/TaskCard";
 
 export default function DashboardTask() {
+  const allTasks = useAppSelector((store) => store.tasksSlice.task) || [];
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchTasksData());
   }, [dispatch]);
-
-  const allTasks = useAppSelector((store) => store.tasksSlice.task) || [];
-  console.log("all tasks", allTasks);
   const close = () => {
     setIsOpen(!isOpen);
   };
   return (
     <>
-      <div className="mt-3 px-3 md:px-5 py-3 bg-white rounded-md shadow w-full xl:w-[65%]">
+      <div className="mt-3 px-3 md:px-5 py-3 bg-white rounded-md shadow w-full xl:w-[65%] h-auto">
         <div className="flex justify-between items-center">
           <div>
             <p className="font-semibold">Tasks</p>
           </div>
           <button
-            onClick={()=>{
-              close()
+            onClick={() => {
+              close();
               dispatch(resetUpdateTaskId());
             }}
             className="flex justify-center items-center font-medium gap-2 text-primary cursor-pointer"

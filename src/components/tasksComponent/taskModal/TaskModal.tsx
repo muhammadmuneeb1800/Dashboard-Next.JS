@@ -6,6 +6,7 @@ import { useAppSelector } from "@/store/store";
 import React, { useEffect } from "react";
 
 export default function TaskModal({ close }: { close: () => void }) {
+  const update = useAppSelector((store) => store.tasksSlice.updateTask) || null;
   const {
     title,
     setTitle,
@@ -19,7 +20,6 @@ export default function TaskModal({ close }: { close: () => void }) {
     isLoading,
     clearTask,
   } = useAddTask(close);
-  const update = useAppSelector((store) => store.tasksSlice.updateTask) || null;
   useEffect(() => {
     if (update) {
       setTitle(update.title as string);
@@ -30,8 +30,6 @@ export default function TaskModal({ close }: { close: () => void }) {
       setDes("");
       setStatus("");
     }
-
-    console.log("To update fomr asls======", update);
   }, [update]);
   return (
     <>

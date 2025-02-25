@@ -22,7 +22,6 @@ export const userEdit = createAsyncThunk(
   async (data: initialAuth) => {
     try {
       const response = await axiosInstance.put(`/api/login-user`, data);
-      console.log("response from userEditProfile", response);
       return response?.data?.user || {};
     } catch (error) {
       console.log(error);
@@ -34,9 +33,7 @@ export const updateUserPassword = createAsyncThunk(
   "updatePassword",
   async (data: updatePasswordData) => {
     try {
-      console.log("updating user password", data);
       const response = await axiosInstance.put("/api/update-password", data);
-      console.log("response from updatePassword", response);
       if (response.status === 401) {
         showToast("error", "Old password is required");
         return;

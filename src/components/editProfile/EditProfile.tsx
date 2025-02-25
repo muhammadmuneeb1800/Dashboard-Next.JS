@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import Input from "../input/Input";
 import Button from "../button/Button";
@@ -25,7 +24,6 @@ export default function EditProfile() {
     handleChangePassword,
     handleSaveChanges,
   } = useEditProfile();
-
   return (
     <>
       <div className="md:w-[70%] mx-auto bg-white p-6 rounded-md shadow-md mt-5">

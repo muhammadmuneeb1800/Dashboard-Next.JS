@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import GraphCard from "../graphCard/GrapCard";
 import { useGraphData } from "@/hooks/useAppointments/useAppointments";

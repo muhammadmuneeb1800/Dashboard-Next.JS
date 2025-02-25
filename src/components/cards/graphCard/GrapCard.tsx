@@ -1,15 +1,5 @@
-import { IconType } from "react-icons";
+import { cardDetails } from "@/types/types";
 import { BsThreeDots } from "react-icons/bs";
-
-interface cardDetails {
-  title?: string;
-  number?: number;
-  upAndDown?: string;
-  img?: string | undefined;
-  width?: number;
-  icon?: IconType;
-  chart?: React.FC | React.ComponentType;
-}
 
 export default function GraphCard(props: cardDetails) {
   return (

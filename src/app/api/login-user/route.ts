@@ -31,7 +31,6 @@ export const GET = async () => {
 export const PUT = async (req: NextRequest) => {
   try {
     const body = await req.json();
-    console.log("user data from api edit user =========", body);
     const updatedDoctor = await prisma.doctor.update({
       where: { id: body.id },
       data: {

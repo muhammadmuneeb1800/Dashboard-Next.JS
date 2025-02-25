@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import TopBar from "../topBar/TopBar";
 import TaskModal from "./taskModal/TaskModal";
@@ -9,15 +8,14 @@ import { fetchTasksData } from "@/store/slices/taskSlice";
 
 export default function Tasks() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const close = () => {
-    setIsOpen(!isOpen);
-  };
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchTasksData());
   }, [dispatch]);
-
   const AllTasks = useAppSelector((store) => store.tasksSlice.task) || [];
+  const close = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
     <>

@@ -19,13 +19,6 @@ export default function useAddTask(close?: () => void) {
   const { data: session } = useSession();
   const dispatch = useAppDispatch();
 
-  const data = {
-    doctorId: session?.user.id as string,
-    title: title,
-    description: des,
-    status: status,
-  };
-
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -39,7 +32,12 @@ export default function useAddTask(close?: () => void) {
       setIsLoading(false);
       return;
     }
-
+    const data = {
+      doctorId: session?.user.id as string,
+      title: title,
+      description: des,
+      status: status,
+    };
     try {
       await dispatch(addTasks(data));
       setIsLoading(false);

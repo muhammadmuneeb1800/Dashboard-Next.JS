@@ -23,7 +23,6 @@ export const GET = async () => {
 export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();
-    console.log("user form API=========", body);
     const newPatient = await prisma.patients.create({
       data: {
         doctorId: body.doctorId,
@@ -37,8 +36,6 @@ export const POST = async (req: NextRequest) => {
         phoneNumber: body.phoneNumber,
       },
     });
-
-    console.log("Newly created... ", newPatient);
     return NextResponse.json(
       {
         message: "Succesfully Create Patient",
@@ -58,7 +55,6 @@ export const POST = async (req: NextRequest) => {
 export const PUT = async (req: NextRequest) => {
   try {
     const body = await req.json();
-    console.log("body from PUT API====", body);
     const updatedPatient = await prisma.patients.update({
       where: { id: body.id as string },
       data: {
@@ -89,7 +85,6 @@ export const PUT = async (req: NextRequest) => {
 export const DELETE = async (req: NextRequest) => {
   try {
     const body = await req.json();
-    console.log("id from deleet patients shdsjjk =====", body.id);
     const { id } = body;
     await prisma.patients.delete({ where: { id: id } });
     return NextResponse.json({ message: "Succesfully Delete Patient" });

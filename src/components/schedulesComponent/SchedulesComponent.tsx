@@ -1,17 +1,14 @@
 "use client";
-
+import React, { useState } from "react";
 import Calendar from "@/components/calendor/Calendor";
 import ScheduleModal from "@/components/schedulesComponent/scheduleModal/ScheduleModal";
 import TopBar from "@/components/topBar/TopBar";
-import React, { useState } from "react";
 
 export default function MainSchedules() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const close = () => {
     setIsModalOpen(!isModalOpen);
   };
-
   return (
     <div>
       <TopBar
@@ -25,7 +22,6 @@ export default function MainSchedules() {
       <div className="mt-5 bg-white">
         <Calendar />
       </div>
-
       {isModalOpen && <ScheduleModal close={close} />}
     </div>
   );

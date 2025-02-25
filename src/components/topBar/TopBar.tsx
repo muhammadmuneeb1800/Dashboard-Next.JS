@@ -1,21 +1,11 @@
 "use client";
+import { topBarDetails } from "@/types/types";
 import Link from "next/link";
 import React from "react";
 import * as Icons from "react-icons/fa";
 import * as IoIcons from "react-icons/io5";
 import * as MdIcons from "react-icons/md";
 import * as TbIcons from "react-icons/tb";
-
-interface topBarDetails {
-  title?: string;
-  sabTitle?: string;
-  icon1?: string;
-  icon2?: string;
-  icon3?: string;
-  icon4?: string;
-  link?: string | undefined;
-  onclick?: () => void;
-}
 
 const getIcons = (iconName: string) => {
   return (

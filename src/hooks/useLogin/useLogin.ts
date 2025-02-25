@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { showToast } from "@/components/toast/Toast";
@@ -14,19 +13,16 @@ export default function useLogin() {
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-
     if (!email.trim()) {
       newErrors.email = "Email is required";
     } else if (!/^\S+@\S+\.\S+$/.test(email)) {
       newErrors.email = "Enter a valid email address";
     }
-
     if (!password.trim()) {
       newErrors.password = "Password is required";
     } else if (password.length < 8) {
       newErrors.password = "Password must be at least 8 characters";
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -45,7 +41,6 @@ export default function useLogin() {
         redirect: false,
       });
       if (login?.error) {
-        console.log("Login failed", login.error);
         setErrors({ Invalid: "Invalid email or password" });
         setLoading(false);
         return;

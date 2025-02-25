@@ -1,15 +1,6 @@
+import { inputDetails } from "@/types/types";
 import React from "react";
 import { ImCross } from "react-icons/im";
-
-interface inputDetails {
-  value?: string | number;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  border?: string;
-  borderColor?: string;
-  id?: string;
-  type?: string;
-  placeholder?: string;
-}
 
 export default function Input(props: inputDetails) {
   const handleCross = () => {
@@ -34,7 +25,10 @@ export default function Input(props: inputDetails) {
           className={`w-full outline-none text-lg md:text-xl py-2`}
         />
         {props.value && (
-          <ImCross className="text-black text-[10px] md:text-[14px]" onClick={() => handleCross()} />
+          <ImCross
+            className="text-black text-[10px] md:text-[14px]"
+            onClick={() => handleCross()}
+          />
         )}
       </div>
     </>

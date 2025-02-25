@@ -5,16 +5,18 @@ import { CiMail } from "react-icons/ci";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
 import { useEffect, useState } from "react";
-import { MONTH_OF_YEAR } from "@/constant/constant";
 import { signOut } from "next-auth/react";
 import { showToast } from "../toast/Toast";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { userAuth } from "@/store/slices/authSlice";
+import moment from "moment";
 
 export default function Header() {
   const [search, setSearch] = useState<string>("");
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [isNotification, setIsNotification] = useState(false);
+  const date = moment(new Date()).format("DD,MMMM YYYY");
+  const session = useAppSelector((store) => store.authSlice.user) || {};
   const dispatch = useAppDispatch();
   const noti =
     useAppSelector((store) => store.notificationSlice.notifications) || [];
@@ -24,12 +26,6 @@ export default function Header() {
       setIsNotification(true);
     }
   }, [dispatch]);
-
-  const session = useAppSelector((store) => store.authSlice.user) || {};
-  const day = new Date().getDate();
-  const month = new Date().getMonth();
-  const year = new Date().getFullYear();
-
   return (
     <div className="w-full flex px-3 md:px-5 py-[10.8px] justify-between items-center gap-10 border-light border-b">
       <div className="w-[50%] lg:flex hidden justify-between items-center border border-light px-5 rounded">
@@ -47,9 +43,7 @@ export default function Header() {
             {session?.companyName}
           </p>
         </div>
-        <div className="hidden md:block border p-2 rounded">
-          {day + "," + MONTH_OF_YEAR[month] + " " + year}
-        </div>
+        <div className="hidden md:block border p-2 rounded">{date}</div>
         <div className="flex justify-center items-center gap-5 md:gap-3 lg:gap-6">
           <CiMail className="text-2xl lg:text-3xl text-info cursor-pointer" />
           <button
