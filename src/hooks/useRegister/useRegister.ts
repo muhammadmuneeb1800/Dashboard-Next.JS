@@ -2,7 +2,6 @@
 import { useState } from "react";
 import bcrypt from "bcryptjs";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { axiosInstance } from "@/utils/axiosInstance";
 import { showToast } from "@/components/toast/Toast";
 
@@ -14,7 +13,6 @@ export default function useRegister() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const router = useRouter();
-  const session = useSession();
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -105,7 +103,6 @@ export default function useRegister() {
     loading,
     setLoading,
     router,
-    session,
     handleRegister,
   };
 }

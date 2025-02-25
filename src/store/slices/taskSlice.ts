@@ -98,12 +98,10 @@ const Task = createSlice({
       state.task = [action.payload, ...state.task];
     });
     builder.addCase(updateTasks.fulfilled, (state, action) => {
-      const id = state.task.map((task) => task.id === action.payload.id);
-      if (id) {
-        state.task = state.task.map((task) =>
+      state.task =
+        state.task.map((task) =>
           task.id === action.payload.id ? action.payload : task
-        );
-      }
+        ) || [];
     });
     builder.addCase(deleteTasks.fulfilled, (state, action) => {
       state.task = state.task.filter((task) => task.id !== action.payload);

@@ -1,14 +1,21 @@
 import React from "react";
 import RightSideLogin from "@/components/rightSideLogin/RightSideLogin";
 import RegisterForm from "@/components/authForms/registerForm/RegisterForm";
+import { authOptions } from "@/lib/auth";
+import { redirect } from "next/navigation";
 import { Metadata } from "next";
+import { getServerSession } from "next-auth";
 
 export const metadata: Metadata = {
   title: "Register for Dashboard",
   description: "Register for your Personal Doctor Dashboard.",
 };
 
-export default function Register() {
+export default async function Register() {
+  const session = await getServerSession(authOptions);
+  if (session) {
+    redirect("/dashboard");
+  }
   return (
     <>
       <div className="flex justify-center items-center w-full h-screen">

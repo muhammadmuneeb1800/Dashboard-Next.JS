@@ -74,7 +74,10 @@ export default function TaskCard({
                   Update
                 </button>
                 <button
-                  onClick={() => handleDelete(props.id as string)}
+                  onClick={() => {
+                    handleDelete(props.id as string);
+                    setIsOpen(!isOpen);
+                  }}
                   className="text-base text-red-500 hover:bg-red-500 duration-500 hover:text-white font-bold px-3 py-2 rounded-md"
                 >
                   Delete

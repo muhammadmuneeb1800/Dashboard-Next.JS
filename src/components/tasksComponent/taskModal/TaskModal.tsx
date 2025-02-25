@@ -37,7 +37,13 @@ export default function TaskModal({ close }: { close: () => void }) {
     <>
       <div className="fixed flex justify-center inset-0 z-50 items-center h-screen w-full bg-black backdrop-blur bg-opacity-40">
         <form
-          onSubmit={update === null ? handleSave : handleUpdateTask}
+          onSubmit={(e: React.FormEvent) => {
+            if (update === null) {
+              handleSave(e);
+            } else {
+              handleUpdateTask(e, update.id as string);
+            }
+          }}
           className="mx-auto w-[85%] md:w-[65%] lg:w-[50%] p-7 bg-white z-50 rounded-md shadow-md"
         >
           <h2 className="text-center text-xl font-semibold">

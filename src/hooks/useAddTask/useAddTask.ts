@@ -2,6 +2,7 @@ import { showToast } from "@/components/toast/Toast";
 import {
   addTasks,
   deleteTasks,
+  fetchTasksData,
   updateTaskId,
   updateTasks,
 } from "@/store/slices/taskSlice";
@@ -68,11 +69,11 @@ export default function useAddTask(close?: () => void) {
     }
   };
 
-  const handleUpdateTask = async (e: React.FormEvent) => {
+  const handleUpdateTask = async (e: React.FormEvent, id: string) => {
     e.preventDefault();
     setIsLoading(true);
     const data = {
-      id: session?.user.id as string,
+      id: id,
       doctorId: session?.user.id as string,
       title: title,
       description: des,
@@ -81,10 +82,13 @@ export default function useAddTask(close?: () => void) {
     try {
       await dispatch(updateTasks(data));
       setIsLoading(false);
+      dispatch(fetchTasksData());
       showToast("success", "Task updated successfully");
       if (close) close();
     } catch (error) {
       showToast("error", error as string);
+    } finally {
+      setIsLoading(false);
     }
   };
 

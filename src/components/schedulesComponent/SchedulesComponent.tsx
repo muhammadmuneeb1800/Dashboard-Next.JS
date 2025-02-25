@@ -8,13 +8,10 @@ import React, { useState } from "react";
 export default function MainSchedules() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const openModal = () => {
-    setIsModalOpen(true);
+  const close = () => {
+    setIsModalOpen(!isModalOpen);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
   return (
     <div>
       <TopBar
@@ -23,13 +20,13 @@ export default function MainSchedules() {
         icon3="TbFilter"
         icon2="IoPrintOutline"
         icon4="MdOutlineContactSupport"
-        onclick={openModal}
+        onclick={close}
       />
       <div className="mt-5 bg-white">
         <Calendar />
       </div>
 
-      {isModalOpen && <ScheduleModal close={closeModal} />}
+      {isModalOpen && <ScheduleModal close={close} />}
     </div>
   );
 }

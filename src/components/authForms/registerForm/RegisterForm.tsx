@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import Button from "@/components/button/Button";
 import Input from "@/components/input/Input";
@@ -17,16 +17,8 @@ export default function RegisterForm() {
     setPassword,
     errors,
     loading,
-    router,
-    session,
     handleRegister,
   } = useRegister();
-
-  useEffect(() => {
-    if (session.status === "authenticated") {
-      router.push("/dashboard");
-    }
-  }, [session, router]);
   return (
     <>
       <div className="md:px-5 lg:px-12 px-5 mt-20">
@@ -47,6 +39,7 @@ export default function RegisterForm() {
             <Input
               id="name"
               value={name}
+              placeholder="Enter your name"
               onChange={(e) => setName(e.target.value)}
               border="border-b-2"
               type="text"
@@ -64,6 +57,7 @@ export default function RegisterForm() {
               id="email"
               value={email}
               type="email"
+              placeholder="Enter your email address"
               onChange={(e) => setEmail(e.target.value)}
               border="border-b-2"
             />
@@ -79,6 +73,7 @@ export default function RegisterForm() {
             <Input
               id="companyName"
               value={companyName}
+              placeholder="Enter your company name"
               onChange={(e) => setCompanyName(e.target.value)}
               border="border-b-2"
               type="text"
@@ -94,6 +89,7 @@ export default function RegisterForm() {
             </label>
             <Input
               id="password"
+              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               border="border-b-2"

@@ -16,9 +16,13 @@ export default function Header() {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [isNotification, setIsNotification] = useState(false);
   const dispatch = useAppDispatch();
-
+  const noti =
+    useAppSelector((store) => store.notificationSlice.notifications) || [];
   useEffect(() => {
     dispatch(userAuth());
+    if (noti.length > 0) {
+      setIsNotification(true);
+    }
   }, [dispatch]);
 
   const session = useAppSelector((store) => store.authSlice.user) || {};

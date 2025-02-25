@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { showToast } from "@/components/toast/Toast";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 export default function useLogin() {
   const router = useRouter();
@@ -11,7 +11,6 @@ export default function useLogin() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const session = useSession();
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -71,7 +70,6 @@ export default function useLogin() {
     errors,
     setErrors,
     loading,
-    session,
     router,
     handleLogin,
   };

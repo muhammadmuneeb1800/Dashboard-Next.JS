@@ -3,6 +3,7 @@ import authentication from "@/store/slices/authSlice";
 import patients from "@/store/slices/patientSlice";
 import tasks from "@/store/slices/taskSlice";
 import appointment from "@/store/slices/appointmentSlice";
+import notification from "@/store/slices/notificationSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 export const store = configureStore({
@@ -11,6 +12,7 @@ export const store = configureStore({
     patientSlice: patients,
     tasksSlice: tasks,
     appointmentSlice: appointment,
+    notificationSlice: notification,
   },
 });
 

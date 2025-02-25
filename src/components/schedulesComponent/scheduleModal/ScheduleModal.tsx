@@ -12,7 +12,7 @@ import { FaCheck } from "react-icons/fa";
 import { useAppSelector } from "@/store/store";
 
 export default function ScheduleModal({ close }: { close: () => void }) {
-  const date = moment(new Date()).format("ddd, MM MMMM");
+  const date = moment(new Date()).format("ddd, DD MMMM");
   const time = moment(new Date()).format("h:mm");
   const {
     patientName,
@@ -45,7 +45,7 @@ export default function ScheduleModal({ close }: { close: () => void }) {
             </button>
           </div>
           <div className="flex justify-around px-1">
-            <div className="flex flex-col justify-center items-center gap-2 md:gap-3">
+            <div className="flex flex-col justify-center mt-4 items-center gap-2 md:gap-3">
               <LuUserRound className="text-primary text-xl md:text-2xl" />
               <p className="text-primary text-sm md:text-base">PRACTITIONER</p>
               <p className="text-sm md:text-base">{session?.name}</p>
@@ -58,14 +58,12 @@ export default function ScheduleModal({ close }: { close: () => void }) {
               <p className="text-primary text-sm md:text-base">DATE AND TIME</p>
               <p className="text-sm md:text-base">{date}</p>
               <p className="font-semibold text-sm md:text-base">{time}</p>
-              <p className="text-primary text-sm md:text-base">Change</p>
             </div>
             <div className="flex flex-col justify-center items-center gap-1 md:gap-3 mt-5">
               <CiLocationOn className="text-primary text-xl md:text-2xl" />
               <p className="text-primary text-sm md:text-base">LOCATION</p>
               <p className="text-sm md:text-base">General clinic</p>
               <p className="font-semibold text-sm md:text-base">Room 1</p>
-              <p className="text-primary text-sm md:text-base">Change</p>
             </div>
           </div>
           <div className="mt-6 px-4 md:px-8 pr-5 md:pr-10 lg:pr-16">

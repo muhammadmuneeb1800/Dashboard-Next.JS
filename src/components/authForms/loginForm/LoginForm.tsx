@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import Button from "@/components/button/Button";
 import Input from "@/components/input/Input";
@@ -13,16 +13,9 @@ export default function LoginForm() {
     setPassword,
     errors,
     loading,
-    session,
-    router,
     handleLogin,
   } = useLogin();
 
-  useEffect(() => {
-    if (session.status === "authenticated") {
-      router.push("/dashboard");
-    }
-  }, [session, router]);
   return (
     <>
       <div className="md:px-5 lg:px-12 px-5 mt-24">
@@ -43,6 +36,7 @@ export default function LoginForm() {
             <Input
               id="email"
               type="email"
+              placeholder="Enter your email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               border="border-b-2"
@@ -59,6 +53,7 @@ export default function LoginForm() {
             <Input
               id="password"
               type="password"
+              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               border="border-b-2"
@@ -67,8 +62,8 @@ export default function LoginForm() {
               {errors.password || errors.Invalid}
             </p>
             <Link
-              href="/forgetPassword/"
-              className="text-secondray float-right w-[150px] block text-right mt-2"
+              href="/forget-password"
+              className="text-secondray float-right w-[150px] block text-right mt-2 hover:text-primary hover:underline"
             >
               Forget Password?
             </Link>

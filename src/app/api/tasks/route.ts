@@ -45,10 +45,11 @@ export const POST = async (req: NextRequest) => {
 export const PUT = async (req: NextRequest) => {
   try {
     const body = await req.json();
-    console.log("Task form API=========", body);
-    const updatedTask = await prisma.tasks.updateMany({
+    console.log("Task form API=========Task Task Task", body);
+    const updatedTask = await prisma.tasks.update({
       where: { id: body.id },
       data: {
+        doctorId: body.doctorId,
         title: body.title,
         description: body.description,
         status: body.status,
