@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { CiLocationOn } from "react-icons/ci";
 import { ImCross } from "react-icons/im";
 import { LuUserRound } from "react-icons/lu";
@@ -9,8 +9,11 @@ import Button from "../../button/Button";
 import useAddAppointment from "@/hooks/useAddAppointment/useAddAppointment";
 import { FaCheck } from "react-icons/fa";
 import { useAppSelector } from "@/store/store";
+import { resetUpdateApp } from "@/store/slices/appointmentSlice";
 
 export default function ScheduleModal({ close }: { close: () => void }) {
+  const app =
+    useAppSelector((store) => store.appointmentSlice.updateApp) || null;
   const {
     patientName,
     setPatientName,
@@ -21,25 +24,61 @@ export default function ScheduleModal({ close }: { close: () => void }) {
     setStartDate,
     endDate,
     setEndDate,
+    dispatch,
+    type,
+    status,
     setType,
     isOnline,
     isLoading,
     date,
+    user,
     time,
     setIsOnline,
+    hanldeUpdate,
     handleAddAppointment,
   } = useAddAppointment(close);
-  const session = useAppSelector((store) => store.authSlice.user) || [];
+  useEffect(() => {
+    if (app) {
+      setPatientName(app.patientName as string);
+      setPurpose(app.purposeOfVisit as string);
+      setStatus(app.appointmentStatus as string);
+      setStartDate(app.startDate ? new Date(app.startDate) : null);
+      setEndDate(app.endDate ? new Date(app.endDate) : null);
+      setIsOnline(isOnline === app.isOnline);
+      setType(app.appointmentType as string);
+    } else {
+      setPatientName("");
+      setPurpose("");
+      setStatus("");
+      setStartDate(null);
+      setEndDate(null);
+      setIsOnline(false);
+      setType("");
+    }
+  }, [app]);
   return (
     <>
       <div className="fixed flex justify-center inset-0 z-50 items-center h-screen w-full bg-black backdrop-blur bg-opacity-40">
         <form
-          onSubmit={handleAddAppointment}
+          onSubmit={(e) => {
+            if (app !== null) {
+              hanldeUpdate(e, app.id as string);
+            } else {
+              handleAddAppointment(e);
+            }
+          }}
           className="bg-white relative w-[90%] h-[70%] md:w-[65%] mx-auto md:h-[80%] md:mt-10 overflow-auto rounded-md shadow-md"
         >
           <div className="bg-primary sticky top-0 flex justify-between items-center px-2 md:px-4 py-6">
-            <p className="text-xl font-bold text-white">New Appointment</p>
-            <button onClick={close}>
+            <p className="text-xl font-bold text-white">
+              {app !== null ? "Update Appointment" : "New Appointment"}
+            </p>
+            <button
+              onClick={() => {
+                dispatch(resetUpdateApp());
+                close();
+              }}
+            >
               <ImCross className="text-white" />
             </button>
           </div>
@@ -47,7 +86,7 @@ export default function ScheduleModal({ close }: { close: () => void }) {
             <div className="flex flex-col justify-center mt-4 items-center gap-2 md:gap-3">
               <LuUserRound className="text-primary text-xl md:text-2xl" />
               <p className="text-primary text-sm md:text-base">PRACTITIONER</p>
-              <p className="text-sm md:text-base">{session?.name}</p>
+              <p className="text-sm md:text-base">{user?.name}</p>
               <p className="font-semibold text-sm md:text-base">
                 General Doctor
               </p>
@@ -100,7 +139,11 @@ export default function ScheduleModal({ close }: { close: () => void }) {
                 <input
                   type="datetime-local"
                   id="start"
-                  value={startDate ? startDate.toISOString().slice(0, 16) : ""}
+                  value={
+                    startDate instanceof Date
+                      ? startDate.toISOString().slice(0, 16)
+                      : ""
+                  }
                   onChange={(e) =>
                     setStartDate(
                       e.target.value ? new Date(e.target.value) : null
@@ -116,7 +159,11 @@ export default function ScheduleModal({ close }: { close: () => void }) {
                 <input
                   type="datetime-local"
                   id="end"
-                  value={endDate ? endDate.toISOString().slice(0, 16) : ""}
+                  value={
+                    endDate instanceof Date
+                      ? endDate.toISOString().slice(0, 16)
+                      : ""
+                  }
                   onChange={(e) =>
                     setEndDate(e.target.value ? new Date(e.target.value) : null)
                   }
@@ -132,7 +179,8 @@ export default function ScheduleModal({ close }: { close: () => void }) {
                     type="radio"
                     name="Confirm"
                     id=" Confirmation "
-                    value={"Confirmation Required"}
+                    value={"Confirmation_Required"}
+                    checked={status == "Confirmation_Required"}
                     onChange={(e) => setStatus(e.target.value)}
                     className="hidden peer"
                   />
@@ -146,6 +194,7 @@ export default function ScheduleModal({ close }: { close: () => void }) {
                     name="Confirm"
                     id="Confirmed"
                     value={"Confirmed"}
+                    checked={status === "Confirmed"}
                     onChange={(e) => setStatus(e.target.value)}
                     className="hidden peer"
                   />
@@ -163,7 +212,8 @@ export default function ScheduleModal({ close }: { close: () => void }) {
                     type="radio"
                     name="type"
                     id="First time"
-                    value={"First Time"}
+                    value={"First_Time"}
+                    checked={type === "First_Time"}
                     onChange={(e) => setType(e.target.value)}
                     className="hidden peer"
                   />
@@ -176,7 +226,8 @@ export default function ScheduleModal({ close }: { close: () => void }) {
                     type="radio"
                     name="type"
                     id="follow"
-                    value={"Follow Up Visit"}
+                    value={"Follow_Up_Visit"}
+                    checked={type === "Follow_Up_Visit"}
                     onChange={(e) => setType(e.target.value)}
                     className="hidden peer"
                   />
@@ -223,7 +274,10 @@ export default function ScheduleModal({ close }: { close: () => void }) {
           </p>
           <div className="my-10 flex justify-end items-center gap-4 pr-6 md:pr-16">
             <Button
-              onClick={close}
+              onClick={() => {
+                dispatch(resetUpdateApp());
+                close();
+              }}
               text="Cancel"
               bg="bg-none"
               color="text-black"
@@ -233,20 +287,45 @@ export default function ScheduleModal({ close }: { close: () => void }) {
               hColor="text-black"
             />
             {isLoading ? (
+              app === null ? (
+                <Button
+                  type="button"
+                  text="Save..."
+                  bg="bg-gray-400"
+                  color="text-white"
+                  hBg="bg-gray-400"
+                  hColor="text-white"
+                  borderWidth="border-2"
+                  borderColor="border-gray-400"
+                />
+              ) : (
+                <Button
+                  type="button"
+                  text="Updating..."
+                  bg="bg-gray-400"
+                  color="text-white"
+                  hBg="bg-gray-400"
+                  hColor="text-white"
+                  borderWidth="border-2"
+                  borderColor="border-gray-400"
+                />
+              )
+            ) : app === null ? (
               <Button
-                type="button"
-                text="Save..."
-                bg="bg-gray-400"
+                type="submit"
+                text="Save"
+                bg="bg-primary"
                 color="text-white"
-                hBg="bg-gray-400"
-                hColor="text-white"
+                hBg="bg-white"
+                hColor="text-primary"
+                borderColor="border-primary"
                 borderWidth="border-2"
-                borderColor="border-gray-400"
+                hBorderColor="border-primary"
               />
             ) : (
               <Button
                 type="submit"
-                text="Save"
+                text="Update"
                 bg="bg-primary"
                 color="text-white"
                 hBg="bg-white"

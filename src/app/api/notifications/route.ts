@@ -6,14 +6,14 @@ import { NextRequest, NextResponse } from "next/server";
 export const GET = async () => {
   try {
     const session = await getServerSession(authOptions);
-    const appointments = await prisma.appointments.findMany({
+    const notification = await prisma.notifications.findMany({
       where: {
         doctorId: session?.user.id as string,
       },
     });
     return NextResponse.json({
-      message: "Succesfully Fetch Appointments",
-      Appointments: appointments,
+      message: "Succesfully Fetch notification",
+      notification: notification,
     });
   } catch (error) {
     return NextResponse.json({ message: "Error to GET", error: error });

@@ -1,3 +1,4 @@
+import { LineChart1 } from "@/components/charts/Charts";
 import { cardDetails } from "@/types/types";
 import { BsThreeDots } from "react-icons/bs";
 
@@ -22,7 +23,9 @@ export default function GraphCard(props: cardDetails) {
               <p className={`text-sm`}>{props.upAndDown}</p>
             </div>
           </div>
-          <div className="">{props.chart && <props.chart />}</div>
+          <div className="w-40 h-20">
+            <LineChart1 data={props.chart} />
+          </div>
         </div>
       </div>
     </>

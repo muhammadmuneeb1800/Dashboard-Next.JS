@@ -1,98 +1,59 @@
 "use client";
+
+import { useEffect, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
-// import dayGridPlugin from "@fullcalendar/daygrid";
+import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { useState } from "react";
+import interactionPlugin from "@fullcalendar/interaction";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { fetchAppointments } from "@/store/slices/appointmentSlice";
 
-const Calendar = () => {
-  const [events, setEvents] = useState([
-    { title: "Meeting", date: "2025-02-10" },
-    { title: "Workshop", date: "2025-02-15" },
-  ]);
-
-  const handleDateClick = (info: any) => {
-    const title = prompt("Enter event title:");
-    if (title) {
-      setEvents([...events, { title, date: info.dateStr }]);
+export default function Calendar() {
+  const all =
+    useAppSelector((store) => store.appointmentSlice.appointments) || [];
+  const calendarRef = useRef(null);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(fetchAppointments());
+    if (calendarRef.current) {
+      const calendarApi = calendarRef.current.getApi();
+      calendarApi.render();
     }
-  };
+  }, [dispatch]);
 
   return (
-    <FullCalendar
-      plugins={[timeGridPlugin]}
-      headerToolbar={false}
-      dayHeaderClassNames="h-28"
-      dayHeaderFormat={{ day: "2-digit", weekday: "short" }}
-      initialView="timeGridWeek"
-      selectable={true}
-      events={events}
-      editable={true}
-      slotLabelFormat={{ timeStyle: "short" }}
-      height="auto"
-      expandRows={true}
-      eventMinHeight={120}
-      eventMinWidth={120}
-      contentHeight="auto"
-      eventBackgroundColor="red"
-      eventTextColor="white"
-    />
+    <div className="w-full overflow-auto rounded-lg shadow-md">
+      <div className="w-full p-4 bg-white shadow-lg rounded-lg">
+        <FullCalendar
+          ref={calendarRef}
+          plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
+          initialView="dayGridMonth"
+          events={all?.map((event) => ({
+            title: event?.patientName as string,
+            start: event?.startDate as Date,
+            end: event?.endDate as Date,
+            status: event?.appointmentStatus,
+            extendedProps: {
+              name: event?.patientName,
+              appointmentType: event?.appointmentType,
+              purpose: event?.purposeOfVisit,
+              status: event?.appointmentStatus,
+            },
+          }))}
+          eventContent={({ event }) => {
+            return (
+              <div className={`p-2 rounded-md ${event} shadow`}>
+                <h3 className="">{event.title}</h3>
+                <p>{event.extendedProps.purpose}</p>
+                <p>{event.extendedProps.status}</p>
+              </div>
+            );
+          }}
+          dayMaxEventRows={1}
+          selectable={true}
+          timeZone="UTC"
+        />
+      </div>
+    </div>
   );
-};
-
-export default Calendar;
-
-// "use client";
-// import FullCalendar from "@fullcalendar/react";
-// import timeGridPlugin from "@fullcalendar/timegrid";
-// import interactionPlugin from "@fullcalendar/interaction";
-// import { useState } from "react";
-
-// const Calendar = () => {
-//   const [events, setEvents] = useState([
-//     {
-//       title: "Medical Appointment",
-//       start: "2025-02-25T09:00:00",
-//       end: "2025-02-25T09:45:00",
-//       color: "red",
-//     },
-//     {
-//       title: "General Clinic",
-//       start: "2025-02-26T10:00:00",
-//       end: "2025-02-26T10:45:00",
-//       color: "blue",
-//     },
-//     {
-//       title: "Medical Appointment",
-//       start: "2025-02-27T09:00:00",
-//       end: "2025-02-27T09:45:00",
-//       color: "green",
-//     },
-//     {
-//       title: "Medical Checkup",
-//       start: "2025-02-28T11:00:00",
-//       end: "2025-02-28T11:45:00",
-//       color: "yellow",
-//     },
-//   ]);
-
-// //   const handleDateClick = (info: any) => {
-// //     const title = prompt("Enter event title:");
-// //     if (title) {
-// //       setEvents([...events, { title, date: info.dateStr }]);
-// //     }
-// //   };
-
-//   return (
-//     <FullCalendar
-//       plugins={[timeGridPlugin]}
-//       initialView="timeGridWeek"
-//       selectable={true}
-//       events={events}
-//       editable={true}
-//     //   dateClick={handleDateClick}
-//       height="auto"
-//     />
-//   );
-// };
-
-// export default Calendar;
+}

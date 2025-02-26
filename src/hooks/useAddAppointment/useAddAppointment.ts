@@ -1,12 +1,16 @@
 "use client";
 import { showToast } from "@/components/toast/Toast";
-import { createAppointments } from "@/store/slices/appointmentSlice";
-import { useAppDispatch } from "@/store/store";
+import {
+  createAppointments,
+  updateAppointments,
+} from "@/store/slices/appointmentSlice";
+import { useAppDispatch, useAppSelector } from "@/store/store";
 import moment from "moment";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
 export default function useAddAppointment(close: () => void) {
+  const user = useAppSelector((store) => store.authSlice.user) || [];
   const [patientName, setPatientName] = useState<string>("");
   const [purpose, setPurpose] = useState<string>("");
   const [status, setStatus] = useState<string>("");
@@ -21,9 +25,7 @@ export default function useAddAppointment(close: () => void) {
   const { data: session } = useSession();
   const dispatch = useAppDispatch();
 
-  const handleAddAppointment = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
+  const formValidation = async () => {
     const newErrors: Record<string, string> = {};
     if (!patientName) {
       newErrors.patient = "Patient is required";
@@ -74,6 +76,17 @@ export default function useAddAppointment(close: () => void) {
       setIsLoading(false);
       return;
     }
+    return true;
+  };
+
+  const handleAddAppointment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    if (!formValidation()) {
+      setIsLoading(false);
+      return;
+    }
+
     const appointmentData = {
       doctorId: session?.user.id as string,
       doctorName: session?.user.name as string,
@@ -102,6 +115,44 @@ export default function useAddAppointment(close: () => void) {
     setType("");
     setIsOnline(false);
   };
+
+  const hanldeUpdate = async (e: React.FormEvent, id: string) => {
+    e.preventDefault();
+    setIsLoading(true);
+    if (!formValidation()) {
+      setIsLoading(false);
+      return;
+    }
+    const appointmentData = {
+      id: id,
+      doctorId: session?.user.id as string,
+      doctorName: session?.user.name as string,
+      patientName: patientName,
+      purposeOfVisit: purpose,
+      appointmentStatus: status.replace(" ", "_"),
+      startDate: startDate,
+      endDate: endDate,
+      appointmentType: type.replaceAll(" ", "_"),
+      isOnline: isOnline,
+    };
+    try {
+      await dispatch(updateAppointments(appointmentData));
+      setIsLoading(false);
+      close();
+      showToast("success", "Appointment Update successfully");
+    } catch (error) {
+      console.log("Error Update appointment", error);
+      showToast("error", "Error Update appointment");
+    }
+    setPatientName("");
+    setPurpose("");
+    setStatus("");
+    setStartDate(null);
+    setEndDate(null);
+    setType("");
+    setIsOnline(false);
+  };
+
   return {
     patientName,
     setPatientName,
@@ -115,12 +166,15 @@ export default function useAddAppointment(close: () => void) {
     setEndDate,
     type,
     setType,
-    isOnline,
     isLoading,
+    isOnline,
     setIsOnline,
     errors,
     date,
     time,
+    user,
+    dispatch,
+    hanldeUpdate,
     handleAddAppointment,
   };
 }

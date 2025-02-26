@@ -1,11 +1,15 @@
-"use client"
+"use client";
 import React, { useState } from "react";
-import { FaPlus } from "react-icons/fa";
+import { FaAngleRight, FaPlus } from "react-icons/fa";
 import UpCommingSchedule from "../upCommingSchedule/UpCommingSchedule";
 import ScheduleModal from "../scheduleModal/ScheduleModal";
+import { useAppSelector } from "@/store/store";
+import Link from "next/link";
 
 export default function SchedulesComponent() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const all =
+    useAppSelector((store) => store.appointmentSlice.appointments) || [];
   const close = () => {
     setIsOpen(!isOpen);
   };
@@ -24,8 +28,30 @@ export default function SchedulesComponent() {
             </div>
           </button>
         </div>
+        <hr className="mt-3" />
         <div className="mt-5">
-          <UpCommingSchedule />
+          {all.length > 0 ? (
+            <>
+              {all?.map((app) => {
+                return (
+                  <div key={app.id}>
+                    <UpCommingSchedule initialAppointment={app} close={close} />
+                  </div>
+                );
+              })}
+              <Link
+                href={"/dashboard/schedule"}
+                className="flex justify-center items-center text-[12px] text-primary gap-2 mt-7 float-right"
+              >
+                <p className="font-semibold">View all</p>
+                <div className="border p-1 rounded-lg cursor-pointer">
+                  <FaAngleRight className="text-primary" />
+                </div>
+              </Link>
+            </>
+          ) : (
+            <p className="text-center text-sm">No appointment found</p>
+          )}
         </div>
       </div>
       {isOpen && <ScheduleModal close={close} />}

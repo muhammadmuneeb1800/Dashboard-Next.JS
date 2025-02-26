@@ -52,7 +52,7 @@ export default function TaskCard({
             {props?.description}
           </p>
         </div>
-        <div className="flex justify-center items-center gap-2 md:gap-10">
+        <div className="flex justify-center items-center gap-2 md:gap-7 lg:gap-10">
           <p className="text-[11px] md:text-[15px]">{date}</p>
           <div className="relative">
             <div

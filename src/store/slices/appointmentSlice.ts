@@ -4,6 +4,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialSate = {
   appointments: [] as initialAppointment[],
+  updateApp: {} as initialAppointment | null,
 };
 
 export const fetchAppointments = createAsyncThunk(
@@ -39,9 +40,10 @@ export const createAppointments = createAsyncThunk(
 export const updateAppointments = createAsyncThunk(
   "updateAppointments",
   async (appointment: initialAppointment) => {
+    console.log("Appointments updated", appointment);
     try {
       const response = await axiosInstance.put(`api/appointments`, appointment);
-      const data = await response.data;
+      const data = (await response?.data?.appointment) || {};
       return data;
     } catch (error) {
       console.error("Error updating appointment:", error);
@@ -51,10 +53,12 @@ export const updateAppointments = createAsyncThunk(
 
 export const deleteAppointments = createAsyncThunk(
   "deleteAppointments",
-  async (appointmentId: string) => {
+  async (id: string) => {
     try {
-      await axiosInstance.delete(`api/appointments/${appointmentId}`);
-      return appointmentId;
+      await axiosInstance.delete(`api/appointments`, {
+        data: { id },
+      });
+      return id;
     } catch (error) {
       console.error("Error deleting appointment:", error);
     }
@@ -64,7 +68,17 @@ export const deleteAppointments = createAsyncThunk(
 const Appointment = createSlice({
   name: "appointment",
   initialState: initialSate,
-  reducers: {},
+  reducers: {
+    updateApp: (state, action) => {
+      const appUpdate = state.appointments.find(
+        (app) => app.id === action.payload.id
+      );
+      state.updateApp = appUpdate || null;
+    },
+    resetUpdateApp: (state) => {
+      state.updateApp = null;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchAppointments.fulfilled, (state, action) => {
       state.appointments = action.payload || [];
@@ -79,11 +93,11 @@ const Appointment = createSlice({
         ) || [];
     });
     builder.addCase(deleteAppointments.fulfilled, (state, action) => {
-      state.appointments = state.appointments.filter(
-        (ap) => ap.id !== action.payload
-      ) || [];
+      state.appointments =
+        state.appointments.filter((ap) => ap.id !== action.payload) || [];
     });
   },
 });
 
+export const { updateApp, resetUpdateApp } = Appointment.actions;
 export default Appointment.reducer;

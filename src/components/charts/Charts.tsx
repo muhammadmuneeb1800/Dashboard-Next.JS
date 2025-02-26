@@ -1,25 +1,43 @@
 "use client";
-import { LineChart, Line, PieChart, Pie, Cell, Label } from "recharts";
+import { LineChart, Line, PieChart, Pie, Cell, Label, ResponsiveContainer } from "recharts";
 import {
-  LINE_CHART_DATA,
   LINE_CHART_DATA_SECOND,
   PIE_CHART_DATA,
 } from "@/constant/constant";
 type ViewBoxType = { cx: number; cy: number };
-export const LineChart1 = () => {
+// export const LineChart1 = (props) => {
   
+//   return (
+//     <LineChart data={props} width={200} height={100}>
+//       <Line
+//         type={"monotone"}
+//         dataKey="isOnline"
+//         dot={false}
+//         stroke="#2F80ED"
+//         strokeWidth={2}
+//       />
+//     </LineChart>
+//   );
+// };
+
+
+export const LineChart1 = ({ data }) => {
   return (
-    <LineChart data={LINE_CHART_DATA} width={200} height={100}>
-      <Line
-        type={"monotone"}
-        dataKey="pv"
-        dot={false}
-        stroke="#2F80ED"
-        strokeWidth={2}
-      />
-    </LineChart>
+    <ResponsiveContainer width="100%" height={100}>
+      <LineChart data={data}>
+        <Line
+          type="monotone"
+          dataKey="isOnline"
+          dot={false}
+          stroke="#2F80ED"
+          strokeWidth={2}
+        />
+      </LineChart>
+    </ResponsiveContainer>
   );
 };
+
+
 
 export const LineChart2 = () => {
   return (

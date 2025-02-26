@@ -1,5 +1,4 @@
 "use client";
-import { LineChart1 } from "@/components/charts/Charts";
 import { fetchAppointments } from "@/store/slices/appointmentSlice";
 import { fetchPatientsData } from "@/store/slices/patientSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
@@ -19,6 +18,20 @@ export const useGraphData = () => {
   const onlineAppointments = allAppointments.filter((a) => a.isOnline);
   const offlineAppointments = allAppointments.filter((a) => !a.isOnline);
 
+
+const offlineAppointmentsFormatted = offlineAppointments.map((app) => ({
+  isOnline: 1,
+  startDate: new Date(app.startDate as Date).toISOString().slice(0, 10),
+}));
+
+const onlineAppointmentsFormatted = onlineAppointments.map((app) => ({
+  isOnline: 0,
+  startDate: new Date(app.startDate as Date).toISOString().slice(0, 10),
+}));
+
+console.log("Offline Appointments:", offlineAppointmentsFormatted);
+console.log("Online Appointments:", onlineAppointmentsFormatted);
+
   return [
     {
       title: "Offline Consultations",
@@ -26,7 +39,7 @@ export const useGraphData = () => {
       upAndDown: "+3.11%",
       width: 200,
       icon: FaArrowAltCircleUp,
-      // chart: LineChart1,
+      chart: offlineAppointmentsFormatted,
     },
     {
       title: "Online Consultations",
@@ -35,6 +48,7 @@ export const useGraphData = () => {
       width: 240,
       upAndDown: "-20.9%",
       icon: FaArrowAltCircleUp,
+      chart: onlineAppointmentsFormatted,
     },
     {
       title: "Total Patients",
