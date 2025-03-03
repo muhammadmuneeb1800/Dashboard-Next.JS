@@ -48,7 +48,6 @@ export const POST = async (req: NextRequest) => {
       { status: 201 }
     );
   } catch (error) {
-    console.log("erro from api====", error);
     return NextResponse.json(
       { message: "Error to POST", error: error },
       { status: 501 }

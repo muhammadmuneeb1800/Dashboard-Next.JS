@@ -32,50 +32,49 @@ export default function useAddAppointment(close: () => void) {
       newErrors.patient = "Patient is required";
       showToast("error", "Patient is required");
       setIsLoading(false);
-      return;
+      return false;
     }
     if (!purpose) {
       newErrors.purpose = "Purpose is required";
       showToast("error", "Purpose is required");
       setIsLoading(false);
-      return;
+      return false;
     }
     if (!status) {
       newErrors.status = "Status is required";
       showToast("error", "Status is required");
       setIsLoading(false);
-      return;
+      return false;
     }
     if (!startDate) {
       newErrors.startDate = "Start date is required";
       showToast("error", "Start date is required");
       setIsLoading(false);
-      return;
+      return false;
     }
     if (!endDate) {
       newErrors.endDate = "End date is required";
       showToast("error", "End date is required");
       setIsLoading(false);
-      return;
+      return false;
     }
     if (!type) {
       newErrors.type = "Type is required";
       showToast("error", "Type is required");
       setIsLoading(false);
-      return;
+      return false;
     }
     if (startDate && endDate && startDate > endDate) {
       newErrors.startDate = "Start date cannot be after end date";
       showToast("error", "Start date cannot be after end date");
       setIsLoading(false);
-      return;
+      return false;
     }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      console.log("Validation failed", newErrors);
       setIsLoading(false);
-      return;
+      return false;
     }
     return true;
   };
@@ -83,7 +82,8 @@ export default function useAddAppointment(close: () => void) {
   const handleAddAppointment = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    if (!formValidation()) {
+    const isValid = await formValidation();
+    if (!isValid) {
       setIsLoading(false);
       return;
     }
@@ -132,7 +132,8 @@ export default function useAddAppointment(close: () => void) {
   const hanldeUpdate = async (e: React.FormEvent, id: string) => {
     e.preventDefault();
     setIsLoading(true);
-    if (!formValidation()) {
+    const isValid = await formValidation();
+    if (!isValid) {
       setIsLoading(false);
       return;
     }

@@ -1,5 +1,6 @@
 "use client";
 import Input from "../input/Input";
+import Link from "next/link";
 import { FaAngleRight, FaSearch } from "react-icons/fa";
 import { CiMail } from "react-icons/ci";
 import { IoMdNotificationsOutline } from "react-icons/io";
@@ -9,9 +10,8 @@ import { signOut } from "next-auth/react";
 import { showToast } from "../toast/Toast";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { userAuth } from "@/store/slices/authSlice";
-import moment from "moment";
 import { fetchNotification } from "@/store/slices/notificationSlice";
-import Link from "next/link";
+import moment from "moment";
 
 export default function Header() {
   const [search, setSearch] = useState<string>("");
@@ -21,7 +21,6 @@ export default function Header() {
   const dispatch = useAppDispatch();
   const noti =
     useAppSelector((store) => store.notificationSlice.notifications) || [];
-  console.log("notifications", noti);
   useEffect(() => {
     dispatch(userAuth());
     dispatch(fetchNotification());
@@ -57,7 +56,7 @@ export default function Header() {
               <div className="z-50 absolute top-16 py-3 overflow-x-hidden overflow-y-auto right-20 border shadow w-80 h-72 rounded bg-white px-5">
                 <div>
                   <p className="text-primary text-start">All Notifications</p>
-                  <hr className="border border-primary mt-1" />
+                  <hr className="border border-primary mt-1 relative" />
                   {noti?.length > 0 ? (
                     <>
                       {noti?.map((notification) => {
@@ -75,7 +74,7 @@ export default function Header() {
                       <Link
                         onClick={() => setNotificationOpen(!notificationOpen)}
                         href={"/dashboard/notifications"}
-                        className="flex absolute bottom-2 right-5 items-center gap-1"
+                        className={`flex ${noti.length > 2 ? "justify-end" : "absolute bottom-3 right-3"} my-1 items-center gap-1`}
                       >
                         <p className="text-primary text-xs">View all</p>
                         <div className="border rounded-lg cursor-pointer">

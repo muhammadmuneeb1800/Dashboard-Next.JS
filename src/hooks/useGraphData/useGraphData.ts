@@ -15,9 +15,10 @@ export const useGraphData = () => {
     useAppSelector((store) => store.appointmentSlice.appointments) || [];
   const allPatients =
     useAppSelector((store) => store.patientSlice.patients) || [];
-  const onlineAppointments = allAppointments.filter((a) => a.isOnline);
-  const offlineAppointments = allAppointments.filter((a) => !a.isOnline);
-
+  const onlineAppointments = allAppointments.filter((a) => a.isOnline === true);
+  const offlineAppointments = allAppointments.filter(
+    (a) => a.isOnline === false
+  );
   const formatDate = (date: Date): string => {
     if (!date) return "Invalid Date";
     const parsedDate = new Date(date);
@@ -25,25 +26,16 @@ export const useGraphData = () => {
       ? parsedDate.toISOString().slice(0, 10)
       : "Invalid Date";
   };
-
   const offlineAppointmentsFormatted = offlineAppointments.map((app) => ({
     isOnline: 1,
     startDate: formatDate(app.startDate as Date),
   }));
-
   const onlineAppointmentsFormatted = onlineAppointments.map((app) => ({
     isOnline: 0,
     startDate: new Date(app.startDate as Date).toISOString().slice(0, 10),
   }));
-
   const femaleCount = allPatients.filter((p) => p.sex === "Female").length;
   const maleCount = allPatients.length - femaleCount;
-
-  console.log("male", maleCount)
-  console.log("female", femaleCount)
-
-  console.log("Offline Appointments:", offlineAppointmentsFormatted);
-  console.log("Online Appointments:", onlineAppointmentsFormatted);
 
   return [
     {

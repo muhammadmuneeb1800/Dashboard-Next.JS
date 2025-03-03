@@ -15,7 +15,6 @@ import moment from "moment";
 export default function ScheduleModal({ close }: { close: () => void }) {
   const app =
     useAppSelector((store) => store.appointmentSlice.updateApp) || null;
-  console.log("apppppp", app);
   const {
     patientName,
     setPatientName,

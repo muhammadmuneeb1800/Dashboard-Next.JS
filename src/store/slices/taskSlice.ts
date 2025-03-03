@@ -79,7 +79,6 @@ const Task = createSlice({
       if (taskToUpdate) {
         state.updateTask = taskToUpdate;
       } else {
-        console.log("task not found in state");
         state.updateTask = null;
       }
     },

@@ -27,57 +27,57 @@ export default function useAddPatient() {
   const doctorId = session?.user?.id;
   const router = useRouter();
 
-  const formValidation = () => {
+  const formValidation = async () => {
     if (!foreName?.trim()) {
       showToast("error", "Forename is required");
       setIsLoading(false);
-      return;
+      return false;
     }
     if (!surName?.trim()) {
       showToast("error", "Surname is required");
       setIsLoading(false);
-      return;
+      return false;
     }
     if (!diagnosis?.trim()) {
       showToast("error", "Diagnosis is required");
       setIsLoading(false);
-      return;
+      return false;
     }
     if (!status?.trim()) {
       showToast("error", "Status is required");
       setIsLoading(false);
-      return;
+      return false;
     }
     if (!dob) {
       showToast("error", "Date of birth is required");
       setIsLoading(false);
-      return;
+      return false;
     }
     const validGenders = ["Male", "Female"];
     if (!validGenders.includes(gender as string)) {
       showToast("error", "Sex is Require (Male) & (Female)");
       setIsLoading(false);
-      return;
+      return false;
     }
     if (!phoneNumber?.trim()) {
       showToast("error", "Phone number is required");
       setIsLoading(false);
-      return;
+      return false;
     } else if (!/^\d{10,15}$/.test(phoneNumber)) {
       showToast("error", "Phone number must be 10-15 digits");
       setIsLoading(false);
-      return;
+      return false;
     }
     if (!appointmentDate) {
       showToast("error", "Appointment date is required");
       setIsLoading(false);
-      return;
+      return false;
     } else {
       const appointment = new Date(appointmentDate);
       if (appointment < new Date()) {
         showToast("error", "Appointment date must be in the future");
         setIsLoading(false);
-        return;
+        return false;
       }
     }
     return true;
@@ -91,7 +91,6 @@ export default function useAddPatient() {
         "upload_preset",
         process.env.NEXT_PUBLIC_CLOUDINARY_PRESET as string
       );
-
       const response = await axios.post(
         `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
         imageData
@@ -109,7 +108,8 @@ export default function useAddPatient() {
   const handleAddPatient = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    if (!formValidation()) {
+    const isValid = await formValidation();
+    if (!isValid) {
       setIsLoading(false);
       return;
     }
@@ -118,12 +118,10 @@ export default function useAddPatient() {
         url: "",
         publicId: "",
       };
-
       if (image) {
         const uploadedImage = await uploadImageToCloudinary(image as File);
         imageURL = uploadedImage ?? { url: "", publicId: "" };
       }
-
       const patientData = {
         doctorId: doctorId,
         foreName: foreName,
@@ -137,7 +135,6 @@ export default function useAddPatient() {
         image: imageURL.url,
         publicId: imageURL.publicId,
       };
-      console.log("patientData from hook=======", patientData);
       const result = await dispatch(addPatientData(patientData));
       if (result) {
         showToast("success", "Patient added successfully");
@@ -166,7 +163,8 @@ export default function useAddPatient() {
   ) => {
     e.preventDefault();
     setIsLoading(true);
-    if (!formValidation()) {
+    const isValid = await formValidation();
+    if (!isValid) {
       setIsLoading(false);
       return;
     }
@@ -175,7 +173,6 @@ export default function useAddPatient() {
         url: "",
         publicId: "",
       };
-
       if (image) {
         const uploadedImage = await uploadImageToCloudinary(image as File);
         imageURL = uploadedImage ?? { url: "", publicId: "" };

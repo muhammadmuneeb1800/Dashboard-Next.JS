@@ -8,7 +8,6 @@ const initialState = {
   updatePatientData: null as InitialData | null,
 };
 
-// Fetch patients data
 export const fetchPatientsData = createAsyncThunk(
   "patients/fetchPatients",
   async (_, { rejectWithValue }) => {
@@ -22,12 +21,10 @@ export const fetchPatientsData = createAsyncThunk(
   }
 );
 
-// Add patient data
 export const addPatientData = createAsyncThunk(
   "patients/addPatients",
   async (user: InitialData, { rejectWithValue, dispatch }) => {
     try {
-      console.log("Patients data from slice request====",user);
       const response = await axiosInstance.post("api/patients", user);
       if (response.status === 501) {
         showToast("error", "Server error. Please try again later.");
@@ -43,7 +40,6 @@ export const addPatientData = createAsyncThunk(
   }
 );
 
-// Update patient data
 export const updatePatientDataThunk = createAsyncThunk(
   "patients/updatePatients",
   async (user: InitialData, { rejectWithValue, dispatch }) => {
@@ -63,7 +59,6 @@ export const updatePatientDataThunk = createAsyncThunk(
   }
 );
 
-// Delete patient data
 export const deletePatientData = createAsyncThunk(
   "patients/deletePatients",
   async (id: string, { rejectWithValue, dispatch }) => {

@@ -11,9 +11,8 @@ export default function useResetPassword() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
-
   const token = new URLSearchParams(window.location.search).get("token");
-
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);

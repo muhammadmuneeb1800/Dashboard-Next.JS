@@ -125,3 +125,9 @@ export interface ChartData {
   isOnline: number;
   startDate: string;
 }
+
+export interface ChartComponentProps {
+  type: "line" | "pie";
+  data: any[];
+  color?: string;
+}

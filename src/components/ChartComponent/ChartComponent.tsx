@@ -1,5 +1,6 @@
 "use client";
 
+import { ChartComponentProps } from "@/types/types";
 import {
   Chart as ChartJS,
   LineElement,
@@ -24,11 +25,7 @@ ChartJS.register(
   Legend
 );
 
-interface ChartComponentProps {
-  type: "line" | "pie";
-  data: any[];
-  color?: string;
-}
+
 
 export const ChartComponent = ({
   type,
@@ -41,11 +38,12 @@ export const ChartComponent = ({
       datasets: [
         {
           label: "Online Status",
-          data: data.map((d) => d.isOnline),
-          borderColor: color,
+          data: data.map((d) => (d.isOnline ? 1 : 0)),
+          borderColor: color || "#007bff",
           borderWidth: 2,
           pointRadius: 0,
-          fill: false,
+          fill: true,
+          tension: 0.9,
         },
       ],
     };
@@ -65,10 +63,9 @@ export const ChartComponent = ({
   }
 
   if (type === "pie") {
-    // Check if data is available and valid
     const hasData =
       data.length > 0 &&
-      data.every((d) => d.value !== undefined && d.value !== null);
+      data?.every((d) => d?.value !== undefined && d?.value !== null);
 
     const chartData = {
       labels: ["Female", "Male"],
@@ -101,14 +98,14 @@ export const ChartComponent = ({
     const centerTextPlugin = {
       id: "centerText",
       beforeDraw: (chart: any) => {
-        if (!hasData) return; // Don't draw text if no data
+        if (!hasData) return;
 
         const { width, height } = chart;
         const ctx = chart.ctx;
         ctx.restore();
-
-        const femaleCount = data[0]?.value || 0;
-        const maleCount = data[1]?.value || 0;
+        const dataset = chart.data.datasets[0].data || [0, 0];
+        const femaleCount = dataset[0];
+        const maleCount = dataset[1];
 
         ctx.font = "12px sans-serif";
         ctx.textAlign = "center";
@@ -125,7 +122,7 @@ export const ChartComponent = ({
 
     return hasData ? (
       <Pie data={chartData} options={options} plugins={[centerTextPlugin]} />
-    ) : null; // If no data, return null (hide the chart)
+    ) : null;
   }
 
   return null;

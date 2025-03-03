@@ -12,7 +12,6 @@ export default function NotificationCard() {
   const dispatch = useAppDispatch();
   const noti =
     useAppSelector((store) => store.notificationSlice.notifications) || [];
-  console.log("notifications", noti);
   useEffect(() => {
     dispatch(fetchNotification());
   }, [dispatch]);

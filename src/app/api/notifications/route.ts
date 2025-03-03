@@ -23,7 +23,6 @@ export const GET = async () => {
 export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();
-    console.log("body from nitification",body);
     const newAppointment = await prisma.notifications.create({
       data: {
         doctorId: body.doctorId,

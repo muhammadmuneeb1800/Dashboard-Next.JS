@@ -29,7 +29,6 @@ export const createAppointments = createAsyncThunk(
         appointment
       );
       const data = await response.data;
-      console.log("appointment from slice data ====", data);
       return data;
     } catch (error) {
       console.error("Error creating appointment:", error);
@@ -40,7 +39,6 @@ export const createAppointments = createAsyncThunk(
 export const updateAppointments = createAsyncThunk(
   "updateAppointments",
   async (appointment: initialAppointment) => {
-    console.log("Appointments updated", appointment);
     try {
       const response = await axiosInstance.put(`api/appointments`, appointment);
       const data = (await response?.data?.appointment) || {};

@@ -31,10 +31,10 @@ export default function SchedulesComponent() {
         <hr className="mt-3" />
         <div className="mt-5">
           {all.length > 0 ? (
-            <div key={all.length + 1}>
-              {all?.map((app) => {
+            <div>
+              {all?.map((app,index) => {
                 return (
-                  <div key={app.id}>
+                  <div key={index}>
                     <UpCommingSchedule initialAppointment={app} close={close} />
                   </div>
                 );

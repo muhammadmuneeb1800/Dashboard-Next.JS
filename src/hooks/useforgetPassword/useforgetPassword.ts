@@ -12,12 +12,10 @@ export default function useForgetPassword() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-
     try {
       const response = await axiosInstance.post("/api/forgot-password", {
         email,
       });
-
       if (response.status === 202) {
         showToast("success", "Password reset link sent to your email!");
       } else {
