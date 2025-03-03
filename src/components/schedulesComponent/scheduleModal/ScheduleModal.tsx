@@ -56,7 +56,18 @@ export default function ScheduleModal({ close }: { close: () => void }) {
       setIsOnline(false);
       setType("");
     }
-  }, [app]);
+  }, [
+    app,
+    isOnline,
+    setPatientName,
+    setPurpose,
+    setStatus,
+    setStartDate,
+    setEndDate,
+    setIsOnline,
+    setType,
+  ]);
+
   return (
     <>
       <div className="fixed flex justify-center inset-0 z-50 items-center h-screen w-full bg-black backdrop-blur bg-opacity-40">

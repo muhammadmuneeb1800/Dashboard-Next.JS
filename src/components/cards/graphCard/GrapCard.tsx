@@ -1,6 +1,6 @@
 "use client"
 import { ChartComponent } from "@/components/ChartComponent/ChartComponent";
-import { cardDetails } from "@/types/types";
+import { cardDetails, LineChartDataPoint, PieChartDataPoint } from "@/types/types";
 import { BsThreeDots } from "react-icons/bs";
 
 export default function GraphCard(props: cardDetails) {
@@ -28,7 +28,11 @@ export default function GraphCard(props: cardDetails) {
             {props.chart && (
               <ChartComponent
                 type={props?.type as "line" | "pie"}
-                data={props.chart}
+                data={
+                  props.type === "line"
+                    ? (props.chart as LineChartDataPoint[])
+                    : (props.chart as PieChartDataPoint[])
+                }
               />
             )}
           </div>

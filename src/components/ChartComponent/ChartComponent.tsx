@@ -1,6 +1,10 @@
 "use client";
 
-import { ChartComponentProps } from "@/types/types";
+import {
+  ChartComponentProps,
+  PieChartDataPoint,
+  RawDataPoint,
+} from "@/types/types";
 import {
   Chart as ChartJS,
   LineElement,
@@ -11,6 +15,7 @@ import {
   ArcElement,
   Tooltip,
   Legend,
+  Chart,
 } from "chart.js";
 import { Line, Pie } from "react-chartjs-2";
 
@@ -25,20 +30,19 @@ ChartJS.register(
   Legend
 );
 
-
-
 export const ChartComponent = ({
   type,
   data,
   color = "#2F80ED",
 }: ChartComponentProps) => {
   if (type === "line") {
+    const lineData = data as RawDataPoint[];
     const chartData = {
-      labels: data.map((_, index) => index + 1),
+      labels: lineData.map((_, index) => index + 1),
       datasets: [
         {
           label: "Online Status",
-          data: data.map((d) => (d.isOnline ? 1 : 0)),
+          data: lineData.map((d) => (d.isOnline ? 1 : 0)),
           borderColor: color || "#007bff",
           borderWidth: 2,
           pointRadius: 0,
@@ -63,24 +67,28 @@ export const ChartComponent = ({
   }
 
   if (type === "pie") {
+   const isPieChart = (data as PieChartDataPoint[])[0]?.value !== undefined;
     const hasData =
+      Array.isArray(data) &&
+      isPieChart &&
       data.length > 0 &&
-      data?.every((d) => d?.value !== undefined && d?.value !== null);
+      data.every((d) => (d as PieChartDataPoint).value !== undefined);
 
     const chartData = {
       labels: ["Female", "Male"],
       datasets: hasData
         ? [
             {
-              data: [data[0]?.value || 0, data[1]?.value || 0],
-              backgroundColor: [
-                data[0]?.color || "#D3D3D3",
-                data[1]?.color || "#D3D3D3",
+              data: [
+                (data as PieChartDataPoint[])[0]?.value || 0,
+                (data as PieChartDataPoint[])[1]?.value || 0,
               ],
-              hoverBackgroundColor: [
-                data[0]?.color || "#D3D3D3",
-                data[1]?.color || "#D3D3D3",
-              ],
+              backgroundColor: (data as PieChartDataPoint[]).map(
+                (d) => d.color || "#D3D3D3"
+              ),
+              hoverBackgroundColor: (data as PieChartDataPoint[]).map(
+                (d) => d.color || "#D3D3D3"
+              ),
             },
           ]
         : [],
@@ -97,7 +105,7 @@ export const ChartComponent = ({
 
     const centerTextPlugin = {
       id: "centerText",
-      beforeDraw: (chart: any) => {
+      beforeDraw: (chart: Chart) => {
         if (!hasData) return;
 
         const { width, height } = chart;

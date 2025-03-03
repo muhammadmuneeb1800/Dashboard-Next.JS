@@ -121,13 +121,44 @@ export interface notification {
   createdAt?: Date;
 }
 
-export interface ChartData {
-  isOnline: number;
+export interface RawDataPoint {
+  isOnline: boolean;
+}
+
+export interface RawDataPoint {
+  isOnline: boolean;
   startDate: string;
 }
 
+export interface LineChartDataPoint {
+  label?: string;
+  value: number;
+}
+
+export interface RawDataPoint {
+  isOnline: boolean;
+  startDate: string;
+}
+
+export interface PieChartDataPoint {
+  value: number;
+  color?: string;
+}
+
+export type ChartData = RawDataPoint[] | PieChartDataPoint[];
+
 export interface ChartComponentProps {
   type: "line" | "pie";
-  data: any[];
+  data: ChartData;
   color?: string;
+}
+
+export interface CardDetails {
+  title: string;
+  number: number;
+  upAndDown?: string;
+  width?: number;
+  icon?: React.ComponentType;
+  chart: ChartData;
+  type: "line" | "pie";
 }

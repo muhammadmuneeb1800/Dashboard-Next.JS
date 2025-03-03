@@ -30,7 +30,7 @@ export default function TaskModal({ close }: { close: () => void }) {
       setDes("");
       setStatus("");
     }
-  }, [update]);
+  }, [update, setTitle, setDes, setStatus]);
   return (
     <>
       <div className="fixed flex justify-center inset-0 z-50 items-center h-screen w-full bg-black backdrop-blur bg-opacity-40">
