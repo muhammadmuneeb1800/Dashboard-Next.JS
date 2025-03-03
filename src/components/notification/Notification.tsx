@@ -1,8 +1,9 @@
 import React from "react";
 import Button from "../button/Button";
-import NotificationCard from "./notificationCard/notificationCard";
+import NotificationCard from "./notificationCard/NotificationCard";
 
 export default function Notification() {
+  
   return (
     <>
       <div className="flex justify-between shadow items-center px-3 md:px-7 bg-white py-3 mt-5 rounded">

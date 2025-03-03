@@ -23,25 +23,11 @@ export const GET = async () => {
 export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();
-    const exitsAppointments = await prisma.appointments.findFirst({
-      where: { patientName: body.patientName },
-    });
-    if (exitsAppointments) {
-      return NextResponse.json({
-        message: "Patient already has an appointment",
-      });
-    }
-    const newAppointment = await prisma.appointments.create({
+    console.log("body from nitification",body);
+    const newAppointment = await prisma.notifications.create({
       data: {
         doctorId: body.doctorId,
-        doctorName: body.doctorName,
-        patientName: body.patientName,
-        purposeOfVisit: body.purposeOfVisit,
-        appointmentStatus: body.appointmentStatus,
-        startDate: body.startDate,
-        endDate: body.endDate,
-        appointmentType: body.appointmentType,
-        isOnline: body.isOnline,
+        data: body.data,
       },
     });
     return NextResponse.json({
@@ -53,38 +39,11 @@ export const POST = async (req: NextRequest) => {
   }
 };
 
-export const PUT = async (req: NextRequest) => {
-  try {
-    const body = await req.json();
-    console.log("put request form body", body);
-    const updatedAppointment = await prisma.appointments.update({
-      where: { id: body.id as string },
-      data: {
-        doctorId: body.doctorId,
-        doctorName: body.doctorName,
-        patientName: body.patientName,
-        purposeOfVisit: body.purposeOfVisit,
-        appointmentStatus: body.appointmentStatus,
-        startDate: body.startDate,
-        endDate: body.endDate,
-        appointmentType: body.appointmentType,
-        isOnline: body.isOnline,
-      },
-    });
-    return NextResponse.json({
-      message: "Succesfully Update Appointments",
-      appointment: updatedAppointment,
-    });
-  } catch (error) {
-    return NextResponse.json({ message: "Error to PUT", error: error });
-  }
-};
-
 export const DELETE = async (req: NextRequest) => {
   try {
     const body = await req.json();
     const { id } = body;
-    await prisma.appointments.delete({ where: { id: id } });
+    await prisma.notifications.delete({ where: { id: id } });
     return NextResponse.json({ message: "Succesfully Delete Appointment" });
   } catch (error) {
     return NextResponse.json({ message: "Error to DELETE", error: error });

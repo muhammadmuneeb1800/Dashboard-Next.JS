@@ -6,6 +6,7 @@ import {
   updatePatientDataThunk,
 } from "@/store/slices/patientSlice";
 import { useAppDispatch } from "@/store/store";
+import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -17,6 +18,7 @@ export default function useAddPatient() {
   const [gender, setGender] = useState<string>();
   const [diagnosis, setDiagnosis] = useState<string>();
   const [status, setStatus] = useState<string>();
+  const [image, setImage] = useState<string | File | null>(null);
   const [appointmentDate, setAppointmentDate] = useState<Date | null>();
   const [phoneNumber, setPhoneNumber] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -81,6 +83,29 @@ export default function useAddPatient() {
     return true;
   };
 
+  const uploadImageToCloudinary = async (image: File) => {
+    try {
+      const imageData = new FormData();
+      imageData.append("file", image);
+      imageData.append(
+        "upload_preset",
+        process.env.NEXT_PUBLIC_CLOUDINARY_PRESET as string
+      );
+
+      const response = await axios.post(
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        imageData
+      );
+      return {
+        url: response.data.secure_url as string,
+        publicId: response.data.public_id as string,
+      };
+    } catch (error) {
+      console.error("Cloudinary Upload Error:", error);
+      return null;
+    }
+  };
+
   const handleAddPatient = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -88,21 +113,38 @@ export default function useAddPatient() {
       setIsLoading(false);
       return;
     }
-    const patientData = {
-      doctorId: doctorId,
-      foreName: foreName,
-      surName: surName,
-      dob: dob,
-      sex: gender,
-      diagnosis: diagnosis,
-      status: status?.replace(" ", "_"),
-      appointmentDate: appointmentDate,
-      phoneNumber: phoneNumber,
-    };
     try {
-      await dispatch(addPatientData(patientData));
-      showToast("success", "Patient added successfully");
-      router.push("/dashboard/patients");
+      let imageURL: { url: string; publicId: string } = {
+        url: "",
+        publicId: "",
+      };
+
+      if (image) {
+        const uploadedImage = await uploadImageToCloudinary(image as File);
+        imageURL = uploadedImage ?? { url: "", publicId: "" };
+      }
+
+      const patientData = {
+        doctorId: doctorId,
+        foreName: foreName,
+        surName: surName,
+        dob: dob,
+        sex: gender,
+        diagnosis: diagnosis,
+        status: status?.replace(" ", "_"),
+        appointmentDate: appointmentDate,
+        phoneNumber: phoneNumber,
+        image: imageURL.url,
+        publicId: imageURL.publicId,
+      };
+      console.log("patientData from hook=======", patientData);
+      const result = await dispatch(addPatientData(patientData));
+      if (result) {
+        showToast("success", "Patient added successfully");
+        router.push("/dashboard/patients");
+      } else {
+        showToast("error", "Failed to add patient");
+      }
     } catch (error) {
       console.log("Error from the useAdd Patients", error);
     }
@@ -128,19 +170,30 @@ export default function useAddPatient() {
       setIsLoading(false);
       return;
     }
-    const patientData = {
-      id,
-      doctorId,
-      foreName,
-      surName,
-      dob,
-      sex: gender,
-      diagnosis,
-      status: status?.replace(" ", "_"),
-      appointmentDate,
-      phoneNumber,
-    };
     try {
+      let imageURL: { url: string; publicId: string } = {
+        url: "",
+        publicId: "",
+      };
+
+      if (image) {
+        const uploadedImage = await uploadImageToCloudinary(image as File);
+        imageURL = uploadedImage ?? { url: "", publicId: "" };
+      }
+      const patientData = {
+        id,
+        doctorId,
+        foreName,
+        surName,
+        dob,
+        sex: gender,
+        diagnosis,
+        status: status?.replace(" ", "_"),
+        appointmentDate,
+        phoneNumber,
+        image: imageURL.url,
+        publicId: imageURL.publicId,
+      };
       const res = await dispatch(updatePatientDataThunk(patientData));
       if (res?.payload?.success) {
         showToast("success", "Patient Updated successfully");
@@ -181,6 +234,8 @@ export default function useAddPatient() {
     isLoading,
     dispatch,
     router,
+    image,
+    setImage,
     setAppointmentDate,
     handleAddPatient,
     handleUpdate,

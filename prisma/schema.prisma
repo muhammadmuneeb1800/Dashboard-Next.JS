@@ -8,21 +8,24 @@ generator client {
 }
 
 model Doctor {
-  id            String          @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String          @unique
-  password      String?
-  emailVerified DateTime?
-  image         String?
-  companyName   String?
-  industryName  String?
-  employees     String?
-  accounts      Account[]
-  sessions      Session[]
-  Authenticator Authenticator[]
-  patients      Patients[]
-  appointments  Appointments[]
-  tasks         Tasks[]
+  id               String          @id @default(auto()) @map("_id") @db.ObjectId
+  name             String?
+  email            String          @unique
+  password         String?
+  emailVerified    DateTime?
+  image            String?
+  companyName      String?
+  industryName     String?
+  employees        String?
+  resetToken       String?         @unique
+  resetTokenExpiry DateTime?
+  accounts         Account[]
+  sessions         Session[]
+  Authenticator    Authenticator[]
+  patients         Patients[]
+  appointments     Appointments[]
+  tasks            Tasks[]
+  notifications    Notifications[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -100,6 +103,8 @@ model Patients {
   status          PatientStatus
   appointmentDate DateTime?
   phoneNumber     String
+  image           String?
+  publicId        String?
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 
@@ -166,4 +171,17 @@ model Tasks {
 enum TaskStatus {
   NOT_COMPLETED
   COMPLETED
+}
+
+/**
+ * ******************************************* Notification Schema **************************************************************************
+ */
+
+model Notifications {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  doctorId  String   @db.ObjectId
+  data      String
+  createdAt DateTime @default(now())
+
+  doctor Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
 }

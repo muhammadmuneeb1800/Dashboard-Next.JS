@@ -1,23 +1,51 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import {
+  clearNotification,
+  fetchNotification,
+} from "@/store/slices/notificationSlice";
+import { showToast } from "@/components/toast/Toast";
 
 export default function NotificationCard() {
+  const dispatch = useAppDispatch();
+  const noti =
+    useAppSelector((store) => store.notificationSlice.notifications) || [];
+  console.log("notifications", noti);
+  useEffect(() => {
+    dispatch(fetchNotification());
+  }, [dispatch]);
   return (
     <>
-      <div className="bg-white rounded-md shadow-md w-full">
-        <div className="flex items-center justify-between p-3">
-          <h3 className="text-xl font-medium">New Appointment</h3>
-          <button className="text-sm text-gray-500">Mark as Read</button>
+      {noti?.length === 0 ? (
+        <div className="text-center py-5">
+          <p className="text-gray-600 text-sm">No new notifications.</p>
         </div>
-        <div className="p-3">
-          <p className="text-sm text-gray-600">
-            John Doe visited your office on 20th Feb, 2022 at 10:30 AM.
-          </p>
-        </div>
-        <div className="flex items-center justify-between p-3">
-          <button className="text-sm text-blue-500">View Details</button>
-          <button className="text-sm text-gray-500">Remove</button>
-        </div>
-      </div>
+      ) : (
+        noti?.map((noti, index) => (
+          <div key={index}>
+            <div className="bg-white rounded-md shadow-md w-full p-3">
+              <div className="pt-3">
+                <h3 className="text-lg font-medium">New Appointment</h3>
+              </div>
+              <div className="pt-3">
+                <p className="text-sm text-gray-600">{noti?.data}</p>
+              </div>
+              <div className="flex justify-end p-2">
+                <button
+                  onClick={async () => {
+                    await dispatch(clearNotification(noti?.id as string));
+                    showToast("success","Notifications deleted successfully")
+                  }}
+                  className="text-sm text-gray-500"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        ))
+      )}
     </>
   );
 }

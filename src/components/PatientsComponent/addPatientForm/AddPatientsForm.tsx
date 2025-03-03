@@ -4,6 +4,7 @@ import Button from "@/components/button/Button";
 import Input from "@/components/input/Input";
 import { MdOutlineCalendarToday } from "react-icons/md";
 import useAddPatient from "@/hooks/useAddPatient/useAddPatient";
+import Image from "next/image";
 
 export default function AddPatientsForm() {
   const {
@@ -22,6 +23,8 @@ export default function AddPatientsForm() {
     gender,
     isLoading,
     router,
+    image,
+    setImage,
     appointmentDate,
     setAppointmentDate,
     handleAddPatient,
@@ -262,6 +265,27 @@ export default function AddPatientsForm() {
                 id="Phone Number"
                 border="border"
                 borderColor="border-gray-400"
+              />
+            </div>
+          </div>
+          <div className="flex pt-10 justify-between items-center">
+            <label htmlFor="image" className="text-sm md:text-base">
+              Patient Image
+            </label>
+            <div className="w-[72%] flex-col flex gap-5 justify-between items-center">
+              {image && (
+                <Image
+                  src={URL.createObjectURL(image as File)}
+                  width={200}
+                  height={150}
+                  alt="Selected"
+                  className="w-24 h-24 object-cover rounded-md"
+                />
+              )}
+              <Input
+                type="file"
+                onChange={(e) => setImage(e.target.files?.[0] || null)}
+                id="image"
               />
             </div>
           </div>

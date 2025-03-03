@@ -12,6 +12,7 @@ import {
 import TopBar from "../topBar/TopBar";
 import { showToast } from "../toast/Toast";
 import PatientsUpdateModal from "./patientsUpdateModal/PatientsUpdateModal";
+import Image from "next/image";
 
 export default function PatientsComponent() {
   const [active, setActive] = useState<boolean>(false);
@@ -50,7 +51,7 @@ export default function PatientsComponent() {
                 <th className="py-3 px-6 text-left">Name</th>
                 <th className="py-3 px-6 text-left">Diagnosis</th>
                 <th className="py-3 px-6 text-center">Status</th>
-                <th className="py-3 px-6 text-center">Last Appointment</th>
+                <th className="py-3 px-6 text-center">Image</th>
                 <th className="py-3 px-6 text-center">Next Appointment</th>
                 <th className="py-3 px-6 text-center">Options</th>
               </tr>
@@ -83,7 +84,16 @@ export default function PatientsComponent() {
                       </span>
                     </td>
                     <td className="py-3 px-6 text-center">
-                      {patient?.phoneNumber}
+                      <Image
+                        src={
+                          (patient?.image as string) ||
+                          "/assets/images/user.jpg"
+                        }
+                        alt="Patient Image"
+                        width={50}
+                        height={50}
+                        className="rounded-full"
+                      />
                     </td>
                     <td className="py-3 px-6 text-center">
                       {patient?.appointmentDate &&

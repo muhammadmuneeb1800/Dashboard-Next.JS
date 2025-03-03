@@ -4,6 +4,7 @@ import {
   createAppointments,
   updateAppointments,
 } from "@/store/slices/appointmentSlice";
+import { addNotification } from "@/store/slices/notificationSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import moment from "moment";
 import { useSession } from "next-auth/react";
@@ -86,7 +87,6 @@ export default function useAddAppointment(close: () => void) {
       setIsLoading(false);
       return;
     }
-
     const appointmentData = {
       doctorId: session?.user.id as string,
       doctorName: session?.user.name as string,
@@ -98,14 +98,23 @@ export default function useAddAppointment(close: () => void) {
       appointmentType: type.replaceAll(" ", "_"),
       isOnline: isOnline,
     };
+    const notificationString = `Congratulations, Doctor
+     ${session?.user.name}. Your patient (${patientName}) appointment has been successfully added.`;
+    const notification = {
+      doctorId: session?.user.id as string,
+      data: notificationString,
+    };
     try {
       await dispatch(createAppointments(appointmentData));
+      await dispatch(addNotification(notification));
       setIsLoading(false);
       close();
       showToast("success", "Appointment created successfully");
     } catch (error) {
       console.log("Error adding appointment", error);
       showToast("error", "Error adding appointment");
+    } finally {
+      setIsLoading(false);
     }
     setPatientName("");
     setPurpose("");
@@ -135,8 +144,14 @@ export default function useAddAppointment(close: () => void) {
       appointmentType: type.replaceAll(" ", "_"),
       isOnline: isOnline,
     };
+    const notificationString = ``;
+    const notification = {
+      doctorId: session?.user.id as string,
+      data: notificationString,
+    };
     try {
       await dispatch(updateAppointments(appointmentData));
+      await dispatch(addNotification(notification));
       setIsLoading(false);
       close();
       showToast("success", "Appointment Update successfully");

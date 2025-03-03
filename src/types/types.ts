@@ -21,6 +21,8 @@ export interface InitialData {
   status?: string | null;
   appointmentDate?: Date | null;
   phoneNumber?: string | null;
+  image?: string | null;
+  publicId?: string | null;
 }
 
 export interface taskData {
@@ -99,4 +101,11 @@ export interface button {
   hBorderColor?: string;
   borderWidth?: string;
   width?: string;
+}
+
+export interface notification {
+  id?: string;
+  doctorId: string;
+  data: string;
+  createdAt?: Date;
 }

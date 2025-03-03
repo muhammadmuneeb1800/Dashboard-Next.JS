@@ -1,4 +1,5 @@
 import { authOptions } from "@/lib/auth";
+import cloudinary from "@/lib/cloudinary";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
@@ -23,6 +24,7 @@ export const GET = async () => {
 export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();
+    console.log(body);
     const newPatient = await prisma.patients.create({
       data: {
         doctorId: body.doctorId,
@@ -34,6 +36,8 @@ export const POST = async (req: NextRequest) => {
         status: body.status,
         appointmentDate: body.appointmentDate,
         phoneNumber: body.phoneNumber,
+        image: body.image,
+        publicId: body.publicId,
       },
     });
     return NextResponse.json(
@@ -67,6 +71,8 @@ export const PUT = async (req: NextRequest) => {
         appointmentDate: body.appointmentDate,
         phoneNumber: body.phoneNumber,
         doctorId: body.doctorId,
+        image: body.image,
+        publicId: body.publicId,
         updatedAt: new Date(),
       },
     });
@@ -86,6 +92,10 @@ export const DELETE = async (req: NextRequest) => {
   try {
     const body = await req.json();
     const { id } = body;
+    const patient = await prisma.patients.findUnique({ where: { id: id } });
+    if (patient?.publicId) {
+      await cloudinary.uploader.destroy(patient?.publicId);
+    }
     await prisma.patients.delete({ where: { id: id } });
     return NextResponse.json({ message: "Succesfully Delete Patient" });
   } catch (error) {

@@ -1,10 +1,11 @@
-"use client"
+"use client";
 import React, { useEffect } from "react";
 import Button from "@/components/button/Button";
 import Input from "@/components/input/Input";
 import useAddPatient from "@/hooks/useAddPatient/useAddPatient";
 import { useAppSelector } from "@/store/store";
 import { MdOutlineCalendarToday } from "react-icons/md";
+import Image from "next/image";
 
 export default function PatientsUpdateModal({ close }: { close: () => void }) {
   const {
@@ -22,6 +23,8 @@ export default function PatientsUpdateModal({ close }: { close: () => void }) {
     setPhoneNumber,
     gender,
     status,
+    image,
+    setImage,
     isLoading,
     handleUpdate,
     appointmentDate,
@@ -43,6 +46,7 @@ export default function PatientsUpdateModal({ close }: { close: () => void }) {
           ? new Date(updatePatient.appointmentDate)
           : null
       );
+      setImage(updatePatient?.image as string);
     }
   }, [updatePatient]);
   return (
@@ -282,6 +286,37 @@ export default function PatientsUpdateModal({ close }: { close: () => void }) {
                 id="Phone Number"
                 border="border"
                 borderColor="border-gray-400"
+              />
+            </div>
+          </div>
+          <div className="flex pt-10 justify-between items-center">
+            <label htmlFor="image" className="text-sm md:text-base">
+              Patient Image
+            </label>
+            <div className="w-[72%] flex-col flex gap-5 justify-between items-center">
+              {image && image !== "assets/images/user.jpg" ? (
+                image instanceof File ? (
+                  <Image
+                    src={URL.createObjectURL(image)}
+                    width={200}
+                    height={150}
+                    alt="Selected"
+                    className="w-24 h-24 object-cover rounded-md"
+                  />
+                ) : (
+                  <Image
+                    src={image}
+                    width={200}
+                    height={150}
+                    alt="Selected"
+                    className="w-24 h-24 object-cover rounded-md"
+                  />
+                )
+              ) : null}
+              <Input
+                type="file"
+                onChange={(e) => setImage(e.target.files?.[0] || null)}
+                id="image"
               />
             </div>
           </div>

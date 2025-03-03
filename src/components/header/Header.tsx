@@ -1,6 +1,6 @@
 "use client";
 import Input from "../input/Input";
-import { FaSearch } from "react-icons/fa";
+import { FaAngleRight, FaSearch } from "react-icons/fa";
 import { CiMail } from "react-icons/ci";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
@@ -10,21 +10,21 @@ import { showToast } from "../toast/Toast";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { userAuth } from "@/store/slices/authSlice";
 import moment from "moment";
+import { fetchNotification } from "@/store/slices/notificationSlice";
+import Link from "next/link";
 
 export default function Header() {
   const [search, setSearch] = useState<string>("");
   const [notificationOpen, setNotificationOpen] = useState(false);
-  const [isNotification, setIsNotification] = useState(false);
   const date = moment(new Date()).format("DD,MMMM YYYY");
   const session = useAppSelector((store) => store.authSlice.user) || {};
   const dispatch = useAppDispatch();
   const noti =
     useAppSelector((store) => store.notificationSlice.notifications) || [];
+  console.log("notifications", noti);
   useEffect(() => {
     dispatch(userAuth());
-    if (noti.length > 0) {
-      setIsNotification(true);
-    }
+    dispatch(fetchNotification());
   }, [dispatch]);
   return (
     <div className="w-full flex px-3 md:px-5 py-[10.8px] justify-between items-center gap-10 border-light border-b">
@@ -53,17 +53,35 @@ export default function Header() {
             <IoMdNotificationsOutline className="text-2xl lg:text-3xl text-info cursor-pointer" />
           </button>
           {notificationOpen && (
-            <div className="z-50 absolute top-16 py-3 overflow-x-hidden right-20 border shadow w-80 h-72 rounded bg-white px-5">
-              <p className="text-primary text-start">All Notifications</p>
-              <hr className="border border-primary mt-1" />
-              {isNotification ? (
-                <p className="text-primary text-start">
-                  You have new notifications.
-                </p>
-              ) : (
-                <p className="text-center mt-2">No notification available.</p>
-              )}
-            </div>
+            <>
+              <div className="z-50 absolute top-16 py-3 overflow-x-hidden right-20 border shadow w-80 h-72 rounded bg-white px-5">
+                <p className="text-primary text-start">All Notifications</p>
+                <hr className="border border-primary mt-1" />
+                {noti?.length > 0 ? (
+                  noti?.map((notification) => {
+                    return (
+                      <div key={notification?.id}>
+                        <p key={notification?.id} className="text-start mt-2">
+                          {notification?.data}
+                        </p>
+                        <Link
+                          onClick={() => setNotificationOpen(!notificationOpen)}
+                          href={"/dashboard/notifications"}
+                          className="flex absolute bottom-2 right-5 items-center gap-1"
+                        >
+                          <p className="text-primary text-xs">View all</p>
+                          <div className="border rounded-lg cursor-pointer">
+                            <FaAngleRight className="text-primary" />
+                          </div>
+                        </Link>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <p className="text-center mt-2">No notification available.</p>
+                )}
+              </div>
+            </>
           )}
           <button
             onClick={async () => {

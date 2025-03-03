@@ -27,6 +27,7 @@ export const addPatientData = createAsyncThunk(
   "patients/addPatients",
   async (user: InitialData, { rejectWithValue, dispatch }) => {
     try {
+      console.log("Patients data from slice request====",user);
       const response = await axiosInstance.post("api/patients", user);
       if (response.status === 501) {
         showToast("error", "Server error. Please try again later.");

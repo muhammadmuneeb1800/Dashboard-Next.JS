@@ -11,13 +11,12 @@ import { fetchAppointments } from "@/store/slices/appointmentSlice";
 export default function Calendar() {
   const all =
     useAppSelector((store) => store.appointmentSlice.appointments) || [];
-  const calendarRef = useRef(null);
+  const calendarRef = useRef<FullCalendar | null>(null);
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchAppointments());
     if (calendarRef.current) {
-      const calendarApi = calendarRef.current.getApi();
-      calendarApi.render();
+      calendarRef.current.getApi();
     }
   }, [dispatch]);
 
