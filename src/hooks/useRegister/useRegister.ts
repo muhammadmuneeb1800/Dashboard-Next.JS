@@ -64,7 +64,7 @@ export default function useRegister() {
       if (response.status === 201) {
         showToast("success", "Successfully registered");
         setLoading(false);
-        router.push("/login");
+        router.push("/");
       }
     } catch (error) {
       console.error("Registration failed:", error);

@@ -49,6 +49,21 @@ export const updateUserPassword = createAsyncThunk(
   }
 );
 
+export const resetPassword = createAsyncThunk(
+  "resetPassword",
+  async (data: { token: string; password: string }) => {
+    try {
+      const res = await axiosInstance.post("/api/reset-password", data);
+      if (res.status === 402) {
+        showToast("error", "User not found");
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 const Authentication = createSlice({
   name: "Authentication",
   initialState,

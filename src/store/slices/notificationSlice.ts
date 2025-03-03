@@ -37,7 +37,7 @@ export const clearNotification = createAsyncThunk(
       const response = await axiosInstance.delete("/api/notifications", {
         data: { id },
       });
-      return response?.data || [];
+      if (response) return id;
     } catch (error) {
       console.error("Error clear notifications:", error);
     }
@@ -72,7 +72,7 @@ const Notification = createSlice({
     builder.addCase(clearNotification.fulfilled, (state, action) => {
       state.notifications =
         state.notifications.filter(
-          (notification) => notification.id !== action.payload.id
+          (notification) => notification.id !== action.payload
         ) || [];
     });
     builder.addCase(deleteAllNotification.fulfilled, (state) => {

@@ -78,6 +78,16 @@ export interface inputDetails {
   placeholder?: string;
 }
 
+type LineChartData = {
+  isOnline: number;
+  startDate: string;
+};
+
+type PieChartData = {
+  value: number;
+  color: string;
+};
+
 export interface cardDetails {
   title?: string;
   number?: number;
@@ -85,7 +95,8 @@ export interface cardDetails {
   img?: string | undefined;
   width?: number;
   icon?: IconType;
-  chart?: React.FC | React.ComponentType;
+  chart: LineChartData[] | PieChartData[];
+  type: string;
 }
 
 export interface button {
@@ -108,4 +119,9 @@ export interface notification {
   doctorId: string;
   data: string;
   createdAt?: Date;
+}
+
+export interface ChartData {
+  isOnline: number;
+  startDate: string;
 }

@@ -10,10 +10,12 @@ import useAddAppointment from "@/hooks/useAddAppointment/useAddAppointment";
 import { FaCheck } from "react-icons/fa";
 import { useAppSelector } from "@/store/store";
 import { resetUpdateApp } from "@/store/slices/appointmentSlice";
+import moment from "moment";
 
 export default function ScheduleModal({ close }: { close: () => void }) {
   const app =
     useAppSelector((store) => store.appointmentSlice.updateApp) || null;
+  console.log("apppppp", app);
   const {
     patientName,
     setPatientName,
@@ -38,12 +40,12 @@ export default function ScheduleModal({ close }: { close: () => void }) {
     handleAddAppointment,
   } = useAddAppointment(close);
   useEffect(() => {
-    if (app) {
+    if (app !== null) {
       setPatientName(app.patientName as string);
       setPurpose(app.purposeOfVisit as string);
       setStatus(app.appointmentStatus as string);
-      setStartDate(app.startDate ? new Date(app.startDate) : null);
-      setEndDate(app.endDate ? new Date(app.endDate) : null);
+      setStartDate(app.startDate ? moment(app.startDate).toDate() : null);
+      setEndDate(app.endDate ? moment(app.endDate).toDate() : null);
       setIsOnline(isOnline === app.isOnline);
       setType(app.appointmentType as string);
     } else {
@@ -140,8 +142,8 @@ export default function ScheduleModal({ close }: { close: () => void }) {
                   type="datetime-local"
                   id="start"
                   value={
-                    startDate instanceof Date
-                      ? startDate.toISOString().slice(0, 16)
+                    startDate
+                      ? moment(startDate).format("YYYY-MM-DDTHH:mm")
                       : ""
                   }
                   onChange={(e) =>
@@ -160,9 +162,7 @@ export default function ScheduleModal({ close }: { close: () => void }) {
                   type="datetime-local"
                   id="end"
                   value={
-                    endDate instanceof Date
-                      ? endDate.toISOString().slice(0, 16)
-                      : ""
+                    endDate ? moment(endDate).format("YYYY-MM-DDTHH:mm") : ""
                   }
                   onChange={(e) =>
                     setEndDate(e.target.value ? new Date(e.target.value) : null)

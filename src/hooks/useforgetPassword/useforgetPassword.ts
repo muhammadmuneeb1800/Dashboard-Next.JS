@@ -14,14 +14,14 @@ export default function useForgetPassword() {
     setIsLoading(true);
 
     try {
-      const response = await axiosInstance.post("/api/auth/forgot-password", {
+      const response = await axiosInstance.post("/api/forgot-password", {
         email,
       });
 
-      if (response.status === 200) {
+      if (response.status === 202) {
         showToast("success", "Password reset link sent to your email!");
       } else {
-        showToast("error", "Something went wrong.");
+        showToast("error", response.data.message || "Something went wrong.");
       }
     } catch (error) {
       console.error("Error:", error);

@@ -1,4 +1,5 @@
-import { LineChart1 } from "@/components/charts/Charts";
+"use client"
+import { ChartComponent } from "@/components/ChartComponent/ChartComponent";
 import { cardDetails } from "@/types/types";
 import { BsThreeDots } from "react-icons/bs";
 
@@ -24,7 +25,12 @@ export default function GraphCard(props: cardDetails) {
             </div>
           </div>
           <div className="w-40 h-20">
-            <LineChart1 data={props.chart} />
+            {props.chart && (
+              <ChartComponent
+                type={props?.type as "line" | "pie"}
+                data={props.chart}
+              />
+            )}
           </div>
         </div>
       </div>

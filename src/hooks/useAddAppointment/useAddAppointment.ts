@@ -99,17 +99,21 @@ export default function useAddAppointment(close: () => void) {
       isOnline: isOnline,
     };
     const notificationString = `Congratulations, Doctor
-     ${session?.user.name}. Your patient (${patientName}) appointment has been successfully added.`;
+     ${session?.user.name}. Your patient's (${patientName}) appointment has been successfully added.`;
     const notification = {
       doctorId: session?.user.id as string,
       data: notificationString,
     };
     try {
-      await dispatch(createAppointments(appointmentData));
-      await dispatch(addNotification(notification));
-      setIsLoading(false);
-      close();
-      showToast("success", "Appointment created successfully");
+      const res = await dispatch(createAppointments(appointmentData));
+      if (res) {
+        await dispatch(addNotification(notification));
+        setIsLoading(false);
+        close();
+        showToast("success", "Appointment created successfully");
+      } else {
+        showToast("error", "Error adding appointment");
+      }
     } catch (error) {
       console.log("Error adding appointment", error);
       showToast("error", "Error adding appointment");
@@ -144,7 +148,8 @@ export default function useAddAppointment(close: () => void) {
       appointmentType: type.replaceAll(" ", "_"),
       isOnline: isOnline,
     };
-    const notificationString = ``;
+    const notificationString = `Congratulations, Doctor
+     ${session?.user.name}. Your patient's (${patientName}) appointment has been successfully updated.`;
     const notification = {
       doctorId: session?.user.id as string,
       data: notificationString,

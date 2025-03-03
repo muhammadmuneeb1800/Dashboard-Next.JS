@@ -5,7 +5,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   patients: [] as InitialData[],
-  updatePatientData: {} as InitialData | null,
+  updatePatientData: null as InitialData | null,
 };
 
 // Fetch patients data

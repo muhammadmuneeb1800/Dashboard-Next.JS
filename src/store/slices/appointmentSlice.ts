@@ -4,7 +4,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialSate = {
   appointments: [] as initialAppointment[],
-  updateApp: {} as initialAppointment | null,
+  updateApp: null as initialAppointment | null,
 };
 
 export const fetchAppointments = createAsyncThunk(

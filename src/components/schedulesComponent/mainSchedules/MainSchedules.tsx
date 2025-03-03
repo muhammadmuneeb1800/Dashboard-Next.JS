@@ -31,7 +31,7 @@ export default function SchedulesComponent() {
         <hr className="mt-3" />
         <div className="mt-5">
           {all.length > 0 ? (
-            <>
+            <div key={all.length + 1}>
               {all?.map((app) => {
                 return (
                   <div key={app.id}>
@@ -48,7 +48,7 @@ export default function SchedulesComponent() {
                   <FaAngleRight className="text-primary" />
                 </div>
               </Link>
-            </>
+            </div>
           ) : (
             <p className="text-center text-sm">No appointment found</p>
           )}

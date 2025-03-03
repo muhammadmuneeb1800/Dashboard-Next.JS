@@ -5,7 +5,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   task: [] as taskData[],
-  updateTask: {} as taskData | null,
+  updateTask: null as taskData | null,
 };
 
 export const fetchTasksData = createAsyncThunk("fetchTasks", async () => {

@@ -6,6 +6,7 @@ import {
   fetchNotification,
 } from "@/store/slices/notificationSlice";
 import { showToast } from "@/components/toast/Toast";
+import Link from "next/link";
 
 export default function NotificationCard() {
   const dispatch = useAppDispatch();
@@ -23,10 +24,11 @@ export default function NotificationCard() {
         </div>
       ) : (
         noti?.map((noti, index) => (
-          <div key={index}>
+          <div key={index} className="my-5">
             <div className="bg-white rounded-md shadow-md w-full p-3">
-              <div className="pt-3">
+              <div className="pt-3 flex justify-between items-center">
                 <h3 className="text-lg font-medium">New Appointment</h3>
+                <Link href={"/dashboard/schedule"} className="text-sm text-gray-500">View details</Link>
               </div>
               <div className="pt-3">
                 <p className="text-sm text-gray-600">{noti?.data}</p>
@@ -35,7 +37,7 @@ export default function NotificationCard() {
                 <button
                   onClick={async () => {
                     await dispatch(clearNotification(noti?.id as string));
-                    showToast("success","Notifications deleted successfully")
+                    showToast("success", "Notifications deleted successfully");
                   }}
                   className="text-sm text-gray-500"
                 >

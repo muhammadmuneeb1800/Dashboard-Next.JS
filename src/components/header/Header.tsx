@@ -54,32 +54,41 @@ export default function Header() {
           </button>
           {notificationOpen && (
             <>
-              <div className="z-50 absolute top-16 py-3 overflow-x-hidden right-20 border shadow w-80 h-72 rounded bg-white px-5">
-                <p className="text-primary text-start">All Notifications</p>
-                <hr className="border border-primary mt-1" />
-                {noti?.length > 0 ? (
-                  noti?.map((notification) => {
-                    return (
-                      <div key={notification?.id}>
-                        <p key={notification?.id} className="text-start mt-2">
-                          {notification?.data}
-                        </p>
-                        <Link
-                          onClick={() => setNotificationOpen(!notificationOpen)}
-                          href={"/dashboard/notifications"}
-                          className="flex absolute bottom-2 right-5 items-center gap-1"
-                        >
-                          <p className="text-primary text-xs">View all</p>
-                          <div className="border rounded-lg cursor-pointer">
-                            <FaAngleRight className="text-primary" />
+              <div className="z-50 absolute top-16 py-3 overflow-x-hidden overflow-y-auto right-20 border shadow w-80 h-72 rounded bg-white px-5">
+                <div>
+                  <p className="text-primary text-start">All Notifications</p>
+                  <hr className="border border-primary mt-1" />
+                  {noti?.length > 0 ? (
+                    <>
+                      {noti?.map((notification) => {
+                        return (
+                          <div key={notification?.id}>
+                            <p
+                              key={notification?.id}
+                              className="text-start mt-2"
+                            >
+                              {notification?.data}
+                            </p>
                           </div>
-                        </Link>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <p className="text-center mt-2">No notification available.</p>
-                )}
+                        );
+                      })}
+                      <Link
+                        onClick={() => setNotificationOpen(!notificationOpen)}
+                        href={"/dashboard/notifications"}
+                        className="flex absolute bottom-2 right-5 items-center gap-1"
+                      >
+                        <p className="text-primary text-xs">View all</p>
+                        <div className="border rounded-lg cursor-pointer">
+                          <FaAngleRight className="text-primary" />
+                        </div>
+                      </Link>
+                    </>
+                  ) : (
+                    <p className="text-center mt-2">
+                      No notification available.
+                    </p>
+                  )}
+                </div>
               </div>
             </>
           )}

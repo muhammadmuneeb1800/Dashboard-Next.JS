@@ -1,43 +1,62 @@
 "use client";
-import React from "react";
 import Button from "@/components/button/Button";
 import Input from "@/components/input/Input";
-import useforgetPassword from "@/hooks/useforgetPassword/useforgetPassword";
+import useResetPassword from "@/hooks/useResetPassword/useResetPassword";
 import Link from "next/link";
+import React from "react";
 
-export default function ForgetForm() {
-  const { email, setEmail, isLoading, handleSubmit } = useforgetPassword();
+export default function ResetForm() {
+  const {
+    password,
+    confirmPassword,
+    handleSubmit,
+    setPassword,
+    isLoading,
+    setConfirmPassword,
+  } = useResetPassword();
   return (
     <>
       <div className="md:px-5 lg:px-12 px-5 mt-24">
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium">
-          Reset your password
+          Enter your new password
         </h1>
-        <p className="text-lg md:text-xl font-normal mt-3 text-secondray">
-          Enter your email address below and we&rsquo;ll send you a link to
-          reset your password.
-        </p>
         <form onSubmit={handleSubmit} className="mt-24">
           <div className="mt-5">
             <label
-              htmlFor="email"
+              htmlFor="password"
               className="text-base md:text-lg font-medium text-secondray"
             >
-              Email Address
+              New Password
             </label>
             <Input
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email address"
-              type="email"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your new password"
+              type="password"
+              border="border-b-2"
+            />
+          </div>
+          <div className="mt-5">
+            <label
+              htmlFor="confirmPassword"
+              className="text-base md:text-lg font-medium text-secondray"
+            >
+              Confirm New Password
+            </label>
+            <Input
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Enter your confirm new password"
+              type="password"
               border="border-b-2"
             />
           </div>
           <div className="mt-5">
             {isLoading ? (
               <Button
-                text="sending..."
+                text="Sending..."
                 bg="bg-gray-400"
                 color="text-white"
                 hBg="bg-gray-400"
@@ -49,7 +68,7 @@ export default function ForgetForm() {
             ) : (
               <Button
                 type="submit"
-                text="Send"
+                text="Submit"
                 bg="bg-primary"
                 color="text-white"
                 hBg="bg-white"
