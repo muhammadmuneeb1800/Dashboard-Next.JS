@@ -8,6 +8,8 @@ import { MdOutlineCalendarToday } from "react-icons/md";
 import Image from "next/image";
 
 export default function PatientsUpdateModal({ close }: { close: () => void }) {
+  const updatePatient =
+    useAppSelector((store) => store.patientSlice.updatePatientData) || {};
   const {
     foreName,
     setForeName,
@@ -30,8 +32,6 @@ export default function PatientsUpdateModal({ close }: { close: () => void }) {
     appointmentDate,
     setAppointmentDate,
   } = useAddPatient();
-  const updatePatient =
-    useAppSelector((store) => store.patientSlice.updatePatientData) || {};
   useEffect(() => {
     if (updatePatient) {
       setForeName(updatePatient.foreName as string);
@@ -48,7 +48,18 @@ export default function PatientsUpdateModal({ close }: { close: () => void }) {
       );
       setImage(updatePatient?.image as string);
     }
-  }, [updatePatient]);
+  }, [
+    updatePatient,
+    setForeName,
+    setSurname,
+    setDob,
+    setGender,
+    setDiagnosis,
+    setStatus,
+    setPhoneNumber,
+    setAppointmentDate,
+    setImage,
+  ]);
   return (
     <div className="flex justify-center items-center fixed z-50 inset-0 w-full bg-black bg-opacity-40 backdrop-blur">
       <form
