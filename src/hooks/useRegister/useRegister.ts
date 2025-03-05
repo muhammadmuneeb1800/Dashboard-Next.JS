@@ -2,8 +2,9 @@
 import { useState } from "react";
 import bcrypt from "bcryptjs";
 import { useRouter } from "next/navigation";
-import { axiosInstance } from "@/utils/axiosInstance";
 import { showToast } from "@/components/toast/Toast";
+import { useAppDispatch } from "@/store/store";
+import { createUser } from "@/store/slices/authSlice";
 
 export default function useRegister() {
   const [loading, setLoading] = useState(false);
@@ -13,6 +14,7 @@ export default function useRegister() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -41,41 +43,33 @@ export default function useRegister() {
   };
 
   const handleRegister = async (e: React.FormEvent) => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
+
     if (!validateForm()) {
       setLoading(false);
       return;
     }
+
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
-      const userData = {
-        name: name,
-        email: email,
-        password: hashedPassword,
-        companyName: companyName,
-      };
-      const response = await axiosInstance.post("/api/register", userData);
-      if (response.status === 401) {
-        showToast("error", "Email already exists");
-        setLoading(false);
-        return;
-      }
-      if (response.status === 201) {
-        showToast("success", "Successfully registered");
-        setLoading(false);
-        router.push("/");
-      }
+      const userData = { name, email, password: hashedPassword, companyName };
+
+      await dispatch(createUser(userData)).unwrap();
+
+      showToast("success", "Successfully registered");
+      router.push("/");
+
+      setName("");
+      setEmail("");
+      setCompanyName("");
+      setPassword("");
+      setErrors({});
     } catch (error) {
-      console.error("Registration failed:", error);
-      setErrors({ general: "Something went wrong. Please try again later!" });
+      showToast("error", error as string);
+    } finally {
       setLoading(false);
     }
-    setName("");
-    setEmail("");
-    setCompanyName("");
-    setPassword("");
-    setErrors({});
   };
 
   return {

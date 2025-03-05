@@ -10,7 +10,7 @@ export const GET = async () => {
       return new NextResponse("Unauthorized");
     }
     const user = await prisma.doctor.findUnique({
-      where: { email: session?.user?.email as string },
+      where: { email: session?.user?.email },
     });
     if (!user) {
       return new NextResponse("User not found");

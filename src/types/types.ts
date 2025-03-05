@@ -162,3 +162,10 @@ export interface CardDetails {
   chart: ChartData;
   type: "line" | "pie";
 }
+
+export interface userCreateData {
+  name: string;
+  email: string;
+  password: string;
+  companyName: string;
+}

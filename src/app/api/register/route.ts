@@ -8,6 +8,7 @@ export const POST = async (req: NextRequest) => {
       where: { email: body.email },
     });
     if (existsUser) {
+      console.log("Found", existsUser);
       return NextResponse.json(
         { message: "User already exists" },
         { status: 401 }

@@ -1,11 +1,28 @@
 import { showToast } from "@/components/toast/Toast";
-import { initialAuth, updatePasswordData } from "@/types/types";
+import { initialAuth, updatePasswordData, userCreateData } from "@/types/types";
 import { axiosInstance } from "@/utils/axiosInstance";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 
 const initialState = {
   user: {} as initialAuth,
 };
+
+export const createUser = createAsyncThunk(
+  "createUser",
+  async (data: userCreateData, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post("/api/register", data);
+      return response?.data?.user || {};
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === 401) {
+        return rejectWithValue("Email already exists");
+      }
+      return rejectWithValue(error);
+    }
+  }
+);
 
 export const userAuth = createAsyncThunk("userAuth", async () => {
   try {
