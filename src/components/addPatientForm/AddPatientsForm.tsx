@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
-import Button from "@/components/button/Button";
-import Input from "@/components/input/Input";
 import { MdOutlineCalendarToday } from "react-icons/md";
 import useAddPatient from "@/hooks/useAddPatient/useAddPatient";
 import Image from "next/image";
+import Button from "../button/Button";
+import Input from "../input/Input";
 
 export default function AddPatientsForm() {
   const {

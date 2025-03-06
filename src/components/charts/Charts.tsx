@@ -16,6 +16,7 @@ import {
   Tooltip,
   Legend,
   Chart,
+  ScriptableContext,
 } from "chart.js";
 import { Line, Pie } from "react-chartjs-2";
 
@@ -30,30 +31,49 @@ ChartJS.register(
   Legend
 );
 
-export const ChartComponent = ({
-  type,
-  data,
-  color = "#2F80ED",
-}: ChartComponentProps) => {
+export const ChartComponent = ({ type, data }: ChartComponentProps) => {
   if (type === "line") {
     const lineData = data as RawDataPoint[];
+    if (lineData.length === 1) {
+      lineData.push({ ...lineData[0] });
+    }
+    if (lineData.length === 0) {
+      return null;
+    }
+    const createGradient = (ctx: CanvasRenderingContext2D) => {
+      const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+      gradient.addColorStop(0, "rgba(0, 123, 255, 0.5)");
+      gradient.addColorStop(1, "rgba(0, 123, 255, 0)");
+      return gradient;
+    };
     const chartData = {
       labels: lineData.map((_, index) => index + 1),
       datasets: [
         {
           label: "Online Status",
           data: lineData.map((d) => (d.isOnline ? 1 : 0)),
-          borderColor: color || "#007bff",
+          borderColor: lineData.map((d) => (!d.isOnline ? "red" : "blue")),
+          backgroundColor: (context: ScriptableContext<"line">) => {
+            const chart = context.chart;
+            if (!chart) return "#007bff";
+            const ctx = chart.ctx;
+            return createGradient(ctx);
+          },
           borderWidth: 2,
-          pointRadius: 0,
+          pointHoverRadius: 5,
+          pointBackgroundColor: lineData.map((d) =>
+            !d.isOnline ? "red" : "blue"
+          ),
+          pointRadius: lineData.length === 1 ? 4 : 3,
           fill: true,
-          tension: 0.9,
+          tension: 1,
         },
       ],
     };
 
     const options = {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
       },
@@ -67,7 +87,7 @@ export const ChartComponent = ({
   }
 
   if (type === "pie") {
-   const isPieChart = (data as PieChartDataPoint[])[0]?.value !== undefined;
+    const isPieChart = (data as PieChartDataPoint[])[0]?.value !== undefined;
     const hasData =
       Array.isArray(data) &&
       isPieChart &&
@@ -107,7 +127,6 @@ export const ChartComponent = ({
       id: "centerText",
       beforeDraw: (chart: Chart) => {
         if (!hasData) return;
-
         const { width, height } = chart;
         const ctx = chart.ctx;
         ctx.restore();

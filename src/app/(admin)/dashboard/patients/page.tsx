@@ -1,4 +1,4 @@
-import PatientsComponent from "@/components/PatientsComponent/PatientsComponent";
+import PatientsComponent from "@/components/patients/Patients";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

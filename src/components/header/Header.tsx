@@ -74,7 +74,11 @@ export default function Header() {
                       <Link
                         onClick={() => setNotificationOpen(!notificationOpen)}
                         href={"/dashboard/notifications"}
-                        className={`flex ${noti.length > 2 ? "justify-end" : "absolute bottom-3 right-3"} my-1 items-center gap-1`}
+                        className={`flex ${
+                          noti.length > 2
+                            ? "justify-end"
+                            : "absolute bottom-3 right-3"
+                        } my-1 items-center gap-1`}
                       >
                         <p className="text-primary text-xs">View all</p>
                         <div className="border rounded-lg cursor-pointer">

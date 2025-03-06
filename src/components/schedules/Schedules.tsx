@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import Calendar from "@/components/calendor/Calendor";
-import ScheduleModal from "@/components/schedulesComponent/scheduleModal/ScheduleModal";
 import TopBar from "@/components/topBar/TopBar";
+import ScheduleModal from "../scheduleModal/ScheduleModal";
+import ScheduleCalendar from "../scheduleCalendar/ScheduleCalendar";
 
 export default function MainSchedules() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,8 +19,8 @@ export default function MainSchedules() {
         icon4="MdOutlineContactSupport"
         onclick={close}
       />
-      <div className="mt-5 bg-white">
-        <Calendar />
+      <div className="mt-5 rounded-lg bg-white">
+        <ScheduleCalendar />
       </div>
       {isModalOpen && <ScheduleModal close={close} />}
     </div>

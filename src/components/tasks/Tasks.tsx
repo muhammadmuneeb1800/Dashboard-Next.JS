@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import TopBar from "../topBar/TopBar";
-import TaskModal from "./taskModal/TaskModal";
-import TaskCard from "./taskCard/TaskCard";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { fetchTasksData } from "@/store/slices/taskSlice";
+import TaskCard from "../taskCard/TaskCard";
+import TaskModal from "../taskModal/TaskModal";
 
 export default function Tasks() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -19,7 +19,6 @@ export default function Tasks() {
 
   return (
     <>
-      <h1>Tasks</h1>
       <TopBar
         title="Total Tasks"
         sabTitle={AllTasks.length.toLocaleString()}

@@ -1,4 +1,4 @@
-import MainSchedules from "@/components/schedulesComponent/SchedulesComponent";
+import MainSchedules from "@/components/schedules/Schedules";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

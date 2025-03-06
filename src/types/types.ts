@@ -150,7 +150,6 @@ export type ChartData = RawDataPoint[] | PieChartDataPoint[];
 export interface ChartComponentProps {
   type: "line" | "pie";
   data: ChartData;
-  color?: string;
 }
 
 export interface CardDetails {

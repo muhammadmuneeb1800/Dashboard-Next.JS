@@ -1,7 +1,11 @@
-"use client"
-import { ChartComponent } from "@/components/ChartComponent/ChartComponent";
-import { cardDetails, LineChartDataPoint, PieChartDataPoint } from "@/types/types";
+"use client";
+import {
+  cardDetails,
+  LineChartDataPoint,
+  PieChartDataPoint,
+} from "@/types/types";
 import { BsThreeDots } from "react-icons/bs";
+import { ChartComponent } from "../charts/Charts";
 
 export default function GraphCard(props: cardDetails) {
   return (

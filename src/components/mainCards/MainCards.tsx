@@ -3,7 +3,7 @@ import React from "react";
 import GraphCard from "../graphCard/GrapCard";
 import { useGraphData } from "@/hooks/useGraphData/useGraphData";
 
-export default function MainCards() { 
+export default function MainCards() {
   const Data = useGraphData();
   return (
     <>

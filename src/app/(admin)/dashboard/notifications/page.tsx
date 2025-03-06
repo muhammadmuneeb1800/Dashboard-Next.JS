@@ -1,5 +1,5 @@
-import { Metadata } from "next";
 import Notification from "@/components/notification/Notification";
+import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Dashboard - Notifications",
   description: "Your Personal Doctor Dashboard.",

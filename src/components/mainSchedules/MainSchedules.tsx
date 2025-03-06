@@ -32,7 +32,7 @@ export default function SchedulesComponent() {
         <div className="mt-5">
           {all.length > 0 ? (
             <div>
-              {all?.map((app,index) => {
+              {all?.map((app, index) => {
                 return (
                   <div key={index}>
                     <UpCommingSchedule initialAppointment={app} close={close} />

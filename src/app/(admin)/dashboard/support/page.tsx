@@ -11,10 +11,7 @@ export default async function Support() {
     <>
       <div className="px-3 md:px-5 py-3 w-full bg-success h-screen">
         <h1>Support</h1>
-        <TopBar
-          title="Support"
-          icon4="MdOutlineContactSupport"
-        />
+        <TopBar title="Support" icon4="MdOutlineContactSupport" />
       </div>
     </>
   );

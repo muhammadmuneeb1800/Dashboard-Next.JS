@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
 import Button from "../button/Button";
-import NotificationCard from "./notificationCard/NotificationCard";
 import { useAppDispatch } from "@/store/store";
 import { deleteAllNotification } from "@/store/slices/notificationSlice";
 import { showToast } from "../toast/Toast";
+import NotificationCard from "../notificationCard/NotificationCard";
 
 export default function Notification() {
   const dispatch = useAppDispatch();

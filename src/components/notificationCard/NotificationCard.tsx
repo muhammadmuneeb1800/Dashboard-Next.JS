@@ -27,7 +27,12 @@ export default function NotificationCard() {
             <div className="bg-white rounded-md shadow-md w-full p-3">
               <div className="pt-3 flex justify-between items-center">
                 <h3 className="text-lg font-medium">New Appointment</h3>
-                <Link href={"/dashboard/schedule"} className="text-sm text-gray-500">View details</Link>
+                <Link
+                  href={"/dashboard/schedule"}
+                  className="text-sm text-gray-500"
+                >
+                  View details
+                </Link>
               </div>
               <div className="pt-3">
                 <p className="text-sm text-gray-600">{noti?.data}</p>

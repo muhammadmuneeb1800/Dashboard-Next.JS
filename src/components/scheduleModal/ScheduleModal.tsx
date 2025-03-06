@@ -3,14 +3,14 @@ import { CiLocationOn } from "react-icons/ci";
 import { ImCross } from "react-icons/im";
 import { LuUserRound } from "react-icons/lu";
 import { SlClock } from "react-icons/sl";
-import Input from "../../input/Input";
 import { MdOutlineNotifications } from "react-icons/md";
-import Button from "../../button/Button";
 import useAddAppointment from "@/hooks/useAddAppointment/useAddAppointment";
 import { FaCheck } from "react-icons/fa";
 import { useAppSelector } from "@/store/store";
 import { resetUpdateApp } from "@/store/slices/appointmentSlice";
 import moment from "moment";
+import Input from "../input/Input";
+import Button from "../button/Button";
 
 export default function ScheduleModal({ close }: { close: () => void }) {
   const app =
@@ -47,14 +47,6 @@ export default function ScheduleModal({ close }: { close: () => void }) {
       setEndDate(app.endDate ? moment(app.endDate).toDate() : null);
       setIsOnline(isOnline === app.isOnline);
       setType(app.appointmentType as string);
-    } else {
-      setPatientName("");
-      setPurpose("");
-      setStatus("");
-      setStartDate(null);
-      setEndDate(null);
-      setIsOnline(false);
-      setType("");
     }
   }, [
     app,
@@ -183,7 +175,7 @@ export default function ScheduleModal({ close }: { close: () => void }) {
             </div>
             <div className="flex pt-10 justify-between items-center">
               <label htmlFor="Status">Appointment Status</label>
-              <div className="w-full md:w-[70%] flex flex-col md:flex-wrap lg:flex-row lg:items-center items-start gap-7 md:gap-6">
+              <div className="w-full md:w-[70%] flex flex-col md:flex-wrap lg:flex-row lg:items-center items-start gap-10 md:gap-6">
                 <label>
                   <input
                     type="radio"
@@ -247,31 +239,33 @@ export default function ScheduleModal({ close }: { close: () => void }) {
                 </label>
               </div>
             </div>
-            <div className="flex pt-10 gap-32 items-center">
+            <div className="flex pt-10 justify-between items-center">
               <label htmlFor="">Online Consultation</label>
-              <button
-                type="button"
-                onClick={() => setIsOnline(!isOnline)}
-                className={`flex items-center gap-2 border-2 rounded-md p-2 transition-all duration-700 ${
-                  isOnline ? "border-primary" : "border-red-500"
-                }`}
-              >
-                {isOnline ? (
-                  <>
-                    <span className={`text-primary font-bold`}>Yes</span>
-                    <span className="text-white bg-primary rounded-md p-2">
-                      <FaCheck />
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <span className="text-white bg-red-500 rounded-md p-2">
-                      <ImCross />
-                    </span>
-                    <span className="text-red-500 font-bold">No</span>
-                  </>
-                )}
-              </button>
+              <div className="w-[90%] md:w-[70%] flex flex-wrap md:items-center gap-7 md:gap-6">
+                <button
+                  type="button"
+                  onClick={() => setIsOnline(!isOnline)}
+                  className={`flex items-center gap-2 border-2 rounded-md p-2 transition-all duration-700 ${
+                    isOnline ? "border-primary" : "border-red-500"
+                  }`}
+                >
+                  {isOnline ? (
+                    <>
+                      <span className={`text-primary font-bold`}>Yes</span>
+                      <span className="text-white bg-primary rounded-md p-2">
+                        <FaCheck />
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-white bg-red-500 rounded-md p-2">
+                        <ImCross />
+                      </span>
+                      <span className="text-red-500 font-bold">No</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
           <div className="mt-16 flex items-center gap-3 px-4 md:px-8">

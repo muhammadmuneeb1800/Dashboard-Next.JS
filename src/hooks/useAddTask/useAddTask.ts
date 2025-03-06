@@ -36,7 +36,7 @@ export default function useAddTask(close?: () => void) {
       doctorId: session?.user.id as string,
       title: title,
       description: des,
-      status: status,
+      status: status || "NOT_COMPLETED",
     };
     try {
       await dispatch(addTasks(data));
@@ -75,7 +75,7 @@ export default function useAddTask(close?: () => void) {
       doctorId: session?.user.id as string,
       title: title,
       description: des,
-      status: status,
+      status: status || "NOT_COMPLETED",
     };
     try {
       await dispatch(updateTasks(data));

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import React from "react";
 import Link from "next/link";
-import AddPatientsForm from "@/components/PatientsComponent/addPatientForm/AddPatientsForm";
+import AddPatientsForm from "@/components/addPatientForm/AddPatientsForm";
 
 export const metadata: Metadata = {
   title: "Dashboard Patients - Add Patient",
@@ -17,7 +17,7 @@ export default function AddPatients() {
           <p> &gt; Add Patients</p>
         </div>
         <div className="mb-5">
-        <AddPatientsForm />
+          <AddPatientsForm />
         </div>
       </div>
     </>

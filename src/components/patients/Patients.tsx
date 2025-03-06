@@ -11,8 +11,8 @@ import {
 } from "@/store/slices/patientSlice";
 import TopBar from "../topBar/TopBar";
 import { showToast } from "../toast/Toast";
-import PatientsUpdateModal from "./patientsUpdateModal/PatientsUpdateModal";
 import Image from "next/image";
+import PatientsUpdateModal from "../patientsUpdateModal/PatientsUpdateModal";
 
 export default function PatientsComponent() {
   const [active, setActive] = useState<boolean>(false);
