@@ -15,10 +15,18 @@ export default function useAddTask(close?: () => void) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [des, setDes] = useState<string>("");
   const [status, setStatus] = useState<string>("NOT_COMPLETED");
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const [isOpenModalTwo, setIsOpenModalTwo] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { data: session } = useSession();
   const dispatch = useAppDispatch();
 
+  const openModal = () => {
+    setIsOpenModal(!isOpenModal);
+  };
+  const openModalTwo = () => {
+    setIsOpenModalTwo(!isOpenModalTwo);
+  };
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -112,5 +120,11 @@ export default function useAddTask(close?: () => void) {
     setIsOpen,
     handleUpdateTask,
     handleUpdate,
+    isOpenModal,
+    setIsOpenModal,
+    openModal,
+    openModalTwo,
+    isOpenModalTwo,
+    setIsOpenModalTwo,
   };
 }

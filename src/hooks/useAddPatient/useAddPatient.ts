@@ -22,10 +22,22 @@ export default function useAddPatient() {
   const [appointmentDate, setAppointmentDate] = useState<Date | null>();
   const [phoneNumber, setPhoneNumber] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [active, setActive] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [activePatient, setActivePatient] = useState<string | null>(null);
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
   const doctorId = session?.user?.id;
   const router = useRouter();
+
+  const handleClick = (id: string) => {
+    setActivePatient(activePatient === id ? null : id);
+    setActive(!active);
+  };
+
+  const close = () => {
+    setIsOpen(!isOpen);
+  };
 
   const formValidation = async () => {
     if (!foreName?.trim()) {
@@ -236,5 +248,13 @@ export default function useAddPatient() {
     setAppointmentDate,
     handleAddPatient,
     handleUpdate,
+    active,
+    setActive,
+    isOpen,
+    setIsOpen,
+    activePatient,
+    setActivePatient,
+    handleClick,
+    close,
   };
 }

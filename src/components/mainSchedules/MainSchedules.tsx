@@ -2,9 +2,9 @@
 import React, { useState } from "react";
 import { FaAngleRight, FaPlus } from "react-icons/fa";
 import UpCommingSchedule from "../upCommingSchedule/UpCommingSchedule";
+import Link from "next/link";
 import ScheduleModal from "../scheduleModal/ScheduleModal";
 import { useAppSelector } from "@/store/store";
-import Link from "next/link";
 
 export default function SchedulesComponent() {
   const [isOpen, setIsOpen] = useState<boolean>(false);

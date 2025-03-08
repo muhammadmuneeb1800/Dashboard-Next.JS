@@ -1,5 +1,5 @@
-import { inputDetails } from "@/types/types";
 import React from "react";
+import { inputDetails } from "@/types/types";
 import { ImCross } from "react-icons/im";
 
 export default function Input(props: inputDetails) {

@@ -1,22 +1,19 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FaAngleRight, FaPlus } from "react-icons/fa";
 import TaskModal from "../taskModal/TaskModal";
-import { useAppDispatch, useAppSelector } from "@/store/store";
+import { useAppSelector } from "@/store/store";
 import { fetchTasksData, resetUpdateTaskId } from "@/store/slices/taskSlice";
 import TaskCard from "../taskCard/TaskCard";
 import Link from "next/link";
+import useAddTask from "@/hooks/useAddTask/useAddTask";
 
 export default function DashboardTask() {
-  const allTasks = useAppSelector((store) => store.tasksSlice.task) || [];
-  const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useAppDispatch();
+  const { dispatch, openModalTwo, isOpenModalTwo } = useAddTask();
   useEffect(() => {
     dispatch(fetchTasksData());
   }, [dispatch]);
-  const close = () => {
-    setIsOpen(!isOpen);
-  };
+  const allTasks = useAppSelector((store) => store.tasksSlice.task) || [];
   return (
     <>
       <div className="mt-3 px-3 md:px-5 py-3 pb-5 lg:pb-7 bg-white rounded-md shadow w-full xl:w-[65%] h-auto">
@@ -26,7 +23,7 @@ export default function DashboardTask() {
           </div>
           <button
             onClick={() => {
-              close();
+              openModalTwo();
               dispatch(resetUpdateTaskId());
             }}
             className="flex justify-center items-center font-medium gap-2 text-primary cursor-pointer"
@@ -43,11 +40,11 @@ export default function DashboardTask() {
             <>
               {allTasks?.map((tasks, index) => (
                 <div key={index} className="mt-3">
-                  <TaskCard {...tasks} close={close} />
+                  <TaskCard {...tasks} close={openModalTwo} />
                 </div>
               ))}
               <Link
-                href={"/dashboard/tasks"}
+                href={"/dashboard/task"}
                 className="flex justify-center items-center text-[12px] text-primary gap-2 mt-5 float-right"
               >
                 <p className="font-semibold">View all</p>
@@ -62,7 +59,7 @@ export default function DashboardTask() {
         </div>
       </div>
 
-      {isOpen && <TaskModal close={close} />}
+      {isOpenModalTwo && <TaskModal close={openModalTwo} />}
     </>
   );
 }

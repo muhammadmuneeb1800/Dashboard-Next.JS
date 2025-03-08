@@ -24,7 +24,7 @@ export default function NotificationCard() {
       ) : (
         noti?.map((noti, index) => (
           <div key={index} className="my-5">
-            <div className="bg-white rounded-md shadow-md w-full p-3">
+            <div className="bg-white rounded-md shadow w-full p-3">
               <div className="pt-3 flex justify-between items-center">
                 <h3 className="text-lg font-medium">New Appointment</h3>
                 <Link

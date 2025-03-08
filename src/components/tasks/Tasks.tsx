@@ -1,21 +1,18 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import TopBar from "../topBar/TopBar";
-import { useAppDispatch, useAppSelector } from "@/store/store";
+import { useAppSelector } from "@/store/store";
 import { fetchTasksData } from "@/store/slices/taskSlice";
 import TaskCard from "../taskCard/TaskCard";
 import TaskModal from "../taskModal/TaskModal";
+import useAddTask from "@/hooks/useAddTask/useAddTask";
 
 export default function Tasks() {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
+  const { isOpenModal, openModal, dispatch } = useAddTask();
   useEffect(() => {
     dispatch(fetchTasksData());
   }, [dispatch]);
   const AllTasks = useAppSelector((store) => store.tasksSlice.task) || [];
-  const close = () => {
-    setIsOpen(!isOpen);
-  };
 
   return (
     <>
@@ -26,18 +23,18 @@ export default function Tasks() {
         icon3="TbFilter"
         icon2="IoPrintOutline"
         icon4="MdOutlineContactSupport"
-        onclick={close}
+        onclick={openModal}
       />
       <div className="mt-5 bg-white w-full px-3 md:px-5 py-5 rounded-md shadow-md">
         {AllTasks.length > 0 ? (
           AllTasks?.map((task, index) => (
-            <TaskCard key={index} {...task} close={close} />
+            <TaskCard key={index} {...task} close={openModal} />
           ))
         ) : (
           <p className="text-info text-center">No Task available.</p>
         )}
       </div>
-      {isOpen && <TaskModal close={close} />}
+      {isOpenModal && <TaskModal close={openModal} />}
     </>
   );
 }
