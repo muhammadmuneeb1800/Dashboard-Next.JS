@@ -6,6 +6,7 @@ import { AxiosError } from "axios";
 
 const initialState = {
   user: {} as initialAuth,
+  isLoading: false,
 };
 
 export const createUser = createAsyncThunk(
@@ -86,12 +87,21 @@ const Authentication = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(userAuth.fulfilled, (state, action) => {
-      state.user = action.payload;
-    });
-    builder.addCase(userEdit.fulfilled, (state, action) => {
-      state.user = action.payload;
-    });
+    builder
+      .addCase(userAuth.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(userAuth.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload;
+      })
+      .addCase(userEdit.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(userEdit.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload;
+      });
   },
 });
 

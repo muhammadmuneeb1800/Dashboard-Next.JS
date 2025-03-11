@@ -4,6 +4,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   notifications: [] as notification[],
+  isLoading: false,
 };
 
 export const fetchNotification = createAsyncThunk(
@@ -63,21 +64,32 @@ const Notification = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchNotification.fulfilled, (state, action) => {
-      state.notifications = action.payload || [];
-    });
-    builder.addCase(addNotification.fulfilled, (state, action) => {
-      state.notifications = [action.payload, ...state.notifications];
-    });
-    builder.addCase(clearNotification.fulfilled, (state, action) => {
-      state.notifications =
-        state.notifications.filter(
-          (notification) => notification.id !== action.payload
-        ) || [];
-    });
-    builder.addCase(deleteAllNotification.fulfilled, (state) => {
-      state.notifications = [];
-    });
+    builder
+      .addCase(fetchNotification.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchNotification.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.notifications = action.payload || [];
+      })
+      .addCase(addNotification.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.notifications = [action.payload, ...state.notifications];
+      })
+      .addCase(clearNotification.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.notifications =
+          state.notifications.filter(
+            (notification) => notification.id !== action.payload
+          ) || [];
+      })
+      .addCase(deleteAllNotification.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteAllNotification.fulfilled, (state) => {
+        state.isLoading = false;
+        state.notifications = [];
+      });
   },
 });
 

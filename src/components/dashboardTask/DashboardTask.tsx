@@ -7,13 +7,14 @@ import { fetchTasksData, resetUpdateTaskId } from "@/store/slices/taskSlice";
 import TaskCard from "../taskCard/TaskCard";
 import Link from "next/link";
 import useAddTask from "@/hooks/useAddTask/useAddTask";
+import Loader from "../loader/Loader";
 
 export default function DashboardTask() {
   const { dispatch, openModalTwo, isOpenModalTwo } = useAddTask();
   useEffect(() => {
     dispatch(fetchTasksData());
   }, [dispatch]);
-  const allTasks = useAppSelector((store) => store.tasksSlice.task) || [];
+  const { task, isLoading } = useAppSelector((store) => store.tasksSlice) || [];
   return (
     <>
       <div className="mt-3 px-3 md:px-5 py-3 pb-5 lg:pb-7 bg-white rounded-md shadow w-full xl:w-[65%] h-auto">
@@ -36,13 +37,18 @@ export default function DashboardTask() {
         </div>
         <hr className="mt-3" />
         <div className="mt-5">
-          {allTasks.length > 0 ? (
+          {isLoading ? (
+            <div className="flex justify-center items-center">
+              <Loader loading={isLoading} />
+            </div>
+          ) : task.length > 0 ? (
             <>
-              {allTasks?.map((tasks, index) => (
+              {task.map((tasks, index) => (
                 <div key={index} className="mt-3">
                   <TaskCard {...tasks} close={openModalTwo} />
                 </div>
               ))}
+
               <Link
                 href={"/dashboard/task"}
                 className="flex justify-center items-center text-[12px] text-primary gap-2 mt-5 float-right"

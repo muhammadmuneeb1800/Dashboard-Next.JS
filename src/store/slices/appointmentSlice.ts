@@ -5,6 +5,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const initialSate = {
   appointments: [] as initialAppointment[],
   updateApp: null as initialAppointment | null,
+  isLoading: false,
 };
 
 export const fetchAppointments = createAsyncThunk(
@@ -78,22 +79,30 @@ const Appointment = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchAppointments.fulfilled, (state, action) => {
-      state.appointments = action.payload || [];
-    });
-    builder.addCase(createAppointments.fulfilled, (state, action) => {
-      state.appointments = [action.payload, ...state.appointments];
-    });
-    builder.addCase(updateAppointments.fulfilled, (state, action) => {
-      state.appointments =
-        state.appointments.map((app) =>
-          app.id === action.payload.id ? action.payload : app
-        ) || [];
-    });
-    builder.addCase(deleteAppointments.fulfilled, (state, action) => {
-      state.appointments =
-        state.appointments.filter((ap) => ap.id !== action.payload) || [];
-    });
+    builder
+      .addCase(fetchAppointments.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchAppointments.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.appointments = action.payload || [];
+      })
+      .addCase(createAppointments.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.appointments = [action.payload, ...state.appointments];
+      })
+      .addCase(updateAppointments.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.appointments =
+          state.appointments.map((app) =>
+            app.id === action.payload.id ? action.payload : app
+          ) || [];
+      })
+      .addCase(deleteAppointments.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.appointments =
+          state.appointments.filter((ap) => ap.id !== action.payload) || [];
+      });
   },
 });
 

@@ -2,6 +2,7 @@
 import { showToast } from "@/components/toast/Toast";
 import {
   createAppointments,
+  fetchAppointments,
   updateAppointments,
 } from "@/store/slices/appointmentSlice";
 import { addNotification } from "@/store/slices/notificationSlice";
@@ -111,6 +112,7 @@ export default function useAddAppointment(close: () => void) {
         setIsLoading(false);
         close();
         showToast("success", "Appointment created successfully");
+        await dispatch(fetchAppointments());
       } else {
         showToast("error", "Error adding appointment");
       }

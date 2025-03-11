@@ -14,6 +14,7 @@ import { showToast } from "../toast/Toast";
 import Image from "next/image";
 import PatientsUpdateModal from "../patientsUpdateModal/PatientsUpdateModal";
 import useAddPatient from "@/hooks/useAddPatient/useAddPatient";
+import Loader from "../loader/Loader";
 
 export default function PatientsComponent() {
   const {
@@ -30,13 +31,13 @@ export default function PatientsComponent() {
     dispatch(fetchPatientsData());
   }, [dispatch]);
 
-  const allPatients =
-    useAppSelector((store) => store.patientSlice.patients) || [];
+  const { patients, isLoading } =
+    useAppSelector((store) => store.patientSlice) || [];
   return (
     <>
       <TopBar
         title="Total Patients"
-        sabTitle={allPatients.length.toLocaleString()}
+        sabTitle={patients.length.toLocaleString()}
         link={"/dashboard/patients/add-patients"}
         icon1="FaPlus"
         icon3="TbFilter"
@@ -50,14 +51,22 @@ export default function PatientsComponent() {
               <th className="py-3 px-6 text-left">Name</th>
               <th className="py-3 px-6 text-left">Diagnosis</th>
               <th className="py-3 px-6 text-center">Status</th>
-              <th className="py-3 px-6 text-center">Image</th>
+              <th className="py-3 px-6 text-start">Image</th>
               <th className="py-3 px-6 text-center">Next Appointment</th>
               <th className="py-3 px-6 text-center">Options</th>
             </tr>
           </thead>
           <tbody className="text-black text-base font-light">
-            {allPatients?.length > 0 ? (
-              allPatients?.map((patient, index) => (
+            {isLoading ? (
+              <tr>
+                <td colSpan={6} className="py-5">
+                  <div className="flex justify-center items-center">
+                    <Loader loading={isLoading} />
+                  </div>
+                </td>
+              </tr>
+            ) : patients.length > 0 ? (
+              patients.map((patient, index) => (
                 <tr key={index} className="hover:bg-gray-50">
                   <td className="py-3 px-6 text-left whitespace-nowrap">
                     {patient?.foreName}
@@ -82,9 +91,7 @@ export default function PatientsComponent() {
                   </td>
                   <td className="py-3 px-6 text-center">
                     <Image
-                      src={
-                        (patient?.image as string) || "/assets/images/user.jpg"
-                      }
+                      src={patient?.image || "/assets/images/user.jpg"}
                       alt="Patient Image"
                       width={50}
                       height={50}
@@ -93,7 +100,7 @@ export default function PatientsComponent() {
                   </td>
                   <td className="py-3 px-6 text-center">
                     {patient?.appointmentDate &&
-                      moment(patient?.appointmentDate).format("MM-DD-YYYY")}
+                      moment(patient.appointmentDate).format("MM-DD-YYYY")}
                   </td>
                   <td className="py-3 px-6 text-lg text-center relative">
                     <Button
@@ -109,7 +116,7 @@ export default function PatientsComponent() {
                         <button
                           onClick={async () => {
                             await dispatch(updatePatient(patient.id));
-                            setActive(!active);
+                            setActive(false);
                             close();
                           }}
                           className="text-base text-primary hover:bg-primary duration-500 hover:text-white font-bold px-3 py-2 rounded-md"

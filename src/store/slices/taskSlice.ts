@@ -6,6 +6,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const initialState = {
   task: [] as taskData[],
   updateTask: null as taskData | null,
+  isLoading: false,
 };
 
 export const fetchTasksData = createAsyncThunk("fetchTasks", async () => {
@@ -87,19 +88,26 @@ const Task = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(fetchTasksData.pending, (state) => {
+      state.isLoading = true;
+    });
     builder.addCase(fetchTasksData.fulfilled, (state, action) => {
+      state.isLoading = false;
       state.task = action.payload || [];
     });
     builder.addCase(addTasks.fulfilled, (state, action) => {
+      state.isLoading = false;
       state.task = [action.payload, ...state.task];
     });
     builder.addCase(updateTasks.fulfilled, (state, action) => {
+      state.isLoading = false;
       state.task =
         state.task.map((task) =>
           task.id === action.payload.id ? action.payload : task
         ) || [];
     });
     builder.addCase(deleteTasks.fulfilled, (state, action) => {
+      state.isLoading = false;
       state.task = state.task.filter((task) => task.id !== action.payload);
     });
   },

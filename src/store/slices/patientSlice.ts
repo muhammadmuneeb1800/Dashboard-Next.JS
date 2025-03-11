@@ -6,6 +6,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const initialState = {
   patients: [] as InitialData[],
   updatePatientData: null as InitialData | null,
+  isLoading: false,
 };
 
 export const fetchPatientsData = createAsyncThunk(
@@ -89,19 +90,26 @@ const PatientsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchPatientsData.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(fetchPatientsData.fulfilled, (state, action) => {
+        state.isLoading = false;
         state.patients = action.payload || [];
       })
       .addCase(addPatientData.fulfilled, (state, action) => {
+        state.isLoading = false;
         state.patients = [action.payload, ...state.patients];
       })
       .addCase(updatePatientDataThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
         state.patients =
           state.patients.map((patient) =>
             patient.id === action.payload.id ? action.payload : patient
           ) || [];
       })
       .addCase(deletePatientData.fulfilled, (state, action) => {
+        state.isLoading = false;
         state.patients =
           state.patients.filter((patient) => patient.id !== action.payload) ||
           [];

@@ -168,3 +168,9 @@ export interface userCreateData {
   password: string;
   companyName: string;
 }
+
+export type LoaderProps = {
+  loading: boolean;
+  color?: string;
+  size?: number;
+};

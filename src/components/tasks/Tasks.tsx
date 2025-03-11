@@ -6,19 +6,20 @@ import { fetchTasksData } from "@/store/slices/taskSlice";
 import TaskCard from "../taskCard/TaskCard";
 import TaskModal from "../taskModal/TaskModal";
 import useAddTask from "@/hooks/useAddTask/useAddTask";
+import Loader from "../loader/Loader";
 
 export default function Tasks() {
   const { isOpenModal, openModal, dispatch } = useAddTask();
   useEffect(() => {
     dispatch(fetchTasksData());
   }, [dispatch]);
-  const AllTasks = useAppSelector((store) => store.tasksSlice.task) || [];
+  const { task, isLoading } = useAppSelector((store) => store.tasksSlice) || [];
 
   return (
     <>
       <TopBar
         title="Total Tasks"
-        sabTitle={AllTasks.length.toLocaleString()}
+        sabTitle={task.length.toLocaleString()}
         icon1="FaPlus"
         icon3="TbFilter"
         icon2="IoPrintOutline"
@@ -26,8 +27,12 @@ export default function Tasks() {
         onclick={openModal}
       />
       <div className="mt-5 bg-white w-full px-3 md:px-5 py-5 rounded-md shadow-md">
-        {AllTasks.length > 0 ? (
-          AllTasks?.map((task, index) => (
+        {isLoading ? (
+          <div className="flex justify-center items-center">
+            <Loader loading={isLoading} />
+          </div>
+        ) : task.length > 0 ? (
+          task.map((task, index) => (
             <TaskCard key={index} {...task} close={openModal} />
           ))
         ) : (

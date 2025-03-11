@@ -5,11 +5,12 @@ import UpCommingSchedule from "../upCommingSchedule/UpCommingSchedule";
 import Link from "next/link";
 import ScheduleModal from "../scheduleModal/ScheduleModal";
 import { useAppSelector } from "@/store/store";
+import Loader from "../loader/Loader";
 
 export default function SchedulesComponent() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const all =
-    useAppSelector((store) => store.appointmentSlice.appointments) || [];
+  const { appointments, isLoading } =
+    useAppSelector((store) => store.appointmentSlice) || [];
   const close = () => {
     setIsOpen(!isOpen);
   };
@@ -30,15 +31,18 @@ export default function SchedulesComponent() {
         </div>
         <hr className="mt-3" />
         <div className="mt-5">
-          {all.length > 0 ? (
+          {isLoading ? (
+            <div className="flex justify-center items-center">
+              <Loader loading={isLoading} />
+            </div>
+          ) : appointments.length > 0 ? (
             <div>
-              {all?.map((app, index) => {
-                return (
-                  <div key={index}>
-                    <UpCommingSchedule initialAppointment={app} close={close} />
-                  </div>
-                );
-              })}
+              {appointments.map((app, index) => (
+                <div key={index}>
+                  <UpCommingSchedule initialAppointment={app} close={close} />
+                </div>
+              ))}
+
               <Link
                 href={"/dashboard/schedule"}
                 className="flex justify-center items-center text-[12px] text-primary gap-2 mt-7 float-right"
