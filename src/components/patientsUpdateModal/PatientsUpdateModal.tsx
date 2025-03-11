@@ -8,7 +8,7 @@ import { MdOutlineCalendarToday } from "react-icons/md";
 import Image from "next/image";
 
 export default function PatientsUpdateModal({ close }: { close: () => void }) {
-  const updatePatient = 
+  const updatePatient =
     useAppSelector((store) => store.patientSlice.updatePatientData) || {};
   const {
     foreName,
@@ -324,7 +324,10 @@ export default function PatientsUpdateModal({ close }: { close: () => void }) {
                   />
                 )
               ) : null}
-              <Input
+              <input
+                className="bg-white rounded-md px-2 md:px-4 justify-between text-sm items-center w-full flex"
+                accept="image/*"
+                multiple={false}
                 type="file"
                 onChange={(e) => setImage(e.target.files?.[0] || null)}
                 id="image"

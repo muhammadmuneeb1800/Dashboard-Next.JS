@@ -47,10 +47,37 @@ export const ChartComponent = ({ type, data }: ChartComponentProps) => {
       return gradient;
     };
     const chartData = {
-      labels: lineData.map((_, index) => index + 1),
+      labels: [
+        "Munday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+      ],
       datasets: [
         {
           label: "Online Status",
+          data: lineData.map((d) => (d.isOnline ? 1 : 0)),
+          borderColor: lineData.map((d) => (!d.isOnline ? "red" : "blue")),
+          backgroundColor: (context: ScriptableContext<"line">) => {
+            const chart = context.chart;
+            if (!chart) return "#007bff";
+            const ctx = chart.ctx;
+            return createGradient(ctx);
+          },
+          borderWidth: 2,
+          pointHoverRadius: 5,
+          pointBackgroundColor: lineData.map((d) =>
+            !d.isOnline ? "red" : "blue"
+          ),
+          pointRadius: lineData.length === 1 ? 4 : 3,
+          fill: true,
+          tension: 1,
+        },
+        {
+          label: "startDate",
           data: lineData.map((d) => (d.isOnline ? 1 : 0)),
           borderColor: lineData.map((d) => (!d.isOnline ? "red" : "blue")),
           backgroundColor: (context: ScriptableContext<"line">) => {
