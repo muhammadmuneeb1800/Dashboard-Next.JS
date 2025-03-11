@@ -27,7 +27,7 @@ export default function Header() {
   }, [dispatch]);
   return (
     <div className="w-full flex px-3 md:px-5 py-[10.8px] justify-between items-center gap-10 border-light border-b">
-      <div className="w-[90%] lg:flex hidden justify-between items-center border border-light pr-5 rounded">
+      <div className="w-[95%] lg:flex hidden justify-between items-center border border-light pr-5 rounded">
         <Input
           placeholder="Search"
           value={search}
