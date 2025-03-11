@@ -19,14 +19,14 @@ export default function SideBar() {
     <div
       className={`bg-white border-r w-[17%] border-light h-screen transition-width duration-300 ease-in-out fixed`}
     >
-      <div className="flex items-center gap-2 justify-center py-2 text-center">
+      <div className="flex items-center gap-2 justify-center py-1 text-center">
         <Image
-          src="/assets/images/logo-image.png"
+          src="/assets/images/file.svg"
           alt="Logo"
-          width={50}
-          height={50}
+          width={58}
+          height={58}
         />
-        <p className="hidden lg:block  text-primary lg:text-2xl mt-1 lg:font-medium">
+        <p className="hidden lg:block  text-primary lg:text-4xl mt-1 lg:font-medium">
           Medicare
         </p>
       </div>

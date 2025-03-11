@@ -8,7 +8,7 @@ import { MdOutlineCalendarToday } from "react-icons/md";
 import Image from "next/image";
 
 export default function PatientsUpdateModal({ close }: { close: () => void }) {
-  const updatePatient =
+  const updatePatient = 
     useAppSelector((store) => store.patientSlice.updatePatientData) || {};
   const {
     foreName,

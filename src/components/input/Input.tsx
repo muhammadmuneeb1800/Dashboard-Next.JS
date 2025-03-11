@@ -22,7 +22,9 @@ export default function Input(props: inputDetails) {
           id={props.id}
           value={props?.value}
           onChange={props.onChange}
-          className={`w-full outline-none text-lg md:text-xl py-2`}
+          className={`w-full outline-none ${
+            props.placeholder === "Search" && "text-info"
+          } text-lg md:text-xl py-2`}
         />
         {props.value && (
           <ImCross
