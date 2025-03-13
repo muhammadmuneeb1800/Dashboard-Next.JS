@@ -36,6 +36,7 @@ export default function GraphCard(props: cardDetails) {
             {props.chart && (
               <ChartComponent
                 type={props?.type as "line" | "pie"}
+                status={props?.status || ""}
                 data={
                   props.type === "line"
                     ? (props.chart as LineChartDataPoint[])

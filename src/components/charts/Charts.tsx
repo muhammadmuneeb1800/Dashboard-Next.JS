@@ -16,7 +16,6 @@ import {
   Tooltip,
   Legend,
   Chart,
-  ScriptableContext,
 } from "chart.js";
 import { Line, Pie } from "react-chartjs-2";
 
@@ -31,78 +30,86 @@ ChartJS.register(
   Legend
 );
 
-export const ChartComponent = ({ type, data }: ChartComponentProps) => {
+export const ChartComponent = ({ type, data, status }: ChartComponentProps) => {
   if (type === "line") {
     const lineData = data as RawDataPoint[];
-    if (lineData.length === 1) {
-      lineData.push({ ...lineData[0] });
-    }
-    if (lineData.length === 0) {
-      return null;
-    }
-    const createGradient = (ctx: CanvasRenderingContext2D) => {
-      const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-      gradient.addColorStop(0, "rgba(0, 123, 255, 0.5)");
-      gradient.addColorStop(1, "rgba(0, 123, 255, 0)");
+
+    const createGradient = (
+      ctx: CanvasRenderingContext2D,
+      chartArea: { top: number; bottom: number },
+      status: "online" | "offline"
+    ) => {
+      const colors =
+        status === "offline"
+          ? [
+              "rgba(39, 174, 96, 1)",
+              "rgba(39, 174, 96, 0.2)",
+              "rgba(39, 174, 96, 0)",
+            ]
+          : [
+              "rgba(235, 87, 87, 1)",
+              "rgba(235, 87, 87, 0.2)",
+              "rgba(235, 87, 87, 0)",
+            ];
+
+      const gradient = ctx.createLinearGradient(
+        0,
+        chartArea.top,
+        0,
+        chartArea.bottom
+      );
+      gradient.addColorStop(0, colors[0]);
+      gradient.addColorStop(0.3, colors[1]);
+      gradient.addColorStop(1, colors[2]);
+
       return gradient;
     };
+
+    const isOnline = status === "online";
+
     const chartData = {
-      labels: [
-        "Munday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday",
-      ],
+      labels: ["Mon", "Tue", "Wed", "Thurs", "Fri", "Sat", "Sun"],
       datasets: [
         {
-          label: "Online Status",
-          data: lineData.map((d) => (d.isOnline ? 1 : 0)),
-          borderColor: lineData.map((d) => (!d.isOnline ? "red" : "blue")),
-          backgroundColor: (context: ScriptableContext<"line">) => {
-            const chart = context.chart;
-            if (!chart) return "#007bff";
-            const ctx = chart.ctx;
-            return createGradient(ctx);
-          },
+          label: !isOnline ? "Online" : "Offline",
+          data: lineData,
+          borderColor: !isOnline ? "rgb(39, 174, 96)" : "rgb(235, 87, 87)",
           borderWidth: 2,
-          pointHoverRadius: 5,
-          pointBackgroundColor: lineData.map((d) =>
-            !d.isOnline ? "red" : "blue"
-          ),
-          pointRadius: lineData.length === 1 ? 4 : 3,
           fill: true,
-          tension: 1,
-        },
-        {
-          label: "startDate",
-          data: lineData.map((d) => (d.isOnline ? 1 : 0)),
-          borderColor: lineData.map((d) => (!d.isOnline ? "red" : "blue")),
-          backgroundColor: (context: ScriptableContext<"line">) => {
-            const chart = context.chart;
-            if (!chart) return "#007bff";
-            const ctx = chart.ctx;
-            return createGradient(ctx);
+          backgroundColor: (context: {
+            chart: {
+              ctx: CanvasRenderingContext2D;
+              chartArea?: { top: number; bottom: number };
+            };
+          }) => {
+            const { ctx, chartArea } = context.chart;
+            if (!chartArea) return "transparent";
+            return createGradient(
+              ctx,
+              chartArea,
+              isOnline ? "online" : "offline"
+            );
           },
-          borderWidth: 2,
-          pointHoverRadius: 5,
-          pointBackgroundColor: lineData.map((d) =>
-            !d.isOnline ? "red" : "blue"
-          ),
-          pointRadius: lineData.length === 1 ? 4 : 3,
-          fill: true,
-          tension: 1,
+          pointRadius: 0,
+          tension: 0.4,
         },
       ],
     };
 
     const options = {
       responsive: true,
-      maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
+        tooltip: {
+          enabled: true,
+          mode: "index" as const,
+          intersect: false,
+        },
+      },
+      interaction: {
+        mode: "index" as const,
+        axis: "x" as const,
+        intersect: false,
       },
       scales: {
         x: { display: false },

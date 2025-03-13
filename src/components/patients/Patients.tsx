@@ -44,7 +44,7 @@ export default function PatientsComponent() {
         icon2="IoPrintOutline"
         icon4="MdOutlineContactSupport"
       />
-      <div className="bg-white mt-5 w-full h-auto rounded-md shadow-md">
+      <div className="bg-white mt-5 w-full h-auto rounded-md shadow-md overflow-x-auto">
         <table className="min-w-full bg-white rounded-md shadow overflow-x-auto">
           <thead className="border-b">
             <tr className="text-info text-base leading-normal">

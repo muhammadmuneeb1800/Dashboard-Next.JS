@@ -97,6 +97,7 @@ export interface cardDetails {
   icon?: IconType;
   chart: LineChartData[] | PieChartData[];
   type: string;
+  status?: string;
 }
 
 export interface button {
@@ -120,11 +121,6 @@ export interface notification {
   data: string;
   createdAt?: Date;
 }
-
-export interface RawDataPoint {
-  isOnline: boolean;
-}
-
 export interface RawDataPoint {
   isOnline: boolean;
   startDate: string;
@@ -133,11 +129,6 @@ export interface RawDataPoint {
 export interface LineChartDataPoint {
   label?: string;
   value: number;
-}
-
-export interface RawDataPoint {
-  isOnline: boolean;
-  startDate: string;
 }
 
 export interface PieChartDataPoint {
@@ -150,6 +141,7 @@ export type ChartData = RawDataPoint[] | PieChartDataPoint[];
 export interface ChartComponentProps {
   type: "line" | "pie";
   data: ChartData;
+  status?: string;
 }
 
 export interface CardDetails {
