@@ -1,21 +1,12 @@
 "use client";
-import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@/store/store";
-import {
-  clearNotification,
-  fetchNotification,
-} from "@/store/slices/notificationSlice";
-import { showToast } from "@/components/toast/Toast";
+import React from "react";
 import Link from "next/link";
 import Loader from "../loader/Loader";
+import useNotificationCard from "./useNotificationCard";
 
 export default function NotificationCard() {
-  const dispatch = useAppDispatch();
-  const { notifications, isLoading } =
-    useAppSelector((store) => store.notificationSlice) || [];
-  useEffect(() => {
-    dispatch(fetchNotification());
-  }, [dispatch]);
+  const { notifications, isLoading, handleDeleteNotification } =
+    useNotificationCard();
   return (
     <>
       {isLoading ? (
@@ -27,7 +18,7 @@ export default function NotificationCard() {
           <p className="text-gray-600 text-sm">No new notifications.</p>
         </div>
       ) : (
-        notifications.map((noti, index) => (
+        notifications?.map((noti, index) => (
           <div key={index} className="my-5">
             <div className="bg-white rounded-md shadow w-full p-3">
               <div className="pt-3 flex justify-between items-center">
@@ -44,10 +35,7 @@ export default function NotificationCard() {
               </div>
               <div className="flex justify-end p-2">
                 <button
-                  onClick={async () => {
-                    await dispatch(clearNotification(noti?.id as string));
-                    showToast("success", "Notification deleted successfully");
-                  }}
+                  onClick={() => handleDeleteNotification(noti?.id as string)}
                   className="text-sm text-red-500 hover:text-red-700 transition"
                 >
                   Remove

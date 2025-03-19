@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import GraphCard from "../graphCard/GrapCard";
-import { useGraphData } from "@/hooks/useGraphData/useGraphData";
+import { useGraphData } from "@/hooks/useGraphData";
 
 export default function MainCards() {
   const Data = useGraphData();

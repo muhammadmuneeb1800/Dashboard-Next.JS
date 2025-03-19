@@ -34,7 +34,7 @@ export const POST = async (req: NextRequest) => {
       },
     });
 
-    const reset_URL = `${process.env.NEXT_PUBLIC_NEXT_URL}/reset-password?token=${resetToken}`;
+    const reset_URL = `${process.env.NEXT_PUBLIC_NEXT_URL}/reset?token=${resetToken}`;
     const mailOptions = {
       from: process.env.EMAIL_ADDRESS,
       to: email,

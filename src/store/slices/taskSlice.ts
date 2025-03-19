@@ -12,6 +12,7 @@ const initialState = {
 export const fetchTasksData = createAsyncThunk("fetchTasks", async () => {
   try {
     const response = await axiosInstance.get("/api/tasks");
+    console.log("response", response);
     return response?.data?.tasks || [];
   } catch (error) {
     console.error("Error fetching tasks:", error);

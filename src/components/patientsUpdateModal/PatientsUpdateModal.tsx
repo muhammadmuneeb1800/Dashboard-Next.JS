@@ -1,15 +1,12 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import Button from "@/components/button/Button";
 import Input from "@/components/input/Input";
-import useAddPatient from "@/hooks/useAddPatient/useAddPatient";
-import { useAppSelector } from "@/store/store";
+import useAddPatient from "@/hooks/useAddPatient";
 import { MdOutlineCalendarToday } from "react-icons/md";
 import Image from "next/image";
 
 export default function PatientsUpdateModal({ close }: { close: () => void }) {
-  const updatePatient =
-    useAppSelector((store) => store.patientSlice.updatePatientData) || {};
   const {
     foreName,
     setForeName,
@@ -31,40 +28,13 @@ export default function PatientsUpdateModal({ close }: { close: () => void }) {
     handleUpdate,
     appointmentDate,
     setAppointmentDate,
+    updatePatientData,
   } = useAddPatient();
-  useEffect(() => {
-    if (updatePatient) {
-      setForeName(updatePatient.foreName as string);
-      setSurname(updatePatient.surName as string);
-      setDob(updatePatient.dob as string);
-      setGender(updatePatient.sex as string);
-      setDiagnosis(updatePatient.diagnosis as string);
-      setStatus(updatePatient.status as string);
-      setPhoneNumber(updatePatient.phoneNumber as string);
-      setAppointmentDate(
-        updatePatient.appointmentDate
-          ? new Date(updatePatient.appointmentDate)
-          : null
-      );
-      setImage(updatePatient?.image as string);
-    }
-  }, [
-    updatePatient,
-    setForeName,
-    setSurname,
-    setDob,
-    setGender,
-    setDiagnosis,
-    setStatus,
-    setPhoneNumber,
-    setAppointmentDate,
-    setImage,
-  ]);
   return (
     <div className="flex justify-center items-center fixed z-50 inset-0 w-full bg-black bg-opacity-40 backdrop-blur">
       <form
         onSubmit={(e: React.FormEvent) =>
-          handleUpdate(e, updatePatient.id as string, close)
+          handleUpdate(e, updatePatientData.id as string, close)
         }
         className="bg-white rounded w-[100%] md:w-[85%] overflow-y-auto h-[90%] overflow-x-hidden shadow lg:w-[65%] mx-auto"
       >
@@ -270,8 +240,8 @@ export default function PatientsUpdateModal({ close }: { close: () => void }) {
                 type="datetime-local"
                 value={
                   appointmentDate instanceof Date &&
-                  !isNaN(appointmentDate.getTime())
-                    ? appointmentDate.toISOString().slice(0, 16)
+                  !isNaN(appointmentDate?.getTime())
+                    ? appointmentDate?.toISOString()?.slice(0, 16)
                     : ""
                 }
                 onChange={(e) =>
@@ -308,7 +278,7 @@ export default function PatientsUpdateModal({ close }: { close: () => void }) {
               {image && image !== "assets/images/user.jpg" ? (
                 image instanceof File ? (
                   <Image
-                    src={URL.createObjectURL(image)}
+                    src={URL?.createObjectURL(image)}
                     width={200}
                     height={150}
                     alt="Selected"
@@ -329,7 +299,7 @@ export default function PatientsUpdateModal({ close }: { close: () => void }) {
                 accept="image/*"
                 multiple={false}
                 type="file"
-                onChange={(e) => setImage(e.target.files?.[0] || null)}
+                onChange={(e) => setImage(e?.target?.files?.[0] || null)}
                 id="image"
               />
             </div>

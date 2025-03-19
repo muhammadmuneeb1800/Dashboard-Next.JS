@@ -2,14 +2,16 @@
 import { showToast } from "@/components/toast/Toast";
 import {
   addPatientData,
+  deletePatientData,
   fetchPatientsData,
+  updatePatient,
   updatePatientDataThunk,
 } from "@/store/slices/patientSlice";
-import { useAppDispatch } from "@/store/store";
+import { useAppDispatch, useAppSelector } from "@/store/store";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function useAddPatient() {
   const [foreName, setForeName] = useState<string>();
@@ -22,6 +24,7 @@ export default function useAddPatient() {
   const [appointmentDate, setAppointmentDate] = useState<Date | null>();
   const [phoneNumber, setPhoneNumber] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingFetch, setIsLoadingFetch] = useState<boolean>(false);
   const [active, setActive] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [activePatient, setActivePatient] = useState<string | null>(null);
@@ -29,6 +32,33 @@ export default function useAddPatient() {
   const { data: session } = useSession();
   const doctorId = session?.user?.id;
   const router = useRouter();
+  const updatePatientData =
+    useAppSelector((store) => store.patientSlice.updatePatientData) || {};
+
+  useEffect(() => {
+    if (updatePatientData) {
+      setForeName(updatePatientData.foreName as string);
+      setSurname(updatePatientData.surName as string);
+      setDob(updatePatientData.dob as string);
+      setGender(updatePatientData.sex as string);
+      setDiagnosis(updatePatientData.diagnosis as string);
+      setStatus(updatePatientData.status as string);
+      setPhoneNumber(updatePatientData.phoneNumber as string);
+      setAppointmentDate(
+        updatePatientData.appointmentDate
+          ? new Date(updatePatientData.appointmentDate)
+          : null
+      );
+      setImage(updatePatientData?.image as string);
+    }
+  }, []);
+
+  useEffect(() => {
+    setIsLoadingFetch(true);
+    dispatch(fetchPatientsData()).then(() => setIsLoadingFetch(false));
+  }, [dispatch]);
+
+  const { patients } = useAppSelector((store) => store.patientSlice) || [];
 
   const handleClick = (id: string) => {
     setActivePatient(activePatient === id ? null : id);
@@ -224,6 +254,25 @@ export default function useAddPatient() {
     setAppointmentDate(null);
   };
 
+  const deletePatient = async (id: string) => {
+    try {
+      await dispatch(deletePatientData(id));
+      showToast("success", "Patient deleted successfully");
+    } catch (error) {
+      console.log("Error deleting patient:", error);
+    }
+  };
+
+  const updatePatientId = async (id: string, close: () => void) => {
+    try {
+      await dispatch(updatePatient(id));
+      setActive(false);
+      close();
+    } catch (error) {
+      console.log("Error updating patient:", error);
+    }
+  };
+
   return {
     foreName,
     setForeName,
@@ -256,5 +305,10 @@ export default function useAddPatient() {
     setActivePatient,
     handleClick,
     close,
+    patients,
+    isLoadingFetch,
+    deletePatient,
+    updatePatientId,
+    updatePatientData,
   };
 }

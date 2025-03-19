@@ -1,12 +1,9 @@
+import React from "react";
 import Button from "@/components/button/Button";
 import Input from "@/components/input/Input";
-import useAddTask from "@/hooks/useAddTask/useAddTask";
+import useAddTask from "@/hooks/useAddTask";
 import { resetUpdateTaskId } from "@/store/slices/taskSlice";
-import { useAppSelector } from "@/store/store";
-import React, { useEffect } from "react";
-
 export default function TaskModal({ close }: { close: () => void }) {
-  const update = useAppSelector((store) => store.tasksSlice.updateTask) || null;
   const {
     title,
     setTitle,
@@ -19,18 +16,8 @@ export default function TaskModal({ close }: { close: () => void }) {
     dispatch,
     isLoading,
     clearTask,
+    update,
   } = useAddTask(close);
-  useEffect(() => {
-    if (update) {
-      setTitle(update.title as string);
-      setDes(update.description as string);
-      setStatus(update.status as string);
-    } else {
-      setTitle("");
-      setDes("");
-      setStatus("");
-    }
-  }, [update, setTitle, setDes, setStatus]);
   return (
     <>
       <div className="fixed flex justify-center inset-0 z-50 items-center h-screen w-full bg-black backdrop-blur bg-opacity-40">
@@ -39,7 +26,7 @@ export default function TaskModal({ close }: { close: () => void }) {
             if (update === null) {
               handleSave(e);
             } else {
-              handleUpdateTask(e, update.id as string);
+              handleUpdateTask(e, update?.id as string);
             }
           }}
           className="mx-auto w-[85%] md:w-[65%] lg:w-[50%] p-7 bg-white z-50 rounded-md shadow-md"

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: "Register for your Personal Doctor Dashboard.",
 };
 
-export default async function ResetPassword() {
+export default async function Reset() {
   const session = await getServerSession(authOptions);
   if (session) {
     redirect("/dashboard");

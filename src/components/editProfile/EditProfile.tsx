@@ -2,7 +2,7 @@
 import React from "react";
 import Input from "../input/Input";
 import Button from "../button/Button";
-import useEditProfile from "@/hooks/useEditProfile/useEditProfile";
+import useEditProfile from "@/hooks/useEditProfile";
 
 export default function EditProfile() {
   const {

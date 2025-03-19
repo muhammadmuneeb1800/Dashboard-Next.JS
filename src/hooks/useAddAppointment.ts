@@ -3,13 +3,14 @@ import { showToast } from "@/components/toast/Toast";
 import {
   createAppointments,
   fetchAppointments,
+  resetUpdateApp,
   updateAppointments,
 } from "@/store/slices/appointmentSlice";
 import { addNotification } from "@/store/slices/notificationSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import moment from "moment";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function useAddAppointment(close: () => void) {
   const user = useAppSelector((store) => store.authSlice.user) || [];
@@ -26,6 +27,20 @@ export default function useAddAppointment(close: () => void) {
   const time = moment(new Date()).format("h:mm");
   const { data: session } = useSession();
   const dispatch = useAppDispatch();
+
+  const app =
+    useAppSelector((store) => store.appointmentSlice.updateApp) || null;
+  useEffect(() => {
+    if (app !== null) {
+      setPatientName(app.patientName as string);
+      setPurpose(app.purposeOfVisit as string);
+      setStatus(app.appointmentStatus as string);
+      setStartDate(app.startDate ? moment(app.startDate).toDate() : null);
+      setEndDate(app.endDate ? moment(app.endDate).toDate() : null);
+      setIsOnline(isOnline === app.isOnline);
+      setType(app.appointmentType as string);
+    }
+  }, []);
 
   const formValidation = async () => {
     const newErrors: Record<string, string> = {};
@@ -176,6 +191,11 @@ export default function useAddAppointment(close: () => void) {
     setIsOnline(false);
   };
 
+  const modalClose = () => {
+    dispatch(resetUpdateApp());
+    close();
+  };
+
   return {
     patientName,
     setPatientName,
@@ -199,5 +219,7 @@ export default function useAddAppointment(close: () => void) {
     dispatch,
     hanldeUpdate,
     handleAddAppointment,
+    app,
+    modalClose,
   };
 }

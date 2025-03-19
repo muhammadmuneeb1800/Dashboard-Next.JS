@@ -3,12 +3,13 @@ import {
   addTasks,
   deleteTasks,
   fetchTasksData,
+  resetUpdateTaskId,
   updateTaskId,
   updateTasks,
 } from "@/store/slices/taskSlice";
-import { useAppDispatch } from "@/store/store";
+import { useAppDispatch, useAppSelector } from "@/store/store";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function useAddTask(close?: () => void) {
   const [title, setTitle] = useState<string>("");
@@ -17,10 +18,30 @@ export default function useAddTask(close?: () => void) {
   const [status, setStatus] = useState<string>("NOT_COMPLETED");
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [isOpenModalTwo, setIsOpenModalTwo] = useState(false);
+  const [isLoadingStart, setIsLoadingStart] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { data: session } = useSession();
   const dispatch = useAppDispatch();
-
+  const { task } = useAppSelector((store) => store.tasksSlice) || [];
+  const update = useAppSelector((store) => store.tasksSlice.updateTask) || null;
+  useEffect(() => {
+    if (update) {
+      setTitle(update.title as string);
+      setDes(update.description as string);
+      setStatus(update.status as string);
+    } else {
+      setTitle("");
+      setDes("");
+      setStatus("");
+    }
+  }, [update]);
+  useEffect(() => {
+    setIsLoading(true);
+    dispatch(fetchTasksData()).then(() => setIsLoading(false));
+  }, []);
+  useEffect(() => {
+    dispatch(fetchTasksData());
+  }, []);
   const openModal = () => {
     setIsOpenModal(!isOpenModal);
   };
@@ -29,15 +50,15 @@ export default function useAddTask(close?: () => void) {
   };
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    setIsLoadingStart(true);
     if (!title) {
       showToast("error", "Title is required");
-      setIsLoading(false);
+      setIsLoadingStart(false);
       return;
     }
     if (!des) {
       showToast("error", "Description is required");
-      setIsLoading(false);
+      setIsLoadingStart(false);
       return;
     }
     const data = {
@@ -48,7 +69,7 @@ export default function useAddTask(close?: () => void) {
     };
     try {
       await dispatch(addTasks(data));
-      setIsLoading(false);
+      setIsLoadingStart(false);
       showToast("success", "Task added successfully");
       if (close) {
         close();
@@ -77,7 +98,7 @@ export default function useAddTask(close?: () => void) {
 
   const handleUpdateTask = async (e: React.FormEvent, id: string) => {
     e.preventDefault();
-    setIsLoading(true);
+    setIsLoadingStart(true);
     const data = {
       id: id,
       doctorId: session?.user.id as string,
@@ -87,14 +108,14 @@ export default function useAddTask(close?: () => void) {
     };
     try {
       await dispatch(updateTasks(data));
-      setIsLoading(false);
+      setIsLoadingStart(false);
       dispatch(fetchTasksData());
       showToast("success", "Task updated successfully");
       if (close) close();
     } catch (error) {
       showToast("error", error as string);
     } finally {
-      setIsLoading(false);
+      setIsLoadingStart(false);
     }
   };
 
@@ -104,7 +125,14 @@ export default function useAddTask(close?: () => void) {
     setStatus("NOT_COMPLETED");
   };
 
+  const addTaskModalOpen = () => {
+    openModalTwo();
+    dispatch(resetUpdateTaskId());
+  };
+
   return {
+    task,
+    isLoading,
     title,
     setTitle,
     des,
@@ -115,7 +143,7 @@ export default function useAddTask(close?: () => void) {
     handleDelete,
     clearTask,
     dispatch,
-    isLoading,
+    isLoadingStart,
     isOpen,
     setIsOpen,
     handleUpdateTask,
@@ -126,5 +154,7 @@ export default function useAddTask(close?: () => void) {
     openModalTwo,
     isOpenModalTwo,
     setIsOpenModalTwo,
+    addTaskModalOpen,
+    update,
   };
 }

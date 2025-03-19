@@ -1,38 +1,26 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import Button from "../button/Button";
 import { BsThreeDots } from "react-icons/bs";
-import { useAppSelector } from "@/store/store";
 import moment from "moment";
-import {
-  deletePatientData,
-  fetchPatientsData,
-  updatePatient,
-} from "@/store/slices/patientSlice";
 import TopBar from "../topBar/TopBar";
-import { showToast } from "../toast/Toast";
 import Image from "next/image";
 import PatientsUpdateModal from "../patientsUpdateModal/PatientsUpdateModal";
-import useAddPatient from "@/hooks/useAddPatient/useAddPatient";
+import useAddPatient from "@/hooks/useAddPatient";
 import Loader from "../loader/Loader";
 
 export default function PatientsComponent() {
   const {
     active,
-    setActive,
     isOpen,
     activePatient,
     handleClick,
-    dispatch,
     close,
+    patients,
+    isLoadingFetch,
+    deletePatient,
+    updatePatientId,
   } = useAddPatient();
-
-  useEffect(() => {
-    dispatch(fetchPatientsData());
-  }, [dispatch]);
-
-  const { patients, isLoading } =
-    useAppSelector((store) => store.patientSlice) || [];
   return (
     <>
       <TopBar
@@ -44,7 +32,7 @@ export default function PatientsComponent() {
         icon2="IoPrintOutline"
         icon4="MdOutlineContactSupport"
       />
-      <div className="bg-white mt-5 w-full h-auto rounded-md shadow-md overflow-x-auto">
+      <div className="bg-transparent mt-5 w-full h-auto rounded-md shadow-md overflow-x-auto">
         <table className="min-w-full bg-white rounded-md shadow overflow-x-auto">
           <thead className="border-b">
             <tr className="text-info text-base leading-normal">
@@ -57,22 +45,24 @@ export default function PatientsComponent() {
             </tr>
           </thead>
           <tbody className="text-black text-base font-light">
-            {isLoading ? (
+            {isLoadingFetch ? (
               <tr>
                 <td colSpan={6} className="py-5">
                   <div className="flex justify-center items-center">
-                    <Loader loading={isLoading} />
+                    <Loader loading={isLoadingFetch} />
                   </div>
                 </td>
               </tr>
-            ) : patients.length > 0 ? (
-              patients.map((patient, index) => (
+            ) : patients?.length > 0 ? (
+              patients?.map((patient, index) => (
                 <tr key={index} className="hover:bg-gray-50">
                   <td className="py-3 px-6 text-left whitespace-nowrap">
                     {patient?.foreName}
                   </td>
-                  <td className="py-3 px-6 text-left">{patient?.diagnosis}</td>
-                  <td className="py-3 px-6 text-center">
+                  <td className="py-3 px-6 text-left whitespace-nowrap">
+                    {patient?.diagnosis}
+                  </td>
+                  <td className="py-3 px-6 text-center whitespace-nowrap">
                     <span
                       className={`py-[5px] px-[15px] rounded-full w-full text-xs ${
                         patient?.status === "Recovered"
@@ -89,7 +79,7 @@ export default function PatientsComponent() {
                         : "Recovered"}
                     </span>
                   </td>
-                  <td className="py-3 px-6 text-center">
+                  <td className="py-3 px-6 text-center whitespace-nowrap">
                     <Image
                       src={patient?.image || "/assets/images/user.jpg"}
                       alt="Patient Image"
@@ -98,11 +88,11 @@ export default function PatientsComponent() {
                       className="rounded-full"
                     />
                   </td>
-                  <td className="py-3 px-6 text-center">
+                  <td className="py-3 px-6 text-center whitespace-nowrap">
                     {patient?.appointmentDate &&
-                      moment(patient.appointmentDate).format("MM-DD-YYYY")}
+                      moment(patient?.appointmentDate)?.format("MM-DD-YYYY")}
                   </td>
-                  <td className="py-3 px-6 text-lg text-center relative">
+                  <td className="py-3 px-6 text-lg text-center relative whitespace-nowrap">
                     <Button
                       icon={BsThreeDots}
                       bg="bg-none"
@@ -112,27 +102,17 @@ export default function PatientsComponent() {
                       onClick={() => handleClick(patient?.id || "")}
                     />
                     {activePatient === patient?.id && active && (
-                      <div className="absolute top-10 border shadow-md right-16 bg-white rounded-md w-28 px-2 py-3 z-50 flex flex-col justify-center items-center gap-3">
+                      <div className="absolute py-2 border shadow-md right-20 bg-white rounded-md  px-2 z-50 flex flex-col justify-center items-center gap-3">
                         <button
-                          onClick={async () => {
-                            await dispatch(updatePatient(patient.id));
-                            setActive(false);
-                            close();
-                          }}
+                          onClick={async () =>
+                            updatePatientId(patient?.id as string, close)
+                          }
                           className="text-base text-primary hover:bg-primary duration-500 hover:text-white font-bold px-3 py-2 rounded-md"
                         >
                           Update
                         </button>
                         <button
-                          onClick={async () => {
-                            await dispatch(
-                              deletePatientData(patient.id as string)
-                            );
-                            showToast(
-                              "success",
-                              "Patient deleted successfully"
-                            );
-                          }}
+                          onClick={() => deletePatient(patient?.id as string)}
                           className="text-base text-red-500 hover:bg-red-500 duration-500 hover:text-white font-bold px-3 py-2 rounded-md"
                         >
                           Delete

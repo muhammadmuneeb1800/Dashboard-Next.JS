@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import Button from "../button/Button";
 import Input from "../input/Input";
-import useLogin from "@/hooks/useLogin/useLogin";
+import useLogin from "@/hooks/useLogin";
 
 export default function LoginForm() {
   const {
@@ -15,7 +15,6 @@ export default function LoginForm() {
     loading,
     handleLogin,
   } = useLogin();
-
   return (
     <>
       <form className="mt-28" onSubmit={handleLogin}>
@@ -55,7 +54,7 @@ export default function LoginForm() {
             {errors.password || errors.Invalid}
           </p>
           <Link
-            href="/forget-password"
+            href="/forget"
             className="text-secondray float-right w-[150px] block text-right mt-2 hover:text-primary hover:underline"
           >
             Forget Password?

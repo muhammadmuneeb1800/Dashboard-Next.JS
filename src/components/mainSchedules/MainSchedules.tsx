@@ -1,19 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { FaAngleRight, FaPlus } from "react-icons/fa";
-import UpCommingSchedule from "../upCommingSchedule/UpCommingSchedule";
 import Link from "next/link";
 import ScheduleModal from "../scheduleModal/ScheduleModal";
-import { useAppSelector } from "@/store/store";
 import Loader from "../loader/Loader";
+import useMainSchedules from "./useMainSchedules";
+import UpComingSchedule from "../upComingSchedule/UpComingSchedule";
 
 export default function SchedulesComponent() {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { appointments, isLoading } =
-    useAppSelector((store) => store.appointmentSlice) || [];
-  const close = () => {
-    setIsOpen(!isOpen);
-  };
+  const { isOpen, appointments, isLoading, close } = useMainSchedules();
   return (
     <>
       <div className="mt-3 px-3 md:px-5 py-3 bg-white rounded-md shadow w-full xl:w-[35%] h-auto">
@@ -35,14 +30,13 @@ export default function SchedulesComponent() {
             <div className="flex justify-center items-center">
               <Loader loading={isLoading} />
             </div>
-          ) : appointments.length > 0 ? (
+          ) : appointments?.length > 0 ? (
             <div>
-              {appointments.map((app, index) => (
+              {appointments?.map((app, index) => (
                 <div key={index}>
-                  <UpCommingSchedule initialAppointment={app} close={close} />
+                  <UpComingSchedule initialAppointment={app} close={close} />
                 </div>
               ))}
-
               <Link
                 href={"/dashboard/schedule"}
                 className="flex justify-center items-center text-[12px] text-primary gap-2 mt-7 float-right"

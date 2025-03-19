@@ -14,7 +14,7 @@ export default function SideBar() {
     } else {
       setActivePath(param);
     }
-  }, [param]);
+  }, []);
   return (
     <div
       className={`bg-white border-r w-[17%] border-light h-screen transition-width duration-300 ease-in-out fixed`}

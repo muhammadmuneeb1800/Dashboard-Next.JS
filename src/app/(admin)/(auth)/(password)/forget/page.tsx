@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: "Register for your Personal Doctor Dashboard.",
 };
 
-export default async function ForgetPassword() {
+export default async function Forget() {
   const session = await getServerSession(authOptions);
   if (session) {
     redirect("/dashboard");

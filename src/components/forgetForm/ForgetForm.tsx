@@ -2,7 +2,7 @@
 import React from "react";
 import Button from "../button/Button";
 import Input from "../input/Input";
-import useforgetPassword from "@/hooks/useforgetPassword/useforgetPassword";
+import useforgetPassword from "@/hooks/useforgetPassword";
 
 export default function ForgetForm() {
   const { email, setEmail, isLoading, handleSubmit } = useforgetPassword();

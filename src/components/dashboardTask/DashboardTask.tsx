@@ -1,20 +1,15 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { FaAngleRight, FaPlus } from "react-icons/fa";
 import TaskModal from "../taskModal/TaskModal";
-import { useAppSelector } from "@/store/store";
-import { fetchTasksData, resetUpdateTaskId } from "@/store/slices/taskSlice";
 import TaskCard from "../taskCard/TaskCard";
 import Link from "next/link";
-import useAddTask from "@/hooks/useAddTask/useAddTask";
+import useAddTask from "@/hooks/useAddTask";
 import Loader from "../loader/Loader";
 
 export default function DashboardTask() {
-  const { dispatch, openModalTwo, isOpenModalTwo } = useAddTask();
-  useEffect(() => {
-    dispatch(fetchTasksData());
-  }, [dispatch]);
-  const { task, isLoading } = useAppSelector((store) => store.tasksSlice) || [];
+  const { openModalTwo, addTaskModalOpen, isOpenModalTwo, task, isLoading } =
+    useAddTask();
   return (
     <>
       <div className="mt-3 px-3 md:px-5 py-3 pb-5 lg:pb-7 bg-white rounded-md shadow w-full xl:w-[65%] h-auto">
@@ -23,10 +18,7 @@ export default function DashboardTask() {
             <p className="font-semibold">Tasks</p>
           </div>
           <button
-            onClick={() => {
-              openModalTwo();
-              dispatch(resetUpdateTaskId());
-            }}
+            onClick={addTaskModalOpen}
             className="flex justify-center items-center font-medium gap-2 text-primary cursor-pointer"
           >
             <p className="text-sm font-semibold">New Tasks</p>
@@ -41,9 +33,9 @@ export default function DashboardTask() {
             <div className="flex justify-center items-center">
               <Loader loading={isLoading} />
             </div>
-          ) : task.length > 0 ? (
+          ) : task?.length > 0 ? (
             <>
-              {task.map((tasks, index) => (
+              {task?.map((tasks, index) => (
                 <div key={index} className="mt-3">
                   <TaskCard {...tasks} close={openModalTwo} />
                 </div>

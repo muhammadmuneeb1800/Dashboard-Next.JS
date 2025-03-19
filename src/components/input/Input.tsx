@@ -11,28 +11,26 @@ export default function Input(props: inputDetails) {
     }
   };
   return (
-    <>
-      <div
-        className={`${props.border} ${props.borderColor} bg-white rounded-md px-2 md:px-4 justify-between text-sm items-center w-full flex`}
-      >
-        <input
-          type={props.type}
-          placeholder={props.placeholder}
-          required={true}
-          id={props.id}
-          value={props?.value}
-          onChange={props.onChange}
-          className={`w-full outline-none ${
-            props.placeholder === "Search" && "text-info"
-          } text-lg md:text-xl py-2`}
+    <div
+      className={`${props.border} ${props.borderColor} bg-white rounded-md px-2 md:px-4 justify-between text-sm items-center w-full flex`}
+    >
+      <input
+        type={props?.type}
+        placeholder={props?.placeholder}
+        required={true}
+        id={props?.id}
+        value={props?.value}
+        onChange={props?.onChange}
+        className={`w-full outline-none ${
+          props.placeholder === "Search" && "text-info"
+        } text-lg md:text-xl py-2`}
+      />
+      {props?.value && (
+        <ImCross
+          className="text-black text-[10px] md:text-[14px]"
+          onClick={handleCross}
         />
-        {props.value && (
-          <ImCross
-            className="text-black text-[10px] md:text-[14px]"
-            onClick={() => handleCross()}
-          />
-        )}
-      </div>
-    </>
+      )}
+    </div>
   );
 }

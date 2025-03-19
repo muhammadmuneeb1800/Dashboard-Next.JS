@@ -7,13 +7,19 @@ import { showToast } from "../toast/Toast";
 
 export default function DeleteAllNotifications() {
   const dispatch = useAppDispatch();
+  const dellete = async () => {
+    try {
+      await dispatch(deleteAllNotification()).unwrap();
+      showToast("success", "Successfully deleted all notifications");
+    } catch (error) {
+      console.error("Error deleting notifications:", error);
+      showToast("error", "Failed to delete notifications");
+    }
+  };
   return (
     <>
       <Button
-        onClick={async () => {
-          await dispatch(deleteAllNotification());
-          showToast("success", "success fully deleted all notifications");
-        }}
+        onClick={dellete}
         text="Delete All"
         color="text-white"
         bg="bg-red-500"

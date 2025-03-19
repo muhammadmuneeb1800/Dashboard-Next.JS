@@ -1,27 +1,28 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { FaChevronUp } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import { LuUserRound } from "react-icons/lu";
 import { FaRegEdit } from "react-icons/fa";
 import { initialAppointment } from "@/types/types";
-import moment from "moment";
-import { useAppDispatch } from "@/store/store";
-import { deleteAppointments, updateApp } from "@/store/slices/appointmentSlice";
-import { showToast } from "@/components/toast/Toast";
+import useUpComingSchedule from "./useUpComingSchedule";
 
-export default function UpCommingSchedule({
+export default function UpComingSchedule({
   initialAppointment,
   close,
 }: {
   initialAppointment: initialAppointment;
   close: () => void;
 }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useAppDispatch();
-  const start = moment(initialAppointment?.startDate).format("hh:mm");
-  const end = moment(initialAppointment?.endDate).format("hh:mm");
+  const {
+    isOpen,
+    start,
+    hanleDeleteAppointment,
+    end,
+    handleOpenModal,
+    handleUpdate,
+  } = useUpComingSchedule(initialAppointment, close);
   return (
     <div className="">
       <div className="flex items-center md:gap-3 gap-2">
@@ -29,7 +30,7 @@ export default function UpCommingSchedule({
         <div className="bg-black w-[12px] h-[12px] rounded-full"></div>
       </div>
       <div
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleOpenModal}
         className="flex justify-between items-center ml-12 md:ml-16 mt-2 pl-4 border p-1 rounded-md cursor-pointer transition-all duration-700"
       >
         <div className="flex items-center gap-2">
@@ -82,13 +83,7 @@ export default function UpCommingSchedule({
           <div className="flex items-center justify-between mt-3 px-3 md:px-5">
             <div className="flex items-center gap-3">
               <div
-                onClick={async () => {
-                  await dispatch(
-                    deleteAppointments(initialAppointment?.id as string)
-                  );
-                  setIsOpen(!isOpen);
-                  showToast("success", "Delete Appointments successfully");
-                }}
+                onClick={hanleDeleteAppointment}
                 className="border p-1 rounded-lg cursor-pointer"
               >
                 <MdDeleteOutline className="text-red-600" />
@@ -97,11 +92,7 @@ export default function UpCommingSchedule({
                 <LuUserRound className="text-primary" />
               </div>
               <div
-                onClick={async () => {
-                  await dispatch(updateApp(initialAppointment));
-                  setIsOpen(!isOpen);
-                  close();
-                }}
+                onClick={handleUpdate}
                 className="border p-1 rounded-lg cursor-pointer"
               >
                 <FaRegEdit className="text-primary" />
