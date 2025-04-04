@@ -110,6 +110,15 @@ model Patients {
 
   doctor Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
 }
+model Teacherss{
+  id                String            @id @default(auto()) @map("_id") @db.ObjectId
+  doctorId          String            @db.ObjectId
+  doctorName        String
+  patientName       String
+  purposeOfVisit    String
+  appointmentStatus AppointmentStatus
+  startDate         DateTime?
+}
 
 enum Sex {
   Male
