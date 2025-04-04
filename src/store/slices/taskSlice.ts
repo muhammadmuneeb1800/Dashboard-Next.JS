@@ -7,6 +7,7 @@ const initialState = {
   task: [] as taskData[],
   updateTask: null as taskData | null,
   isLoading: false,
+  error: null as string | null,
 };
 
 export const fetchTasksData = createAsyncThunk("fetchTasks", async () => {
@@ -89,28 +90,48 @@ const Task = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchTasksData.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(fetchTasksData.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.task = action.payload || [];
-    });
-    builder.addCase(addTasks.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.task = [action.payload, ...state.task];
-    });
-    builder.addCase(updateTasks.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.task =
-        state.task.map((task) =>
-          task.id === action.payload.id ? action.payload : task
-        ) || [];
-    });
-    builder.addCase(deleteTasks.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.task = state.task.filter((task) => task.id !== action.payload);
-    });
+    builder
+      .addCase(fetchTasksData.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchTasksData.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.task = action.payload || [];
+      })
+      .addCase(fetchTasksData.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error?.message || "Failed to fetch tasks";
+      })
+
+      .addCase(addTasks.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.task = [action.payload, ...state.task];
+      })
+      .addCase(addTasks.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error?.message || "Failed to add task";
+      })
+
+      .addCase(updateTasks.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.task =
+          state.task.map((task) =>
+            task.id === action.payload.id ? action.payload : task
+          ) || [];
+      })
+      .addCase(updateTasks.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error?.message || "Failed to update task";
+      })
+
+      .addCase(deleteTasks.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.task = state.task.filter((task) => task.id !== action.payload);
+      })
+      .addCase(deleteTasks.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error?.message || "Failed to delete task";
+      });
   },
 });
 

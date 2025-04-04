@@ -53,27 +53,16 @@ export default function PatientsUpdateModal({ close }: { close: () => void }) {
               />
             </div>
             <div className="text-center">
-              {isLoading ? (
-                <Button
-                  type="button"
-                  text="Updating..."
-                  bg="bg-primary"
-                  hBg="bg-white"
-                  color="text-white"
-                  hColor="text-primary"
-                />
-              ) : (
-                <Button
-                  type="submit"
-                  text="Update"
-                  bg="bg-primary"
-                  hBg="bg-white"
-                  color="text-white"
-                  borderWidth="border-2"
-                  borderColor="border-primary"
-                  hColor="text-primary"
-                />
-              )}
+              <Button
+                type={isLoading ? "button" : "submit"}
+                text={isLoading ? "Updating..." : "Update"}
+                bg="bg-primary"
+                hBg="bg-white"
+                color="text-white"
+                hColor="text-primary"
+                borderWidth={isLoading ? undefined : "border-2"}
+                borderColor={isLoading ? undefined : "border-primary"}
+              />
             </div>
           </div>
         </div>

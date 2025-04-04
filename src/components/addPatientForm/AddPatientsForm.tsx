@@ -51,29 +51,16 @@ export default function AddPatientsForm() {
             />
           </div>
           <div className="text-center">
-            {isLoading ? (
-              <Button
-                type="button"
-                text="Save..."
-                bg="bg-gray-400"
-                color="text-white"
-                hBg="bg-gray-400"
-                hColor="text-white"
-                borderWidth="border-2"
-                borderColor="border-gray-400"
-              />
-            ) : (
-              <Button
-                type="submit"
-                text="Save"
-                bg="bg-primary"
-                hBg="bg-white"
-                color="text-white"
-                borderWidth="border-2"
-                borderColor="border-primary"
-                hColor="text-primary"
-              />
-            )}
+            <Button
+              type={isLoading ? "button" : "submit"}
+              text={isLoading ? "Save..." : "Save"}
+              bg={isLoading ? "bg-gray-400" : "bg-primary"}
+              color="text-white"
+              hBg={isLoading ? "bg-gray-400" : "bg-white"}
+              hColor={isLoading ? "text-white" : "text-primary"}
+              borderWidth="border-2"
+              borderColor={isLoading ? "border-gray-400" : "border-primary"}
+            />
           </div>
         </div>
       </div>

@@ -26,7 +26,7 @@ export default function PatientsComponent() {
       <TopBar
         title="Total Patients"
         sabTitle={patients.length.toLocaleString()}
-        link={"/dashboard/patients/add-patients"}
+        link={"/dashboard/patients/add"}
         icon1="FaPlus"
         icon3="TbFilter"
         icon2="IoPrintOutline"

@@ -48,30 +48,17 @@ export default function ResetForm() {
         />
       </div>
       <div className="mt-5">
-        {isLoading ? (
-          <Button
-            text="Sending..."
-            bg="bg-gray-400"
-            color="text-white"
-            hBg="bg-gray-400"
-            hColor="text-white"
-            borderWidth="border-2"
-            borderColor="border-gray-400"
-            width="w-full"
-          />
-        ) : (
-          <Button
-            type="submit"
-            text="Submit"
-            bg="bg-primary"
-            color="text-white"
-            hBg="bg-white"
-            borderColor="border-primary"
-            borderWidth="border-2"
-            hColor="text-primary"
-            width="w-full"
-          />
-        )}
+        <Button
+          type={isLoading ? "button" : "submit"}
+          text={isLoading ? "Sending..." : "Submit"}
+          bg={isLoading ? "bg-gray-400" : "bg-primary"}
+          color="text-white"
+          hBg={isLoading ? "bg-gray-400" : "bg-white"}
+          hColor={isLoading ? "text-white" : "text-primary"}
+          borderWidth="border-2"
+          borderColor={isLoading ? "border-gray-400" : "border-primary"}
+          width="w-full"
+        />
       </div>
     </form>
   );

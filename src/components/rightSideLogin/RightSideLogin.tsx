@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import img from "../../../public/assets/images/dashboard-preview.png";
 import Button from "../button/Button";
 
 export default function RightSideLogin() {
@@ -10,7 +9,12 @@ export default function RightSideLogin() {
         ALL IN ONE DASHBOARD
       </h1>
       <div className="flex justify-center items-center md:px-4">
-        <Image src={img} alt="All in one dashboard image" />
+        <Image
+          src="/assets/images/dashboard-preview.png"
+          alt="All in one dashboard image"
+          width={680}
+          height={680}
+        />
       </div>
       <p className="text-white text-center text-xl mt-5">
         Keep track of all patient information in this section.

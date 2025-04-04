@@ -151,42 +151,26 @@ export default function EditProfile() {
                 />
               </div>
             </div>
-            {loading ? (
-              <div className="mt-5 flex justify-between items-center">
-                <Button
-                  type="button"
-                  text="Saving..."
-                  bg="bg-primary"
-                  color="text-white"
-                  hBg="bg-white"
-                  hColor="text-primary"
-                  borderWidth="border-2"
-                  borderColor="border-primary"
-                />
-                <p className="text-info hover:text-primary hover:underline cursor-pointer">
-                  Update Profile
-                </p>
-              </div>
-            ) : (
-              <div className="mt-5 flex justify-between items-center">
-                <Button
-                  text="Save Changes"
-                  type="submit"
-                  bg="bg-primary"
-                  color="text-white"
-                  hBg="bg-white"
-                  hColor="text-primary"
-                  borderWidth="border-2"
-                  borderColor="border-primary"
-                />
-                <p
-                  onClick={() => setIsPassword(!isPassword)}
-                  className="text-info hover:text-primary hover:underline cursor-pointer"
-                >
-                  Update Profile
-                </p>
-              </div>
-            )}
+            <div className="mt-5 flex justify-between items-center">
+              <Button
+                type={loading ? "button" : "submit"}
+                text={loading ? "Saving..." : "Save Changes"}
+                bg="bg-primary"
+                color="text-white"
+                hBg="bg-white"
+                hColor="text-primary"
+                borderWidth="border-2"
+                borderColor="border-primary"
+              />
+              <p
+                onClick={() => !loading && setIsPassword(!isPassword)}
+                className={`text-info hover:text-primary hover:underline cursor-pointer ${
+                  loading && "pointer-events-none opacity-60"
+                }`}
+              >
+                Update Profile
+              </p>
+            </div>
           </form>
         )}
       </div>

@@ -5,6 +5,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const initialState = {
   notifications: [] as notification[],
   isLoading: false,
+  error: null as string | null,
 };
 
 export const fetchNotification = createAsyncThunk(
@@ -72,10 +73,20 @@ const Notification = createSlice({
         state.isLoading = false;
         state.notifications = action.payload || [];
       })
+      .addCase(fetchNotification.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error?.message || "Failed to fetch notifications";
+      })
+
       .addCase(addNotification.fulfilled, (state, action) => {
         state.isLoading = false;
         state.notifications = [action.payload, ...state.notifications];
       })
+      .addCase(addNotification.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error?.message || "Failed to add notification";
+      })
+
       .addCase(clearNotification.fulfilled, (state, action) => {
         state.isLoading = false;
         state.notifications =
@@ -83,12 +94,22 @@ const Notification = createSlice({
             (notification) => notification.id !== action.payload
           ) || [];
       })
+      .addCase(clearNotification.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error?.message || "Failed to clear notification";
+      })
+
       .addCase(deleteAllNotification.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(deleteAllNotification.fulfilled, (state) => {
         state.isLoading = false;
         state.notifications = [];
+      })
+      .addCase(deleteAllNotification.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error =
+          action.error?.message || "Failed to delete all notifications";
       });
   },
 });

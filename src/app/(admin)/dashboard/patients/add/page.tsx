@@ -14,7 +14,7 @@ export default function AddPatients() {
       <div className="px-3 md:px-5 py-3 w-full bg-success">
         <div className="flex items-center">
           <Link href="/dashboard/patients/">Patient registrer{"  "}</Link>
-          <p> &gt; Add Patients</p>
+          <p> &gt; add</p>
         </div>
         <div className="mb-5">
           <AddPatientsForm />

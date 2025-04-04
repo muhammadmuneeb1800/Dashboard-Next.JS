@@ -17,7 +17,7 @@ export default function useHeader() {
   useEffect(() => {
     dispatch(userAuth());
     dispatch(fetchNotification());
-  }, [dispatch]);
+  }, []);
 
   const handelShowNotification = () => {
     setNotificationOpen(!notificationOpen);

@@ -89,30 +89,17 @@ export default function RegisterForm() {
         <p className="text-rose-700 mt-1">{errors?.password}</p>
       </div>
       <div className="mt-5">
-        {loading ? (
-          <Button
-            text="Finish..."
-            bg="bg-gray-400"
-            color="text-white"
-            hBg="bg-gray-400"
-            hColor="text-white"
-            borderWidth="border-2"
-            borderColor="border-gray-400"
-            width="w-full"
-          />
-        ) : (
-          <Button
-            type="submit"
-            text="Finish"
-            bg="bg-primary"
-            color="text-white"
-            hBg="bg-white"
-            borderColor="border-primary"
-            borderWidth="border-2"
-            hColor="text-primary"
-            width="w-full"
-          />
-        )}
+        <Button
+          type={loading ? "button" : "submit"}
+          text={loading ? "Finish..." : "Finish"}
+          bg={loading ? "bg-gray-400" : "bg-primary"}
+          color="text-white"
+          hBg={loading ? "bg-gray-400" : "bg-white"}
+          hColor={loading ? "text-white" : "text-primary"}
+          borderWidth="border-2"
+          borderColor={loading ? "border-gray-400" : "border-primary"}
+          width="w-full"
+        />
       </div>
     </form>
   );

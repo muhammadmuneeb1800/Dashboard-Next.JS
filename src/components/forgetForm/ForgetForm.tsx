@@ -26,30 +26,17 @@ export default function ForgetForm() {
           />
         </div>
         <div className="mt-5">
-          {isLoading ? (
-            <Button
-              text="sending..."
-              bg="bg-gray-400"
-              color="text-white"
-              hBg="bg-gray-400"
-              hColor="text-white"
-              borderWidth="border-2"
-              borderColor="border-gray-400"
-              width="w-full"
-            />
-          ) : (
-            <Button
-              type="submit"
-              text="Send"
-              bg="bg-primary"
-              color="text-white"
-              hBg="bg-white"
-              borderColor="border-primary"
-              borderWidth="border-2"
-              hColor="text-primary"
-              width="w-full"
-            />
-          )}
+          <Button
+            type={isLoading ? "button" : "submit"}
+            text={isLoading ? "sending..." : "Send"}
+            bg={isLoading ? "bg-gray-400" : "bg-primary"}
+            color="text-white"
+            hBg="bg-white"
+            hColor="text-primary"
+            borderColor={isLoading ? "border-gray-400" : "border-primary"}
+            borderWidth="border-2"
+            width="w-full"
+          />
         </div>
       </form>
     </>

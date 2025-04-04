@@ -6,6 +6,7 @@ const initialSate = {
   appointments: [] as initialAppointment[],
   updateApp: null as initialAppointment | null,
   isLoading: false,
+  error: null as string | null,
 };
 
 export const fetchAppointments = createAsyncThunk(
@@ -87,10 +88,20 @@ const Appointment = createSlice({
         state.isLoading = false;
         state.appointments = action.payload || [];
       })
+      .addCase(fetchAppointments.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error?.message || "Failed to fetch appointments";
+      })
+
       .addCase(createAppointments.fulfilled, (state, action) => {
         state.isLoading = false;
         state.appointments = [action.payload, ...state.appointments];
       })
+      .addCase(createAppointments.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error?.message || "Failed to create appointment";
+      })
+
       .addCase(updateAppointments.fulfilled, (state, action) => {
         state.isLoading = false;
         state.appointments =
@@ -98,10 +109,19 @@ const Appointment = createSlice({
             app.id === action.payload.id ? action.payload : app
           ) || [];
       })
+      .addCase(updateAppointments.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error?.message || "Failed to update appointment";
+      })
+
       .addCase(deleteAppointments.fulfilled, (state, action) => {
         state.isLoading = false;
         state.appointments =
           state.appointments.filter((ap) => ap.id !== action.payload) || [];
+      })
+      .addCase(deleteAppointments.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error?.message || "Failed to delete appointment";
       });
   },
 });

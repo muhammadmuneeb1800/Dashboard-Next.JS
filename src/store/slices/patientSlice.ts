@@ -7,6 +7,7 @@ const initialState = {
   patients: [] as InitialData[],
   updatePatientData: null as InitialData | null,
   isLoading: false,
+  error: null as string | null,
 };
 
 export const fetchPatientsData = createAsyncThunk(
@@ -97,10 +98,20 @@ const PatientsSlice = createSlice({
         state.isLoading = false;
         state.patients = action.payload || [];
       })
+      .addCase(fetchPatientsData.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error?.message || "Failed to fetch patients data";
+      })
+
       .addCase(addPatientData.fulfilled, (state, action) => {
         state.isLoading = false;
         state.patients = [action.payload, ...state.patients];
       })
+      .addCase(addPatientData.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error?.message || "Failed to add patient data";
+      })
+
       .addCase(updatePatientDataThunk.fulfilled, (state, action) => {
         state.isLoading = false;
         state.patients =
@@ -108,11 +119,20 @@ const PatientsSlice = createSlice({
             patient.id === action.payload.id ? action.payload : patient
           ) || [];
       })
+      .addCase(updatePatientDataThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error?.message || "Failed to update patient data";
+      })
+
       .addCase(deletePatientData.fulfilled, (state, action) => {
         state.isLoading = false;
         state.patients =
           state.patients.filter((patient) => patient.id !== action.payload) ||
           [];
+      })
+      .addCase(deletePatientData.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error?.message || "Failed to delete patient data";
       });
   },
 });

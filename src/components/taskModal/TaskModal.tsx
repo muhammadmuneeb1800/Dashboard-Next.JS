@@ -87,27 +87,23 @@ export default function TaskModal({ close }: { close: () => void }) {
               />
             </div>
             <div>
-              {isLoading ? (
-                <Button
-                  text={update !== null ? "Update..." : "Add..."}
-                  type="button"
-                  bg="bg-gray-400"
-                  color="text-white"
-                  hBg="bg-gray-400"
-                  hColor="text-white"
-                  width="w-28"
-                />
-              ) : (
-                <Button
-                  text={update !== null ? "Update" : "Add"}
-                  type="submit"
-                  bg="bg-primary"
-                  color="text-white"
-                  hBg="bg-white"
-                  hColor="text-red"
-                  width="w-28"
-                />
-              )}
+              <Button
+                text={
+                  isLoading
+                    ? update !== null
+                      ? "Update..."
+                      : "Add..."
+                    : update !== null
+                    ? "Update"
+                    : "Add"
+                }
+                type={isLoading ? "button" : "submit"}
+                bg={isLoading ? "bg-gray-400" : "bg-primary"}
+                color="text-white"
+                hBg={isLoading ? "bg-gray-400" : "bg-white"}
+                hColor={isLoading ? "text-white" : "text-red"}
+                width="w-28"
+              />
             </div>
           </div>
         </form>

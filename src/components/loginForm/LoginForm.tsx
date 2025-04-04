@@ -61,30 +61,17 @@ export default function LoginForm() {
           </Link>
         </div>
         <div className="mt-20">
-          {loading ? (
-            <Button
-              text="Login..."
-              bg="bg-gray-400"
-              color="text-white"
-              hBg="bg-gray-400"
-              hColor="text-white"
-              borderWidth="border-2"
-              borderColor="border-gray-400"
-              width="w-full"
-            />
-          ) : (
-            <Button
-              text="Login"
-              type="submit"
-              bg="bg-primary"
-              color="text-white"
-              hBg="bg-white"
-              hColor="text-primary"
-              borderColor="border-primary"
-              borderWidth="border-2"
-              width="w-full"
-            />
-          )}
+          <Button
+            text={loading ? "Login..." : "Login"}
+            type={loading ? "button" : "submit"}
+            bg={loading ? "bg-gray-400" : "bg-primary"}
+            color="text-white"
+            hBg="bg-white"
+            hColor="text-primary"
+            borderColor={loading ? "border-gray-400" : "border-primary"}
+            borderWidth="border-2"
+            width="w-full"
+          />
         </div>
       </form>
     </>

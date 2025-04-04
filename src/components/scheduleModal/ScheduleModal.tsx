@@ -250,55 +250,25 @@ export default function ScheduleModal({ close }: { close: () => void }) {
             borderWidth="border-2"
             hColor="text-black"
           />
-          {isLoading ? (
-            app === null ? (
-              <Button
-                type="button"
-                text="Save..."
-                bg="bg-gray-400"
-                color="text-white"
-                hBg="bg-gray-400"
-                hColor="text-white"
-                borderWidth="border-2"
-                borderColor="border-gray-400"
-              />
-            ) : (
-              <Button
-                type="button"
-                text="Updating..."
-                bg="bg-gray-400"
-                color="text-white"
-                hBg="bg-gray-400"
-                hColor="text-white"
-                borderWidth="border-2"
-                borderColor="border-gray-400"
-              />
-            )
-          ) : app === null ? (
-            <Button
-              type="submit"
-              text="Save"
-              bg="bg-primary"
-              color="text-white"
-              hBg="bg-white"
-              hColor="text-primary"
-              borderColor="border-primary"
-              borderWidth="border-2"
-              hBorderColor="border-primary"
-            />
-          ) : (
-            <Button
-              type="submit"
-              text="Update"
-              bg="bg-primary"
-              color="text-white"
-              hBg="bg-white"
-              hColor="text-primary"
-              borderColor="border-primary"
-              borderWidth="border-2"
-              hBorderColor="border-primary"
-            />
-          )}
+          <Button
+            type={isLoading ? "button" : "submit"}
+            text={
+              isLoading
+                ? app === null
+                  ? "Save..."
+                  : "Updating..."
+                : app === null
+                ? "Save"
+                : "Update"
+            }
+            bg={isLoading ? "bg-gray-400" : "bg-primary"}
+            color="text-white"
+            hBg={isLoading ? "bg-gray-400" : "bg-white"}
+            hColor={isLoading ? "text-white" : "text-primary"}
+            borderColor={isLoading ? "border-gray-400" : "border-primary"}
+            borderWidth="border-2"
+            hBorderColor={!isLoading ? "border-primary" : undefined}
+          />
         </div>
       </form>
     </div>

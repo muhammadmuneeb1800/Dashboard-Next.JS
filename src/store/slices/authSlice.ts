@@ -7,6 +7,7 @@ import { AxiosError } from "axios";
 const initialState = {
   user: {} as initialAuth,
   isLoading: false,
+  error: null as string | null,
 };
 
 export const createUser = createAsyncThunk(
@@ -95,12 +96,21 @@ const Authentication = createSlice({
         state.isLoading = false;
         state.user = action.payload;
       })
+      .addCase(userAuth.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error?.message || "User authentication failed";
+      })
+
       .addCase(userEdit.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(userEdit.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload;
+      })
+      .addCase(userEdit.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error?.message || "User edit failed";
       });
   },
 });
